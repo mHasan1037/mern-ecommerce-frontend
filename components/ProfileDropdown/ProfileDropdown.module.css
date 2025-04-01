@@ -1,0 +1,11 @@
+.profileBox{
+    @apply absolute bg-white right-0 p-2 rounded-md
+}
+
+.profileBox li{
+    @apply whitespace-nowrap cursor-pointer hover:text-mainBg2
+}
+
+.profilePic{
+    @apply bg-mainBg2 text-white h-8 w-8 flex justify-center items-center rounded-full text-sm cursor-pointer
+}

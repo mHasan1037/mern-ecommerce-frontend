@@ -1,0 +1,20 @@
+@tailwind components;
+@tailwind utilities;
+
+.navbar {
+  @apply flex justify-between items-center bg-mainBg1 p-4;
+}
+
+.searchBox {
+  @apply w-[400px] px-3 py-2 rounded-md outline-none;
+}
+
+.wishlist,
+.cart {
+  @apply flex items-center gap-1;
+}
+
+.count {
+  @apply absolute -top-3 -left-3 bg-mainBg2 h-[20px] w-[20px] rounded-full flex justify-center items-center text-white text-xs;
+}
+

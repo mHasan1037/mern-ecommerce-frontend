@@ -1,0 +1,6 @@
+@tailwind components;
+@tailwind utilities;
+
+.buttonStyle {
+    @apply bg-green-600 hover:bg-green-700 text-white rounded-md px-3 py-1 cursor-pointer
+}

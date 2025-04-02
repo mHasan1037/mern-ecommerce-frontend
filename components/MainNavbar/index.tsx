@@ -6,7 +6,11 @@ import { CiShoppingCart } from "react-icons/ci";
 import ProfileDropdown from "../ProfileDropdown";
 import SmallScreenSearchbox from "../SmallScreenSearchbox";
 
-function MainNavbar() {
+interface NavbarProps {
+  setOpenForm: React.Dispatch<React.SetStateAction<null | 'login' | 'signup'>>;
+}
+
+function MainNavbar ({setOpenForm}: NavbarProps) {
   return (
     <section className={styles.navbar}>
       <div className="flex items-center">
@@ -37,14 +41,12 @@ function MainNavbar() {
           </div>{" "}
           Cart
         </div>
-        {/*
-        user who is not logged in will see it
         <div className="flex gap-2">
-          <p>Log In</p> /
-          <p>Sign up</p>
-        </div> */}
+          <p onClick={()=> setOpenForm(()=> 'login')} className="cursor-pointer">Log In</p> /
+          <p onClick={()=> setOpenForm(()=> 'signup')} className="cursor-pointer">Sign up</p>
+        </div>
         {/*logged in user will see the profileDropdown*/}
-        <ProfileDropdown />
+        {/* <ProfileDropdown /> */}
       </div>
     </section>
   );

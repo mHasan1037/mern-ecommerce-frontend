@@ -5,12 +5,16 @@ import { CiHeart } from "react-icons/ci";
 import { CiShoppingCart } from "react-icons/ci";
 import ProfileDropdown from "../ProfileDropdown";
 import SmallScreenSearchbox from "../SmallScreenSearchbox";
+import { useSelector } from 'react-redux';
+import { RootState } from "@/redux/store";
 
 interface NavbarProps {
-  setOpenForm: React.Dispatch<React.SetStateAction<null | 'login' | 'signup'>>;
+  setOpenForm: React.Dispatch<React.SetStateAction<null | 'login' | 'signup' | 'verifyEmail' | 'resetPasswordLink'>>;
 }
 
 function MainNavbar ({setOpenForm}: NavbarProps) {
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+
   return (
     <section className={styles.navbar}>
       <div className="flex items-center">
@@ -41,12 +45,25 @@ function MainNavbar ({setOpenForm}: NavbarProps) {
           </div>{" "}
           Cart
         </div>
-        <div className="flex gap-2">
-          <p onClick={()=> setOpenForm(()=> 'login')} className="cursor-pointer">Log In</p> /
-          <p onClick={()=> setOpenForm(()=> 'signup')} className="cursor-pointer">Sign up</p>
-        </div>
-        {/*logged in user will see the profileDropdown*/}
-        {/* <ProfileDropdown /> */}
+        {isAuthenticated ? (
+          <ProfileDropdown />
+        ) : (
+          <div className="flex gap-2">
+            <p
+              onClick={() => setOpenForm(() => "login")}
+              className="cursor-pointer hover:text-mainBg2"
+            >
+              Log In
+            </p>{" "}
+            /
+            <p
+              onClick={() => setOpenForm(() => "signup")}
+              className="cursor-pointer hover:text-mainBg2"
+            >
+              Sign up
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -44,7 +44,7 @@ const GeneralForm: React.FC<GeneralFormProps> = ({
     <div className={styles.background}>
       <div className={styles.mainContainer}>
         <div className="flex justify-between items-center">
-          <h2>{title}</h2>
+          <h2 className="font-bold text-lg">{title}</h2>
           <IoMdClose className="cursor-pointer" onClick={()=> onclose(null)}/> 
         </div>
         <form onSubmit={handleSubmit}>

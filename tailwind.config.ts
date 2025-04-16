@@ -12,7 +12,7 @@ export default {
         mainBg1:'#E8F9E9',
         mainBg2: '#299E60',
         border1: '#f3f4f6',
-        border2: '#86efac'
+        border2: '#86efac',
       },
     },
   },

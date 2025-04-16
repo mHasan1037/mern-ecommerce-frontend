@@ -1,0 +1,6 @@
+@tailwind components;
+@tailwind utilities;
+
+.sidebarMain{
+    @apply bg-mainBg1 min-w-[15%] text-center py-8
+}

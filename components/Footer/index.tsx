@@ -11,7 +11,7 @@ const Footer = () => {
   return (
     <div className='bg-mainBg1 flex justify-between p-3'>
         <p>Copyright: 2025</p>
-        {user?.isAdmin && <Link href="/admin">Go to admin dashboard</Link>}       
+        {user?.isAdmin && <Link href="/admin">Admin dashboard</Link>}       
     </div>
   )
 }

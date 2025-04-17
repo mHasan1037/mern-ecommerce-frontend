@@ -1,0 +1,11 @@
+@tailwind components;
+@tailwind utilities;
+
+
+.dashBoardBox{
+    @apply h-48 w-52 bg-white rounded p-3;
+}
+
+.totalCountFlex{
+    @apply flex justify-between items-center
+}

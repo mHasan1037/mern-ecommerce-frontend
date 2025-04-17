@@ -5,21 +5,35 @@ import { CiHeart } from "react-icons/ci";
 import { CiShoppingCart } from "react-icons/ci";
 import ProfileDropdown from "../ProfileDropdown";
 import SmallScreenSearchbox from "../SmallScreenSearchbox";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { useRouter } from "next/navigation";
 
 interface NavbarProps {
-  setOpenForm: React.Dispatch<React.SetStateAction<null | 'login' | 'signup' | 'verifyEmail' | 'resetPasswordLink'>>;
+  setOpenForm: React.Dispatch<
+    React.SetStateAction<
+      null | "login" | "signup" | "verifyEmail" | "resetPasswordLink"
+    >
+  >;
 }
 
-function MainNavbar ({setOpenForm}: NavbarProps) {
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+function MainNavbar({ setOpenForm }: NavbarProps) {
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
+  const router = useRouter();
 
   return (
     <section className={styles.navbar}>
       <div className="flex items-center">
         <div className="w-20 cursor-pointer">
-          <Image src="/images/logo.png" alt="Logo" width={200} height={100} />
+          <Image
+            src="/images/logo.png"
+            alt="Logo"
+            width={200}
+            height={100}
+            onClick={() => router.push("/")}
+          />
         </div>
         <SmallScreenSearchbox />
       </div>

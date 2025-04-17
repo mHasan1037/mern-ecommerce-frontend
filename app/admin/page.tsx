@@ -87,8 +87,8 @@ const Admin = () => {
   return (
     <div className="flex p-5 bg-mainBg3">
       <AdminSidebar />
-      <div>
-        <div className="flex gap-5">
+      <div className="w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           <AdminInfoBox
             title={"Total orders"}
             amount={adminSummary?.totalOrders}

@@ -2,5 +2,5 @@
 @tailwind utilities;
 
 .sidebarMain{
-    @apply bg-white min-w-[15%] text-center py-8 mr-8
+    @apply bg-white min-w-[17%] text-center py-8 mr-8
 }

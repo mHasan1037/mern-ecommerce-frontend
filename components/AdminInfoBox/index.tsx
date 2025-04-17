@@ -19,12 +19,10 @@ const AdminInfoBox: React.FC<Props> = ({
     <div className={styles.dashBoardBox}>
       <div className={styles.totalCountFlex}>
         <div>
-          <p>{title}</p>
-          <h1>{amount}</h1>
+          <p className="text-xl text-gray-800 font-medium">{title}</p>
+          <h1 className="text-3xl font-semibold">{amount}</h1>
         </div>
-        <p>
-          <Icon />
-        </p>
+        <Icon className="text-green-500 text-5xl"/>
       </div>
       <div>{percentageGrowth}</div>
     </div>

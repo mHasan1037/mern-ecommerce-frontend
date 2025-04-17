@@ -3,9 +3,9 @@
 
 
 .dashBoardBox{
-    @apply h-48 w-52 bg-white rounded p-3;
+    @apply h-48 bg-white rounded py-3 px-4;
 }
 
 .totalCountFlex{
-    @apply flex justify-between items-center
+    @apply flex justify-between items-center mb-3
 }

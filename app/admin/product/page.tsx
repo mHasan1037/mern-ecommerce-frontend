@@ -3,7 +3,7 @@ import React from 'react'
 
 const Product = () => {
   return (
-    <div className='flex'>
+    <div className='adminMainSection'>
         <AdminSidebar />
         <h1>Product</h1>
     </div>

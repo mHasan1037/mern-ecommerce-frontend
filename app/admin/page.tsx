@@ -1,5 +1,4 @@
 "use client";
-import styles from "./admin.module.css";
 import AdminSidebar from "@/components/adminSidebar";
 import { RootState } from "@/redux/store";
 import axiosInstance from "@/utils/axiosInstance";
@@ -85,7 +84,7 @@ const Admin = () => {
   }
 
   return (
-    <div className="flex p-5 bg-mainBg3">
+    <div className="adminMainSection">
       <AdminSidebar />
       <div className="w-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">

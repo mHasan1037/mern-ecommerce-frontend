@@ -9,6 +9,7 @@ const AdminSidebar = () => {
             <li className='text-mainBg2 cursor-pointer flex flex-col gap-3'>
                 <Link href="/admin">Dashboard</Link>
                 <Link href="/admin/product">Product</Link>
+                <Link href="/admin/category">Categories</Link>
             </li>
         </ul>
     </div>

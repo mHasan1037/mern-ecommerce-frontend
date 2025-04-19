@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import style from "./adminProductList.module.css";
 import axiosInstance from "@/utils/axiosInstance";
 import { ProductType } from "@/types/product";
-import { MdEdit, MdDelete  } from "react-icons/md";
+import { MdEdit, MdDelete } from "react-icons/md";
+import { useRouter } from "next/navigation";
 
 interface ProductResponse {
   total: number;
@@ -16,14 +17,13 @@ const AdminProductsList = () => {
   const [allProductInfo, setAllProductsInfo] = useState<ProductResponse | null>(
     null
   );
+  const router = useRouter();
 
   useEffect(() => {
     const getAllProducts = async () => {
       try {
         const allProducts = await axiosInstance.get("/api/products");
         setAllProductsInfo(allProducts.data);
-        console.log("product", allProducts.data.products);
-        console.log("product", allProducts.data);
       } catch (error) {
         console.error("Error fetching products", error);
       }
@@ -31,20 +31,23 @@ const AdminProductsList = () => {
     getAllProducts();
   }, []);
 
-  const handleDeleteProduct = async (id: string) =>{
-    try{
-       const productToDelete = allProductInfo?.products.find((prod) => prod._id === id);
+  const handleDeleteProduct = async (id: string) => {
+    try {
+      const productToDelete = allProductInfo?.products.find(
+        (prod) => prod._id === id
+      );
 
-       if(!productToDelete) return;
+      if (!productToDelete) return;
 
-       for(const img of productToDelete.images){
-        console.log('the image public id', img)
-        await axiosInstance.delete(`/api/products/delete-image/${img?.public_id}`)
-       }
+      for (const img of productToDelete.images) {
+        await axiosInstance.delete(
+          `/api/products/delete-image/${img?.public_id}`
+        );
+      }
 
-       await axiosInstance.delete(`/api/products/${id}`)
+      await axiosInstance.delete(`/api/products/${id}`);
 
-       setAllProductsInfo((prev) =>
+      setAllProductsInfo((prev) =>
         prev
           ? {
               ...prev,
@@ -53,10 +56,10 @@ const AdminProductsList = () => {
             }
           : null
       );
-    }catch(error){
-       console.error('Error deleting product', error);
+    } catch (error) {
+      console.error("Error deleting product", error);
     }
-  }
+  };
 
   return (
     <div>
@@ -83,8 +86,16 @@ const AdminProductsList = () => {
                   <td>{product.price}</td>
                   <td>{product.ratings?.average}</td>
                   <td className="flex gap-2">
-                    <button><MdEdit /></button>
-                    <button onClick={()=> handleDeleteProduct(product._id)}><MdDelete /></button>
+                    <button
+                      onClick={() =>
+                        router.push(`/admin/product/edit/${product._id}`)
+                      }
+                    >
+                      <MdEdit />
+                    </button>
+                    <button onClick={() => handleDeleteProduct(product._id)}>
+                      <MdDelete />
+                    </button>
                   </td>
                 </tr>
               );

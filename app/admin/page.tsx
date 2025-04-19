@@ -64,7 +64,6 @@ const Admin = () => {
     const fetchSummary = async () => {
       try {
         const res = await axiosInstance.get("/api/admin/summary");
-        console.log(res.data.summary);
         setAdminSummary(res.data.summary);
       } catch (err: any) {
         console.error(

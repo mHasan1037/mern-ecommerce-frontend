@@ -1,32 +1,62 @@
-"use client"
-import React, { useState, useEffect } from 'react';
-import style from './adminProductList.module.css';
-import axiosInstance from '@/utils/axiosInstance';
-import { ProductType } from '@/types/product';
+"use client";
+import React, { useState, useEffect } from "react";
+import style from "./adminProductList.module.css";
+import axiosInstance from "@/utils/axiosInstance";
+import { ProductType } from "@/types/product";
+import { MdEdit, MdDelete  } from "react-icons/md";
 
 interface ProductResponse {
-  total: number,
-  page: number,
-  pages: number,
-  products: ProductType[]
+  total: number;
+  page: number;
+  pages: number;
+  products: ProductType[];
 }
 
 const AdminProductsList = () => {
-  const [allProductInfo, setAllProductsInfo] = useState<ProductResponse | null>(null);
+  const [allProductInfo, setAllProductsInfo] = useState<ProductResponse | null>(
+    null
+  );
 
-  useEffect(()=>{
-     const getAllProducts = async () =>{
-        try{
-          const allProducts = await axiosInstance.get('/api/products');
-          setAllProductsInfo(allProducts.data)
-          console.log('product', allProducts.data.products)
-          console.log('product', allProducts.data)
-        }catch(error){
-          console.error('Error fetching products', error)
-        }
-     }
-     getAllProducts();
+  useEffect(() => {
+    const getAllProducts = async () => {
+      try {
+        const allProducts = await axiosInstance.get("/api/products");
+        setAllProductsInfo(allProducts.data);
+        console.log("product", allProducts.data.products);
+        console.log("product", allProducts.data);
+      } catch (error) {
+        console.error("Error fetching products", error);
+      }
+    };
+    getAllProducts();
   }, []);
+
+  const handleDeleteProduct = async (id: string) =>{
+    try{
+       const productToDelete = allProductInfo?.products.find((prod) => prod._id === id);
+
+       if(!productToDelete) return;
+
+       for(const img of productToDelete.images){
+        console.log('the image public id', img)
+        await axiosInstance.delete(`/api/products/delete-image/${img?.public_id}`)
+       }
+
+       await axiosInstance.delete(`/api/products/${id}`)
+
+       setAllProductsInfo((prev) =>
+        prev
+          ? {
+              ...prev,
+              products: prev.products.filter((prod) => prod._id !== id),
+              total: prev.total - 1,
+            }
+          : null
+      );
+    }catch(error){
+       console.error('Error deleting product', error);
+    }
+  }
 
   return (
     <div>
@@ -35,33 +65,35 @@ const AdminProductsList = () => {
         {!allProductInfo ? (
           <p>Loading...</p>
         ) : (
-              <table>
-                <tr>
-                  <th>Title</th>
-                  <th>Category</th>
-                  <th>Stock status</th>
-                  <th>Price</th>
-                  <th>Ratings</th>
-                  <th>Action</th>
+          <table>
+            <tr>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Stock status</th>
+              <th>Price</th>
+              <th>Ratings</th>
+              <th>Action</th>
+            </tr>
+            {allProductInfo.products.map((product) => {
+              return (
+                <tr key={product._id}>
+                  <td>{product.name}</td>
+                  <td>{product.category?.name}</td>
+                  <td>{product.stock}</td>
+                  <td>{product.price}</td>
+                  <td>{product.ratings?.average}</td>
+                  <td className="flex gap-2">
+                    <button><MdEdit /></button>
+                    <button onClick={()=> handleDeleteProduct(product._id)}><MdDelete /></button>
+                  </td>
                 </tr>
-                {
-                  allProductInfo.products.map((product) =>{
-                    return (
-                      <tr key={product._id}>
-                      <td>{product.name}</td>
-                      <td>{product.category?.name}</td>
-                      <td>{product.stock}</td>
-                      <td>{product.price}</td>
-                      <td>{product.ratings?.average}</td>
-                    </tr>
-                    )
-                  })
-                }
-              </table>          
+              );
+            })}
+          </table>
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AdminProductsList
+export default AdminProductsList;

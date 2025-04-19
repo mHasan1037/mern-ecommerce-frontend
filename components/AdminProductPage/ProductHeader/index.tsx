@@ -7,7 +7,7 @@ const ProductHeader = () => {
     const router = useRouter();
 
   return (
-    <div className='flex justify-between items-start w-full'>
+    <div className='flex justify-between items-start w-full mb-10'>
         <select name="category">
             <option value="volvo">Volvo</option>
             <option value="saab">Saab</option>

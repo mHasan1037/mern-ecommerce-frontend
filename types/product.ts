@@ -38,4 +38,19 @@ interface Category {
     createdAt: string;
     updatedAt: string;
   }
+
+  export interface CloudinaryImage {
+    url: string;
+    public_id: string;
+  }
+
+  export type ProductFormDataType = {
+    name: string;
+    description: string;
+    price: string;
+    category: string;
+    stock: string;
+    images: CloudinaryImage[];
+    is_featured: string;
+  };
   

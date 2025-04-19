@@ -7,7 +7,6 @@ import Link from 'next/link';
 
 const Footer = () => {
     const user = useSelector((state: RootState) => state.auth.user);
-    console.log('user', user)
   return (
     <div className='bg-mainBg1 flex justify-between p-3'>
         <p>Copyright: 2025</p>

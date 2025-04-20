@@ -117,16 +117,19 @@ const ProductForm: React.FC<ProductFormProps> = ({
         required
       />
 
-      <CldUploadWidget
-        uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || ""}
-        onSuccess={handleImageUpload}
-      >
-        {({ open }: { open: () => void }) => (
-          <button type="button" onClick={() => open()}>
-            Upload Image
-          </button>
-        )}
-      </CldUploadWidget>
+      {formData.images.length < 4 && (
+        <CldUploadWidget
+          uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || ""}
+          options={{ maxFiles: 4 }}
+          onSuccess={handleImageUpload}
+        >
+          {({ open }: { open: () => void }) => (
+            <button type="button" onClick={() => open()}>
+              Upload Image
+            </button>
+          )}
+        </CldUploadWidget>
+      )}
 
       <div className="flex gap-4 mt-4">
         {formData.images.map((img) => (

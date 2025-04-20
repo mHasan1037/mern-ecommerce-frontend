@@ -1,6 +1,7 @@
 "use client";
 import ConfirmButton from "@/components/buttons/ConfirmButton";
 import { ProductFormDataType } from "@/types/product";
+import axiosInstance from "@/utils/axiosInstance";
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -54,11 +55,16 @@ const ProductForm: React.FC<ProductFormProps> = ({
     }));
   };
 
-  const handleImageDelete = (publicId: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      images: prev.images.filter((img) => img.public_id !== publicId),
-    }));
+  const handleImageDelete = async (publicId: string) => {
+    try {
+      await axiosInstance.delete(`/api/products/delete-image/${publicId}`);
+      setFormData((prev) => ({
+        ...prev,
+        images: prev.images.filter((img) => img.public_id !== publicId),
+      }));
+    } catch (error) {
+      console.error("Failed to delete image", error);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

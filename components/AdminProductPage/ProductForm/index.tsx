@@ -1,5 +1,7 @@
 "use client";
 import ConfirmButton from "@/components/buttons/ConfirmButton";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchCategories } from "@/redux/slices/categorySlice";
 import { ProductFormDataType } from "@/types/product";
 import axiosInstance from "@/utils/axiosInstance";
 import { CldUploadWidget } from "next-cloudinary";
@@ -20,7 +22,7 @@ const defaultFormData: ProductFormDataType = {
   category: "",
   stock: "",
   images: [],
-  is_featured: "",
+  is_featured: false,
 };
 
 const ProductForm: React.FC<ProductFormProps> = ({
@@ -31,16 +33,33 @@ const ProductForm: React.FC<ProductFormProps> = ({
   const [formData, setFormData] = useState<ProductFormDataType>(
     initialData || defaultFormData
   );
+  const dispatch = useAppDispatch();
+  const { categories, loading, error } = useAppSelector(
+    (state) => state.categories
+  );
   const router = useRouter();
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   useEffect(() => {
     if (initialData) setFormData(initialData);
   }, [initialData]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const {name, value, type} = e.target;
+    
+    if(type === 'checkbox'){
+      const target = e.target as HTMLInputElement;
+      setFormData({...formData, [name]: target.checked})
+    }else{
+      setFormData({...formData, [name]: value})
+    }
   };
 
   const handleImageUpload = (result: any) => {
@@ -77,7 +96,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
       category: "",
       stock: "",
       images: [],
-      is_featured: "",
+      is_featured: false,
     });
     router.push("/admin/product");
   };
@@ -106,14 +125,20 @@ const ProductForm: React.FC<ProductFormProps> = ({
         placeholder="Price"
         required
       />
-      <input
-        type="text"
+      <select
         name="category"
         value={formData.category}
         onChange={handleChange}
-        placeholder="Category"
         required
-      />
+      >
+        {categories.map((category) => {
+          return (
+            <option key={category._id} value={category._id}>
+              {category.name}
+            </option>
+          );
+        })}
+      </select>
       <input
         type="number"
         name="stock"
@@ -151,14 +176,16 @@ const ProductForm: React.FC<ProductFormProps> = ({
         ))}
       </div>
 
-      <input
-        type="text"
-        name="is_featured"
-        value={formData.is_featured}
-        onChange={handleChange}
-        placeholder="Is featured"
-        required
-      />
+      <div>
+        <label htmlFor="is_featured">Featured:</label>
+        <input
+          type="checkbox"
+          name="is_featured"
+          id="is_featured"
+          checked={formData.is_featured}
+          onChange={handleChange}
+        />
+      </div>
 
       <ConfirmButton
         buttonText={mode === "edit" ? "Update" : "Upload"}

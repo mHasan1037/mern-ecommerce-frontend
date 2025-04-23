@@ -51,6 +51,6 @@ interface Category {
     category: string;
     stock: string;
     images: CloudinaryImage[];
-    is_featured: string;
+    is_featured: boolean;
   };
   

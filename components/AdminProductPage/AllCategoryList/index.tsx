@@ -1,23 +1,24 @@
 "use client";
+import { fetchCategories } from "@/redux/slices/categorySlice";
 import Image from "next/image";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
-interface Category {
-  _id: string;
-  name: string;
-  description: string;
-  image: {
-    url: string;
-  };
-}
 
-interface AllCategoryListProps {
-  categires: Category[];
-}
+const AllCategoryList = () => {
+    const dispatch = useAppDispatch();
+    const { categories, loading, error } = useAppSelector((state) => state.categories);
 
-const AllCategoryList: React.FC<AllCategoryListProps> = ({ categires }) => {
+    useEffect(()=>{
+       dispatch(fetchCategories())
+    }, [dispatch]);
+
+    if(loading) return <p>Loading</p>
+    if(error) return <p>Error: {error}</p>
+
   return (
     <div className="flex gap-3">
-      {categires.map((category) => {
+      {categories.map((category) => {
         return (
           <div key={category._id}>
             <Image

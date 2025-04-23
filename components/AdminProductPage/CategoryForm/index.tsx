@@ -7,6 +7,7 @@ import React, { useState } from "react";
 
 interface CategoryProps {
   title: string;
+  setShowCategoryForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface CategoryFormData {
@@ -16,7 +17,7 @@ interface CategoryFormData {
   image: CloudinaryImage | null;
 }
 
-const CategoryForm: React.FC<CategoryProps> = ({ title }) => {
+const CategoryForm: React.FC<CategoryProps> = ({ title, setShowCategoryForm }) => {
   const [formData, setFormData] = useState<CategoryFormData>({
     name: "",
     description: "",
@@ -69,6 +70,7 @@ const CategoryForm: React.FC<CategoryProps> = ({ title }) => {
           parentCategory: "",
           image: null,
         });
+        setShowCategoryForm(false);
     }catch(error){
 
     }
@@ -77,6 +79,7 @@ const CategoryForm: React.FC<CategoryProps> = ({ title }) => {
 
   return (
     <div>
+      <button onClick={()=> setShowCategoryForm(false)}>Go to categories</button>
       <h1>{title}</h1>
 
       <form onSubmit={handleSubmit}>

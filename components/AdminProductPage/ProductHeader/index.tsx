@@ -3,11 +3,12 @@ import ConfirmButton from "@/components/buttons/ConfirmButton";
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { fetchCategories } from "@/redux/slices/categorySlice";
+import { fetchCategories, setSelectedCategory } from "@/redux/slices/categorySlice";
 
 const ProductHeader = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const selectedCategory = useAppSelector((state) => state.categories.selectedCategory)
   const { categories, loading, error } = useAppSelector(
     (state) => state.categories
   );
@@ -16,10 +17,16 @@ const ProductHeader = () => {
     dispatch(fetchCategories());
   }, [dispatch]);
 
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) =>{
+    dispatch(setSelectedCategory(e.target.value))
+  }
+
   return (
     <div className="flex justify-between items-start w-full mb-10">
       <select
         name="category"
+        value={selectedCategory ?? ""}
+        onChange={handleCategoryChange}
         required
       >
         {categories.map((category) => {

@@ -18,12 +18,14 @@ interface CategoryState {
     categories: Category[];
     loading: boolean;
     error: string | null;
+    selectedCategory: string | null;
 }
 
 const initialState: CategoryState = {
     categories: [],
     loading: false,
-    error: null
+    error: null,
+    selectedCategory: null,
 }
 
 export const fetchCategories = createAsyncThunk(
@@ -41,6 +43,9 @@ const categorySlice = createSlice({
         clearCategories(state){
             state.categories= [];
             state.error = null;
+        },
+        setSelectedCategory(state, action) {
+            state.selectedCategory = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -60,5 +65,5 @@ const categorySlice = createSlice({
     }
 })
 
-export const { clearCategories } = categorySlice.actions;
+export const { clearCategories, setSelectedCategory } = categorySlice.actions;
 export const categoryReducer = categorySlice.reducer;

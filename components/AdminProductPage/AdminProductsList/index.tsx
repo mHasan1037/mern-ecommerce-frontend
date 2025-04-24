@@ -5,6 +5,7 @@ import axiosInstance from "@/utils/axiosInstance";
 import { ProductType } from "@/types/product";
 import { MdEdit, MdDelete } from "react-icons/md";
 import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/redux/hooks";
 
 interface ProductResponse {
   total: number;
@@ -17,19 +18,23 @@ const AdminProductsList = () => {
   const [allProductInfo, setAllProductsInfo] = useState<ProductResponse | null>(
     null
   );
+  const selectedCategory = useAppSelector(state => state.categories.selectedCategory);
   const router = useRouter();
 
   useEffect(() => {
     const getAllProducts = async () => {
       try {
-        const allProducts = await axiosInstance.get("/api/products");
+        const params = new URLSearchParams();
+        if(selectedCategory) params.append('category', selectedCategory);
+
+        const allProducts = await axiosInstance.get(`/api/products?${params.toString()}`);
         setAllProductsInfo(allProducts.data);
       } catch (error) {
         console.error("Error fetching products", error);
       }
     };
     getAllProducts();
-  }, []);
+  }, [selectedCategory]);
 
   const handleDeleteProduct = async (id: string) => {
     try {

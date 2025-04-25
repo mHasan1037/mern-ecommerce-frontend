@@ -43,7 +43,7 @@ const ProductHeader = () => {
             );
           })}
         </select>
-        <p>Add a feature product filter tick here</p>
+        <p className="text-red-500">Add a feature product filter tick here</p>
       </div>
       <div className="flex gap-5">
         <input

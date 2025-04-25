@@ -2,17 +2,10 @@
 import React, { useState, useEffect } from "react";
 import style from "./adminProductList.module.css";
 import axiosInstance from "@/utils/axiosInstance";
-import { ProductType } from "@/types/product";
+import { ProductResponse } from "@/types/product";
 import { MdEdit, MdDelete } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/redux/hooks";
-
-interface ProductResponse {
-  total: number;
-  page: number;
-  pages: number;
-  products: ProductType[];
-}
 
 const AdminProductsList = () => {
   const [allProductInfo, setAllProductsInfo] = useState<ProductResponse | null>(

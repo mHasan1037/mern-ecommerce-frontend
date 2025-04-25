@@ -53,4 +53,11 @@ interface Category {
     images: CloudinaryImage[];
     is_featured: boolean;
   };
+
+  export interface ProductResponse {
+    total: number;
+    page: number;
+    pages: number;
+    products: ProductType[];
+  }
   

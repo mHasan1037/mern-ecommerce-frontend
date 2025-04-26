@@ -76,8 +76,6 @@ const Admin = () => {
     fetchSummary();
   }, [user]);
 
-  const revenueGrowth = adminSummary?.revenueGrowthThisMonth ?? 0;
-
   if (isLoading) {
     return <h1>Loading page</h1>;
   }

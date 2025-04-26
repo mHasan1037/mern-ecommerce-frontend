@@ -1,6 +1,6 @@
 "use client";
+import ProductBox from "@/components/ProductBox";
 import { ProductResponse } from "@/types/product";
-import Image from "next/image";
 import React from "react";
 interface ProductSlideSectionProps {
   allProductSlideSections: ProductResponse;
@@ -13,15 +13,7 @@ const ProductSlideSection: React.FC<ProductSlideSectionProps> = ({
     <div className="flex gap-5">
       {allProductSlideSections.products.map((product) => {
         return (
-          <div key={product._id}>
-            <Image
-              src={product.images[0]?.url}
-              width={100}
-              height={100}
-              alt={product.name}
-            />
-            <p>{product.name}</p>
-          </div>
+          <ProductBox product={product}/>
         );
       })}
     </div>

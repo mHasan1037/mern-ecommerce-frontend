@@ -1,38 +1,27 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import ProductSlideSection from "../ProductSliceSection";
-import { ProductResponse } from "@/types/product";
-import axiosInstance from "@/utils/axiosInstance";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchProducts } from "@/redux/slices/productSlice";
 
 const HomeMainSection = () => {
-  const [allProductSlideSections, setAllProductSlideSectionsI] =
-    useState<ProductResponse | null>(null);
+  const dispatch = useAppDispatch();
+  const {productsInfo, loading, error} = useAppSelector((state) => state.products)
 
   useEffect(() => {
-    const getAllProductSlideSections = async () => {
-      try {
-        const allProducts = await axiosInstance.get(
-          `/api/products?is_featured=true`
-        );
-        setAllProductSlideSectionsI(allProducts.data);
-      } catch (error) {
-        console.error("Error fetching products", error);
-      }
-    };
-    getAllProductSlideSections();
-  }, []);
+    dispatch(fetchProducts({ is_featured: true }))
+  }, [dispatch]);
 
-  if (!allProductSlideSections) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <p>Loading products...</p>;
+  if (error) return <p>Error fetching products: {error}</p>;
 
   return (
     <div>
-      {allProductSlideSections?.products.length !== 0 && (
+      {productsInfo && (
         <>
           <h1>Featured products</h1>
           <ProductSlideSection
-            allProductSlideSections={allProductSlideSections}
+            allProductSlideSections={productsInfo}
           />
         </>
       )}

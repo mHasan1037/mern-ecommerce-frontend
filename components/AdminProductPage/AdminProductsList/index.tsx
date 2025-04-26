@@ -5,33 +5,23 @@ import axiosInstance from "@/utils/axiosInstance";
 import { ProductResponse } from "@/types/product";
 import { MdEdit, MdDelete } from "react-icons/md";
 import { useRouter } from "next/navigation";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchProducts } from "@/redux/slices/productSlice";
 
 const AdminProductsList = () => {
-  const [allProductInfo, setAllProductsInfo] = useState<ProductResponse | null>(
-    null
-  );
+  const dispatch = useAppDispatch();
+  const {productsInfo, loading, error} = useAppSelector((state) => state.products);
+
   const selectedCategory = useAppSelector(state => state.categories.selectedCategory);
   const router = useRouter();
 
   useEffect(() => {
-    const getAllProducts = async () => {
-      try {
-        const params = new URLSearchParams();
-        if(selectedCategory) params.append('category', selectedCategory);
-
-        const allProducts = await axiosInstance.get(`/api/products?${params.toString()}`);
-        setAllProductsInfo(allProducts.data);
-      } catch (error) {
-        console.error("Error fetching products", error);
-      }
-    };
-    getAllProducts();
-  }, [selectedCategory]);
+    dispatch(fetchProducts({category: selectedCategory ?? undefined }))
+  }, [selectedCategory, dispatch]);
 
   const handleDeleteProduct = async (id: string) => {
     try {
-      const productToDelete = allProductInfo?.products.find(
+      const productToDelete = productsInfo?.products.find(
         (prod) => prod._id === id
       );
 
@@ -45,25 +35,20 @@ const AdminProductsList = () => {
 
       await axiosInstance.delete(`/api/products/${id}`);
 
-      setAllProductsInfo((prev) =>
-        prev
-          ? {
-              ...prev,
-              products: prev.products.filter((prod) => prod._id !== id),
-              total: prev.total - 1,
-            }
-          : null
-      );
+      dispatch(fetchProducts({category: selectedCategory ?? undefined }));
     } catch (error) {
       console.error("Error deleting product", error);
     }
   };
 
+  if (loading) return <p>Loading products...</p>;
+  if (error) return <p>Error fetching products: {error}</p>;
+
   return (
     <div>
       <h1>All products</h1>
       <div>
-        {!allProductInfo ? (
+        {!productsInfo ? (
           <p>Loading...</p>
         ) : (
           <table>
@@ -75,7 +60,7 @@ const AdminProductsList = () => {
               <th>Ratings</th>
               <th>Action</th>
             </tr>
-            {allProductInfo.products.map((product) => {
+            {productsInfo.products.map((product) => {
               return (
                 <tr key={product._id}>
                   <td>{product.name}</td>

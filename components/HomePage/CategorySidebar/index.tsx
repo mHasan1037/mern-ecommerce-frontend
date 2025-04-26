@@ -1,6 +1,10 @@
 "use client";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { fetchCategories } from "@/redux/slices/categorySlice";
+import {
+  fetchCategories,
+  setSelectedCategory,
+} from "@/redux/slices/categorySlice";
+import { fetchProducts } from "@/redux/slices/productSlice";
 import React, { useEffect } from "react";
 
 const CategorySidebar = () => {
@@ -16,11 +20,24 @@ const CategorySidebar = () => {
   if (loading) return <p>Loading</p>;
   if (error) return <p>Error: {error}</p>;
 
-  return <div>
-    {categories.map((category) => (
-        <div>{category.name}</div>
-    ))}
-  </div>;
+  const handleCategory = (id: string) => {
+    dispatch(setSelectedCategory(id));
+    dispatch(fetchProducts({ category: id }));
+  };
+
+  return (
+    <div>
+      {categories.map((category) => (
+        <div
+          key={category._id}
+          onClick={() => handleCategory(category._id)}
+          className="cursor-pointer"
+        >
+          {category.name}
+        </div>
+      ))}
+    </div>
+  );
 };
 
 export default CategorySidebar;

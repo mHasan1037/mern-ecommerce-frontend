@@ -1,6 +1,5 @@
 import axiosInstance from "@/utils/axiosInstance";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { stat } from "fs";
 
 export interface Category{
     _id: string;

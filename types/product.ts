@@ -61,3 +61,22 @@ interface Category {
     products: ProductType[];
   }
   
+
+ export interface ProductFilters {
+    category?: string;
+    search?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    sort?: string;
+    page?: number;
+    limit?: number;
+    is_featured?: boolean;
+  }
+
+  export interface ProductState {
+    productsInfo: ProductResponse | null;
+    loading: boolean;
+    error: string | null;
+    singleProduct: ProductFormDataType | null;
+    singleLoading: boolean;
+  }

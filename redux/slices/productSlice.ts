@@ -65,6 +65,9 @@ const productSlice = createSlice({
       state.singleProduct = null;   
       state.singleLoading = false;
     },
+    updateSingleProduct: (state, action) => {
+      state.singleProduct = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -95,6 +98,6 @@ const productSlice = createSlice({
   },
 });
 
-export const { clearProducts } = productSlice.actions;
+export const { clearProducts, updateSingleProduct } = productSlice.actions;
 export const productReducer = productSlice.reducer;
 

@@ -56,7 +56,7 @@ function MainNavbar({ setOpenForm }: NavbarProps) {
         />
       </div>
       <div className="flex gap-5">
-        <div className={styles.wishlist}>
+        <div className={styles.wishlist} onClick={()=> router.push('/wishlist')}>
           <div className="relative">
             <span className={styles.count}>{loading ? "..." : wishlist.length > 0 ? wishlist.length : "0"}</span>
             <CiHeart size={24} />

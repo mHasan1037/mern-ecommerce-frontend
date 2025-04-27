@@ -2,6 +2,7 @@ import { ProductType } from "@/types/product";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
+import AddWishList from "../AddWishList";
 
 interface ProductBoxProps {
   product: ProductType;
@@ -22,6 +23,7 @@ const ProductBox: React.FC<ProductBoxProps> = ({ product }) => {
         <p>{product.price}</p>
         <p>{product.ratings?.average}</p>
       </div>
+      <AddWishList id={product._id}/>
     </div>
   );
 };

@@ -30,7 +30,6 @@ const ResetPassword = () => {
             }
           ]}
           onsubmit={async (data) => {
-            console.log('data', data)
             try {
               await axiosInstance.post(
                 `api/user/reset-password/${userId}/${token}`,

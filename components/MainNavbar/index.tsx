@@ -28,18 +28,11 @@ function MainNavbar({ setOpenForm }: NavbarProps) {
   const dispatch = useAppDispatch();
   const {wishlist, loading, error} = useAppSelector((state) => state.wishlist);
 
-  useEffect(()=>{
-    if(isAuthenticated){
-      dispatch(fetchWishlist())
-    }  
-  }, [dispatch, isAuthenticated])
-
-  if(loading){
-    return <h1>Loading</h1>
-  }
-  if(error){
-    return <h1>Error: {error}</h1>
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(fetchWishlist());
+    }
+  }, [dispatch, isAuthenticated]);
 
   return (
     <section className={styles.navbar}>
@@ -65,7 +58,7 @@ function MainNavbar({ setOpenForm }: NavbarProps) {
       <div className="flex gap-5">
         <div className={styles.wishlist}>
           <div className="relative">
-            <span className={styles.count}>{wishlist.length > 0 ? wishlist.length : '0'}</span>
+            <span className={styles.count}>{loading ? "..." : wishlist.length > 0 ? wishlist.length : "0"}</span>
             <CiHeart size={24} />
           </div>{" "}
           Wishlist

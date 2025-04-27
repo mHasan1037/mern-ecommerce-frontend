@@ -1,7 +1,7 @@
-import { useAppDispatch } from "@/redux/hooks";
-import { addToWishList } from "@/redux/slices/wishListSlice";
-import axiosInstance from "@/utils/axiosInstance";
-import React from "react";
+"use client";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { addToWishList, fetchWishlist } from "@/redux/slices/wishListSlice";
+import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 
 interface AddWishListProps {
@@ -9,7 +9,15 @@ interface AddWishListProps {
 }
 
 const AddWishList: React.FC<AddWishListProps> = ({ id }) => {
-    const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
+  const { wishlist, loading, error } = useAppSelector(
+    (state) => state.wishlist
+  );
+
+  useEffect(() => {
+    dispatch(fetchWishlist());
+  }, [dispatch]);
+
   const handleWishListPost = async (
     event: React.MouseEvent<HTMLButtonElement>,
     id: string
@@ -22,7 +30,13 @@ const AddWishList: React.FC<AddWishListProps> = ({ id }) => {
       console.error("Failed to add to wishlist", error);
     }
   };
-  return (
+
+  if (loading) return <h1>Loading...</h1>;
+  if (error) return <h1>Error...{error}</h1>;
+
+  return wishlist.find((list) => list._id === id) ? (
+    <p>Added to wishlist</p>
+  ) : (
     <button onClick={(e) => handleWishListPost(e, id)}>AddWishList</button>
   );
 };

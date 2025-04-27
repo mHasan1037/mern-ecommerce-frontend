@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/redux/slices/authSlice";
 import { useRouter } from "next/navigation";
 import { RootState } from "@/redux/store";
+import { resetWishlist } from "@/redux/slices/wishListSlice";
 
 const ProfileDropdown = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -22,6 +23,7 @@ const ProfileDropdown = () => {
         withCredentials: true,
       });
       dispatch(logout());
+      dispatch(resetWishlist());
       route.push("/");
       toast.success("Logout successful");
     } catch (error) {

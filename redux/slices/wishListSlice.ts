@@ -1,11 +1,6 @@
+import { WishListState } from "@/types/wishlist";
 import axiosInstance from "@/utils/axiosInstance";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
-interface WishListState {
-    wishlist: string[];
-    loading: boolean;
-    error: string | null;
-}
 
 const initialState: WishListState = {
     wishlist: [],
@@ -40,7 +35,13 @@ export const addToWishList = createAsyncThunk(
 const wishlistSlice = createSlice({
     name: 'wishlist',
     initialState,
-    reducers: {},
+    reducers: {
+      resetWishlist(state){
+        state.wishlist = [];
+        state.loading = false;
+        state.error = null;
+      }
+    },
     extraReducers: (builder) => {
         builder
           .addCase(fetchWishlist.pending, (state) => {
@@ -60,4 +61,5 @@ const wishlistSlice = createSlice({
     }
 })
 
+export const { resetWishlist } = wishlistSlice.actions;
 export const wishListReducer = wishlistSlice.reducer;

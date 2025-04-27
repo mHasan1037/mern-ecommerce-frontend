@@ -1,4 +1,5 @@
-import React from "react";
+"use client"
+import React, { useEffect } from "react";
 import Image from "next/image";
 import styles from "./MainNavbar.module.css";
 import { CiHeart } from "react-icons/ci";
@@ -8,6 +9,8 @@ import SmallScreenSearchbox from "../SmallScreenSearchbox";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchWishlist } from "@/redux/slices/wishListSlice";
 
 interface NavbarProps {
   setOpenForm: React.Dispatch<
@@ -22,6 +25,21 @@ function MainNavbar({ setOpenForm }: NavbarProps) {
     (state: RootState) => state.auth.isAuthenticated
   );
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const {wishlist, loading, error} = useAppSelector((state) => state.wishlist);
+
+  useEffect(()=>{
+    if(isAuthenticated){
+      dispatch(fetchWishlist())
+    }  
+  }, [dispatch, isAuthenticated])
+
+  if(loading){
+    return <h1>Loading</h1>
+  }
+  if(error){
+    return <h1>Error: {error}</h1>
+  }
 
   return (
     <section className={styles.navbar}>
@@ -47,7 +65,7 @@ function MainNavbar({ setOpenForm }: NavbarProps) {
       <div className="flex gap-5">
         <div className={styles.wishlist}>
           <div className="relative">
-            <span className={styles.count}>0</span>
+            <span className={styles.count}>{wishlist.length > 0 ? wishlist.length : '0'}</span>
             <CiHeart size={24} />
           </div>{" "}
           Wishlist

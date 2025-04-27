@@ -1,5 +1,6 @@
 import { ProductType } from "@/types/product";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 interface ProductBoxProps {
@@ -7,8 +8,9 @@ interface ProductBoxProps {
 }
 
 const ProductBox: React.FC<ProductBoxProps> = ({ product }) => {
+   const router = useRouter();
   return (
-    <div key={product._id} className="cursor-pointer">
+    <div key={product._id} className="cursor-pointer" onClick={()=> router.push(`/${product._id}`)}>
       <Image
         src={product.images[0]?.url}
         width={100}

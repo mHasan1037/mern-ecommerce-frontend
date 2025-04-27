@@ -77,6 +77,6 @@ interface Category {
     productsInfo: ProductResponse | null;
     loading: boolean;
     error: string | null;
-    singleProduct: ProductFormDataType | null;
+    singleProduct: ProductType | null;
     singleLoading: boolean;
   }

@@ -31,7 +31,7 @@ const WishList = () => {
                 height={50}
               />
               <p>{list.name}</p>
-              <p>{list.price}</p>
+              <p>${list.price}</p>
               <button onClick={() => router.push(list._id)}>
                 View product
               </button>

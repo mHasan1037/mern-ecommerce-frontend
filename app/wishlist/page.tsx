@@ -45,6 +45,7 @@ const WishList = () => {
               />
               <p>{list.name}</p>
               <p>${list.price}</p>
+              <p>{list.stock > 0 ? 'In stock' : 'Out of stock'}</p>
               <button onClick={() => router.push(list._id)}>
                 View product
               </button>
@@ -52,6 +53,11 @@ const WishList = () => {
             </div>
           );
         })}
+
+        <div>
+          <p>Move to cart</p>
+          <p>Clear whole wishlist in a click</p>
+        </div>
     </div>
   );
 };

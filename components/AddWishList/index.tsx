@@ -10,24 +10,17 @@ interface AddWishListProps {
 
 const AddWishList: React.FC<AddWishListProps> = ({ id }) => {
   const dispatch = useAppDispatch();
-  const { wishlist, loading, error } = useAppSelector(
+  const { wishlist, error } = useAppSelector(
     (state) => state.wishlist
   );
   const { isAuthenticated } = useAppSelector((state ) => state.auth);
-  const [isAdded, setIsAdded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if(isAuthenticated){
       dispatch(fetchWishlist());
     }
   }, [dispatch, isAuthenticated]);
-
-  useEffect(()=> {
-     if(wishlist.find((list) => list._id === id)){
-      setIsAdded(true);
-     }
-  }, [wishlist, id]);
-
 
 
   const handleWishListPost = async (
@@ -40,25 +33,29 @@ const AddWishList: React.FC<AddWishListProps> = ({ id }) => {
         toast.error('You need to login first!');
         return;
       }
+      setIsLoading(true);
       await dispatch(addToWishList(id)).unwrap();
-      setIsAdded(true);
+      await dispatch(fetchWishlist()); 
       toast.success("Added to wishlist!");
     } catch (error) {
       console.error("Failed to add to wishlist", error);
+    } finally{
+      setIsLoading(false);
     }
   };
+
+  const addedToWishlist = wishlist.some((list) => list._id === id);
 
   if(!isAuthenticated){
     return <button onClick={(e) => handleWishListPost(e, id)}>Add Wishlist</button>
   }
 
-  if (loading) return <h1>Loading...</h1>;
   if (error) return <h1>Error...{error}</h1>;
 
-  return isAdded ? (
+  return addedToWishlist ? (
     <p>Added to wishlist</p>
   ) : (
-    <button onClick={(e) => handleWishListPost(e, id)}>AddWishList</button>
+    <button onClick={(e) => handleWishListPost(e, id)}>{isLoading ? 'Adding...' : 'AddWishList'}</button>
   );
 };
 

@@ -56,7 +56,18 @@ const EditProduct = ({ params }: EditProductProps) => {
   };
 
   if (singleLoading) return <p>Loading product...</p>;
-  const initialData = singleProduct || defaultFormData;
+
+  const initialData: ProductFormDataType = singleProduct
+  ? {
+      name: singleProduct.name,
+      description: singleProduct.description,
+      price: singleProduct.price.toString(),
+      stock: singleProduct.stock.toString(),
+      images: singleProduct.images,
+      is_featured: singleProduct.is_featured,
+      category: typeof singleProduct.category === "string" ? singleProduct.category : singleProduct.category._id,
+    }
+  : defaultFormData;
 
   return (
     <div className="adminMainSection">

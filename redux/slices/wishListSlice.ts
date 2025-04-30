@@ -44,6 +44,18 @@ export const removeFromWishlist = createAsyncThunk(
   }
 )
 
+export const clearWishlist = createAsyncThunk(
+  "wishlist/clearwishlist",
+  async (_, thunkApi) =>{
+    try{
+       const res = await axiosInstance.delete('/api/wishlist', { withCredentials: true })
+       return res.data.message;
+    }catch(error: any){
+       return thunkApi.rejectWithValue(error.response.data.message)
+    }
+  }
+)
+
 const wishlistSlice = createSlice({
     name: 'wishlist',
     initialState,
@@ -72,6 +84,9 @@ const wishlistSlice = createSlice({
           })
           .addCase(removeFromWishlist.fulfilled, (state, action) =>{
             state.wishlist = state.wishlist.filter(item => item._id !== action.payload)
+          })
+          .addCase(clearWishlist.fulfilled, (state) =>{
+            state.wishlist = []
           })
     }
 })

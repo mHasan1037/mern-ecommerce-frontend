@@ -1,10 +1,11 @@
 "use client";
+import AddToCart from "@/components/AddToCart";
 import AddWishList from "@/components/AddWishList";
 import NewReviewForm from "@/components/NewReviewForm";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchProductById } from "@/redux/slices/productSlice";
 import Image from "next/image";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 interface ProductDetailsProps {
   params: {
@@ -14,6 +15,7 @@ interface ProductDetailsProps {
 
 const ProductDetail = ({ params }: ProductDetailsProps) => {
   const { productId } = params;
+  const [productCartQuantity, setProductCartQuantity] = useState(0);
   const dispatch = useAppDispatch();
   const {
     singleProduct: product,
@@ -68,7 +70,17 @@ const ProductDetail = ({ params }: ProductDetailsProps) => {
           </div>
           <p>Stocks: {product?.stock}</p>
           <p>{product?.is_featured && <b>Featured product</b>}</p>
-          <AddWishList id={product._id}/>
+          <AddWishList id={product._id} />
+          <div>
+            <input
+              type="number"
+              placeholder="0"
+              value={productCartQuantity}
+              min={0}
+              onChange={(e) => setProductCartQuantity(Number(e.target.value))}
+            />
+            <AddToCart productId={product._id} quantity={productCartQuantity} />
+          </div>
           <p>{product?.description}</p>
         </div>
       </div>

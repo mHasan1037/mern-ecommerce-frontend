@@ -26,6 +26,7 @@ const HomeMainSection = () => {
         </>
       )}
       <h1 className="text-red-700">Add a most sold product in the home page. update the backend</h1>
+      <h1 className="text-red-700">Make the wishlist button like an icon. Small icon</h1>
     </div>
   );
 };

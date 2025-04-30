@@ -31,6 +31,22 @@ export const addToCart = createAsyncThunk(
   }
 );
 
+export const fetchCartList = createAsyncThunk(
+    "cart/fetchCartList",
+    async(_, thunkApi) =>{
+        try{
+           const res = await axiosInstance.get("/api/cart", {
+            withCredentials: true,
+           });
+           return res.data.cart;
+        }catch(error: any){
+           return thunkApi.rejectWithValue(
+            error.response?.data?.message || "Failed to fetch cart"
+           )
+        }
+    }
+)
+
 
 const cartSlice = createSlice({
     name: 'cart',
@@ -53,6 +69,18 @@ const cartSlice = createSlice({
             state.cart = action.payload;
           })
           .addCase(addToCart.rejected, (state, action) =>{
+            state.loading = false;
+            state.error = action.payload as string;
+          })
+          .addCase(fetchCartList.pending, (state) =>{
+            state.loading = true;
+            state.error = null;
+          })
+          .addCase(fetchCartList.fulfilled, (state, action) =>{
+            state.loading = false;
+            state.cart = action.payload;
+          })
+          .addCase(fetchCartList.rejected, (state, action) =>{
             state.loading = false;
             state.error = action.payload as string;
           })

@@ -1,25 +1,48 @@
-import { useAppDispatch } from '@/redux/hooks';
-import { addToCart } from '@/redux/slices/cartSlice';
-import React from 'react'
-import { toast } from 'react-toastify';
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { addToCart, fetchCartList } from "@/redux/slices/cartSlice";
+import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 interface AddToCartProps {
-    productId: string;
-    quantity: number;
+  productId: string;
+  quantity: number;
 }
 
-const AddToCart: React.FC<AddToCartProps> = ({productId, quantity}) => {
-    const dispatch = useAppDispatch();
+const AddToCart: React.FC<AddToCartProps> = ({ productId, quantity }) => {
+  const dispatch = useAppDispatch();
+  const { cart } = useAppSelector((state) => state.cart);
+  const [isLoading, setIsLoading] = useState(false);
 
-    const handleAddToCart = () =>{
-        dispatch(addToCart({productId, quantity}))
-        .unwrap()
-        .then(()=> toast.success("Added to cart!"))
-        .catch((err) => console.error(err));
+  const isAddedToCart = cart.some((c) => c.product._id === productId);
+
+  const handleAddToCart = async () => {
+    if (isAddedToCart) return;
+    setIsLoading(true);
+
+    try {
+      await dispatch(addToCart({ productId, quantity })).unwrap();
+      await dispatch(fetchCartList());
+      toast.success("Added to cart!");
+    } catch (error) {
+      toast.error("Failed to add to cart");
+    } finally {
+      setIsLoading(false);
     }
-  return (
-    <div onClick={handleAddToCart}>AddToCart</div>
-  )
-}
+  };
 
-export default AddToCart
+  if (isAddedToCart) {
+    return <div>Added to cart</div>;
+  }
+
+  return (
+    <button
+      onClick={handleAddToCart}
+      disabled={isLoading}
+      className="px-4 py-2 bg-blue-600 text-white rounded"
+    >
+      {isLoading ? "Adding..." : "Add to Cart"}
+    </button>
+  );
+};
+
+export default AddToCart;

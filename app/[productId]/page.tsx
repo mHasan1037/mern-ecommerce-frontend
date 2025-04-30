@@ -1,4 +1,5 @@
 "use client";
+import AddWishList from "@/components/AddWishList";
 import NewReviewForm from "@/components/NewReviewForm";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchProductById } from "@/redux/slices/productSlice";
@@ -67,6 +68,7 @@ const ProductDetail = ({ params }: ProductDetailsProps) => {
           </div>
           <p>Stocks: {product?.stock}</p>
           <p>{product?.is_featured && <b>Featured product</b>}</p>
+          <AddWishList id={product._id}/>
           <p>{product?.description}</p>
         </div>
       </div>

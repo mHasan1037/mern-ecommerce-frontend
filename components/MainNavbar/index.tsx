@@ -11,6 +11,7 @@ import { RootState } from "@/redux/store";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchWishlist } from "@/redux/slices/wishListSlice";
+import { fetchCartList } from "@/redux/slices/cartSlice";
 
 interface NavbarProps {
   setOpenForm: React.Dispatch<
@@ -26,11 +27,13 @@ function MainNavbar({ setOpenForm }: NavbarProps) {
   );
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const {wishlist, loading, error} = useAppSelector((state) => state.wishlist);
+  const {wishlist, loading: loadingWishlist, error: wishlistError} = useAppSelector((state) => state.wishlist);
+  const {cart, loading: loadingCart, error: cartError} = useAppSelector((state) => state.cart)
 
   useEffect(() => {
     if (isAuthenticated) {
       dispatch(fetchWishlist());
+      dispatch(fetchCartList())
     }
   }, [dispatch, isAuthenticated]);
 
@@ -58,14 +61,14 @@ function MainNavbar({ setOpenForm }: NavbarProps) {
       <div className="flex gap-5">
         <div className={styles.wishlist} onClick={()=> router.push('/wishlist')}>
           <div className="relative">
-            <span className={styles.count}>{loading ? "..." : wishlist.length > 0 ? wishlist.length : "0"}</span>
+            <span className={styles.count}>{loadingWishlist ? "..." : wishlist.length > 0 ? wishlist.length : "0"}</span>
             <CiHeart size={24} />
           </div>{" "}
           Wishlist
         </div>
-        <div className={styles.cart}>
+        <div className={styles.cart} onClick={()=> router.push('/cart')}>
           <div className="relative">
-            <span className={styles.count}>0</span>
+            <span className={styles.count}>{loadingCart ? "..." : cart.length > 0 ? cart.length : "0"} </span>
             <CiShoppingCart size={24} />
           </div>{" "}
           Cart

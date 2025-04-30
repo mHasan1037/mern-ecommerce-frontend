@@ -1,7 +1,7 @@
 "use client";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { RxCross2 } from "react-icons/rx";
-import { fetchWishlist, removeFromWishlist } from "@/redux/slices/wishListSlice";
+import { clearWishlist, fetchWishlist, removeFromWishlist } from "@/redux/slices/wishListSlice";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
@@ -29,10 +29,20 @@ const WishList = () => {
     })
   }
 
+  const removeAllWishlist = async () =>{
+    try{
+      await dispatch(clearWishlist()).unwrap();
+      toast.success("Wishlist is cleared");
+    }catch(error: any){
+      console.error('Failed to clear wishlist',  error)
+    }
+  }
+
   if (loading) return <h1>Loading</h1>;
   if (error) return <h1>Error: {error}</h1>;
   return (
     <div>
+      <button onClick={removeAllWishlist}>Clear wishlist</button>
       {wishlist &&
         wishlist.map((list) => {
           return (

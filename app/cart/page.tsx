@@ -1,49 +1,81 @@
 "use client";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { fetchCartList } from "@/redux/slices/cartSlice";
+import { deleteCart, fetchCartList } from "@/redux/slices/cartSlice";
 import Image from "next/image";
 import React, { useEffect } from "react";
+import { toast } from "react-toastify";
 
-const cart = () => {
+const Cart = () => {
   const dispatch = useAppDispatch();
-  const { cart: cartList, loading, error } = useAppSelector((state) => state.cart);
+  const {
+    cart: cartList,
+    loading,
+    error,
+  } = useAppSelector((state) => state.cart);
 
   useEffect(() => {
     dispatch(fetchCartList());
   }, [dispatch]);
 
-  if (loading) return <p>Loading...</p>;
+  const handleDeleteCart = (productId: string) => {
+    dispatch(deleteCart(productId))
+      .unwrap()
+      .then(() => {
+        toast.success("Product is removed from the cart.");
+      })
+      .catch((error) => {
+        console.error("Error deleting product", error);
+      });
+  };
+
+  if (loading && (!cartList || cartList.length === 0)) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  return <div>
-    <table className="table-auto w-full border border-gray-300">
+  return (
+    <div>
+      <table className="table-auto w-full border border-gray-300">
         <thead>
           <tr className="bg-gray-100 text-left">
             <th className="px-4 py-2 border">Image</th>
             <th className="px-4 py-2 border">Name</th>
             <th className="px-4 py-2 border">Price</th>
             <th className="px-4 py-2 border">Quantity</th>
+            <th className="px-4 py-2 border"></th>
           </tr>
         </thead>
         <tbody>
-          {cartList.map((cart) => (
-            <tr key={cart.product._id} className="border-t">
-              <td className="px-4 py-2 border">
-                <Image
-                  src={cart.product.images[0]?.url}
-                  alt={cart.product.name}
-                  width={80}
-                  height={80}
-                />
-              </td>
-              <td className="px-4 py-2 border">{cart.product.name}</td>
-              <td className="px-4 py-2 border">${cart.product.price}</td>
-              <td className="px-4 py-2 border">{cart.quantity}</td>
-            </tr>
-          ))}
+          {cartList.map((cart) => {
+              if (!cart.product) return null;
+              return (
+                <tr key={cart.product?._id} className="border-t">
+                  <td className="px-4 py-2 border">
+                    {cart.product.images[0]?.url ? (
+                      <Image
+                        src={cart.product.images[0].url}
+                        alt={cart.product.name}
+                        width={80}
+                        height={80}
+                      />
+                    ) : (
+                      <span className="w-[80px] h-[80px] bg-gray-200"></span>
+                    )}
+                  </td>
+                  <td className="px-4 py-2 border">{cart.product.name}</td>
+                  <td className="px-4 py-2 border">${cart.product.price}</td>
+                  <td className="px-4 py-2 border">{cart.quantity}</td>
+                  <td
+                    className="px-4 py-2 border"
+                    onClick={() => handleDeleteCart(cart.product._id)}
+                  >
+                    X
+                  </td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
-  </div>;
+    </div>
+  );
 };
 
-export default cart;
+export default Cart;

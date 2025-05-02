@@ -47,6 +47,20 @@ export const fetchCartList = createAsyncThunk(
     }
 )
 
+export const deleteCart = createAsyncThunk(
+  "cart/deleteCart",
+  async(id: string, thunkApi) =>{
+    try{
+      await axiosInstance.delete(`/api/cart/${id}`, {withCredentials: true});
+      return id;
+    }catch(error: any){
+      return thunkApi.rejectWithValue(
+        error.response?.data?.message || "Failed to delete cart"
+      )
+    }
+  }
+)
+
 
 const cartSlice = createSlice({
     name: 'cart',
@@ -81,6 +95,18 @@ const cartSlice = createSlice({
             state.cart = action.payload;
           })
           .addCase(fetchCartList.rejected, (state, action) =>{
+            state.loading = false;
+            state.error = action.payload as string;
+          })
+          .addCase(deleteCart.pending, (state) =>{
+            state.loading = true;
+            state.error = null;
+          })
+          .addCase(deleteCart.fulfilled, (state, action) =>{
+            state.loading = false;
+            state.cart = state.cart.filter(item => item.product._id !== action.payload);
+          })
+          .addCase(deleteCart.rejected, (state, action) =>{
             state.loading = false;
             state.error = action.payload as string;
           })

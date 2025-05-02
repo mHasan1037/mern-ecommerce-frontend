@@ -1,10 +1,12 @@
 "use client";
 import AddToCart from "@/components/AddToCart";
 import AddWishList from "@/components/AddWishList";
+import ConfirmButton from "@/components/buttons/ConfirmButton";
 import NewReviewForm from "@/components/NewReviewForm";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchProductById } from "@/redux/slices/productSlice";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 interface ProductDetailsProps {
@@ -15,13 +17,14 @@ interface ProductDetailsProps {
 
 const ProductDetail = ({ params }: ProductDetailsProps) => {
   const { productId } = params;
-  const [productCartQuantity, setProductCartQuantity] = useState(0);
+  const [productCartQuantity, setProductCartQuantity] = useState(1);
   const dispatch = useAppDispatch();
   const {
     singleProduct: product,
     singleLoading,
     error,
   } = useAppSelector((state) => state.products);
+  const router = useRouter();
 
   useEffect(() => {
     if (productId) {
@@ -32,7 +35,6 @@ const ProductDetail = ({ params }: ProductDetailsProps) => {
   if (singleLoading) return <p>Loading product details...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  console.log("singleProduct", product);
   if (!product) {
     return <div>No product found</div>;
   }
@@ -80,6 +82,7 @@ const ProductDetail = ({ params }: ProductDetailsProps) => {
               onChange={(e) => setProductCartQuantity(Number(e.target.value))}
             />
             <AddToCart productId={product._id} quantity={productCartQuantity} />
+            <ConfirmButton buttonText={"Buy now"} onclick={()=> router.push(`/checkout?productId=${product._id}&quantity=${productCartQuantity}`)}/>
           </div>
           <p>{product?.description}</p>
         </div>

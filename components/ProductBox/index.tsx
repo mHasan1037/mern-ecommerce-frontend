@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import AddWishList from "../AddWishList";
 import AddToCart from "../AddToCart";
+import ConfirmButton from "../buttons/ConfirmButton";
 
 interface ProductBoxProps {
   product: ProductType;
@@ -31,6 +32,7 @@ const ProductBox: React.FC<ProductBoxProps> = ({ product }) => {
       </div>
       <AddWishList id={product._id} />
       <AddToCart productId={product._id} quantity={1} />
+      <ConfirmButton buttonText={"Buy now"} onclick={()=> router.push(`/checkout?productId=${product._id}&quantity=1`)}/>
     </div>
   );
 };

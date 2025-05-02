@@ -1,7 +1,9 @@
 "use client";
+import ConfirmButton from "@/components/buttons/ConfirmButton";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { deleteCart, fetchCartList } from "@/redux/slices/cartSlice";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 
@@ -12,6 +14,7 @@ const Cart = () => {
     loading,
     error,
   } = useAppSelector((state) => state.cart);
+  const router = useRouter();
 
   useEffect(() => {
     dispatch(fetchCartList());
@@ -74,6 +77,7 @@ const Cart = () => {
             })}
         </tbody>
       </table>
+      <ConfirmButton buttonText={"Checkout"} onclick={()=> router.push('/checkout')}/>
     </div>
   );
 };

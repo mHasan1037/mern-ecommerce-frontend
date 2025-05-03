@@ -51,6 +51,7 @@ const ProfileDropdown = () => {
         <ul className={styles.profileBox}>
           <li>Profile</li>
           <li>Change password</li>
+          <li onClick={()=> route.push('/account/all_orders')}>My Orders</li>
           <li onClick={handleLogout}>Log out</li>
         </ul>
       )}

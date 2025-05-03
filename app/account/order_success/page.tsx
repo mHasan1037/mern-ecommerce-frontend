@@ -2,10 +2,11 @@
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { getOrderById } from "@/redux/slices/orderSlice";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
 
 const OrderSuccess = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId");
@@ -49,6 +50,10 @@ const OrderSuccess = () => {
         </div>
         <div>
             <p>Delivery status: {currentOrder?.status}</p>
+        </div>
+        <div>
+          <button onClick={()=> router.push('/')}>Continue shopping</button>
+          <button onClick={()=> router.push('/account/all_orders')}>All orders</button>
         </div>
       </div>
       <div>

@@ -41,7 +41,7 @@ export const getCurrentUserOrders = createAsyncThunk(
     async (_, {rejectWithValue}) =>{
         try{
            const res = await axiosInstance.get('/api/orders');
-           return res.data;
+           return res.data.orders;
         }catch(err: any){
            return rejectWithValue(err.response?.data?.message || err.message)
         }

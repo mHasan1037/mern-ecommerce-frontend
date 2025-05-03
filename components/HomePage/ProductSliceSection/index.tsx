@@ -13,7 +13,7 @@ const ProductSlideSection: React.FC<ProductSlideSectionProps> = ({
     <div className="flex gap-5">
       {allProductSlideSections.products.map((product) => {
         return (
-          <ProductBox product={product}/>
+          <ProductBox key={product._id} product={product}/>
         );
       })}
     </div>

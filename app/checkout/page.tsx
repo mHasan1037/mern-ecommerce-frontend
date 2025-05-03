@@ -1,7 +1,7 @@
 "use client";
 import { useAppDispatch } from "@/redux/hooks";
-import { fetchCartList } from "@/redux/slices/cartSlice";
-import { postSingleOrder } from "@/redux/slices/orderSlice";
+import { clearCart, fetchCartList } from "@/redux/slices/cartSlice";
+import { postCartOrders, postSingleOrder } from "@/redux/slices/orderSlice";
 import { fetchProductById } from "@/redux/slices/productSlice";
 import { orderItem, shippingInfo } from "@/types/order";
 import Image from "next/image";
@@ -87,13 +87,28 @@ const Checkout = () => {
         .catch((err) =>{
             toast.error("Failed to place order: ", err)
         })
+    }else{
+      dispatch(
+        postCartOrders({
+          totalAmount,
+          shippingInfo,
+        })
+      )
+        .unwrap()
+        .then(() => {
+          dispatch(clearCart());
+          toast.success("Cart order placed successfully!");
+        })
+        .catch((err) => {
+          toast.error("Failed to place cart order: " + err);
+        });
     }
   }
 
   return <div>
     <div>
         {orderItems.map((item) =>(
-            <div className="flex gap-3">
+            <div className="flex gap-3" key={item.productId}>
                 <p>Name: {item.name}</p>
                 <Image src={item.image} alt={item.name} width={50} height={50}/>
                 <p>Quantity: {item.quantity}</p>

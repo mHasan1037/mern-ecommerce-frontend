@@ -22,9 +22,28 @@ export interface OrderPayload {
     totalAmount: number;
     shippingInfo: shippingInfo;
   }
+
+  export interface Order {
+    _id: string;
+    user: string;
+    orderItems: orderItem[];
+    shippingInfo: shippingInfo;
+    totalAmount: number;
+    paymentMethod: string;
+    status: string;
+  }
   
 export  interface OrderState {
     loading: boolean;
+    singleOrderLoading: boolean;
+     cartOrderLoading: boolean;
     success: boolean;
     error: string | null;
+    orders: Order[];
+  }
+
+
+  export interface CartOrderPayload {
+    shippingInfo: shippingInfo;
+    totalAmount: number;
   }

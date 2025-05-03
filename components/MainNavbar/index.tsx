@@ -68,7 +68,7 @@ function MainNavbar({ setOpenForm }: NavbarProps) {
         </div>
         <div className={styles.cart} onClick={()=> router.push('/cart')}>
           <div className="relative">
-            <span className={styles.count}>{loadingCart ? "..." : cart.length > 0 ? cart.length : "0"} </span>
+            <span className={styles.count}>{loadingCart ? "..." : cart && cart.length > 0 ? cart.length : "0"} </span>
             <CiShoppingCart size={24} />
           </div>{" "}
           Cart

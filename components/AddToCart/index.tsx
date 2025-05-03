@@ -13,7 +13,7 @@ const AddToCart: React.FC<AddToCartProps> = ({ productId, quantity }) => {
   const { cart } = useAppSelector((state) => state.cart);
   const [isLoading, setIsLoading] = useState(false);
 
-  const isAddedToCart = cart.some((c) => c.product._id === productId);
+  const isAddedToCart = cart && cart.some((c) => c.product._id === productId);
 
   const handleAddToCart = async () => {
     if (isAddedToCart) return;

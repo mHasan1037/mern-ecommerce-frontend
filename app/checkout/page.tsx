@@ -3,9 +3,9 @@ import { useAppDispatch } from "@/redux/hooks";
 import { clearCart, fetchCartList } from "@/redux/slices/cartSlice";
 import { postCartOrders, postSingleOrder } from "@/redux/slices/orderSlice";
 import { fetchProductById } from "@/redux/slices/productSlice";
-import { orderItem, shippingInfo } from "@/types/order";
+import { CheckoutOrderItem , shippingInfo } from "@/types/order";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -19,11 +19,12 @@ const initialShippingInfo = {
 }
 
 const Checkout = () => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const productId = searchParams.get("productId");
   const quantity = searchParams.get("quantity");
   const dispatch = useAppDispatch();
-  const [orderItems, setOrderItems] = useState<orderItem[]>([]);
+  const [orderItems, setOrderItems] = useState<CheckoutOrderItem []>([]);
   const [shippingInfo, setShippingInfo] = useState<shippingInfo>(initialShippingInfo)
   const [isDirectOrder, setIsDirectOrder] = useState(false);
 
@@ -81,7 +82,8 @@ const Checkout = () => {
             shippingInfo
         }))
         .unwrap()
-        .then(()=>{
+        .then((res)=>{
+            router.push(`/account/order_success?orderId=${res.order._id}`)
             toast.success("Order placed successfully!")
         })
         .catch((err) =>{
@@ -95,7 +97,8 @@ const Checkout = () => {
         })
       )
         .unwrap()
-        .then(() => {
+        .then((res) => {
+          router.push(`/account/order_success?orderId=${res.order._id}`)
           dispatch(clearCart());
           toast.success("Cart order placed successfully!");
         })

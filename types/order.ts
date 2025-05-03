@@ -1,4 +1,4 @@
-export interface orderItem {
+export interface CheckoutOrderItem  {
   productId: string;
   quantity: number;
   price: number;
@@ -6,6 +6,17 @@ export interface orderItem {
   image: string;
 }
 [];
+
+export interface PopulatedOrderItem {
+  _id?: string;
+  quantity: number;
+  product: {
+    _id: string;
+    name: string;
+    price: number;
+    images: { url: string }[];
+  };
+}
 
 export interface shippingInfo {
     fullName: string;
@@ -25,8 +36,12 @@ export interface OrderPayload {
 
   export interface Order {
     _id: string;
-    user: string;
-    orderItems: orderItem[];
+    user: string | {
+      _id: string;
+      name: string;
+      email: string;
+    };
+    orderItems: PopulatedOrderItem[];
     shippingInfo: shippingInfo;
     totalAmount: number;
     paymentMethod: string;
@@ -36,10 +51,11 @@ export interface OrderPayload {
 export  interface OrderState {
     loading: boolean;
     singleOrderLoading: boolean;
-     cartOrderLoading: boolean;
+    cartOrderLoading: boolean;
     success: boolean;
     error: string | null;
     orders: Order[];
+    currentOrder: Order | null;
   }
 
 

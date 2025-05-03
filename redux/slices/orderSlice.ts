@@ -8,7 +8,8 @@ const initialState: OrderState = {
     cartOrderLoading: false,
     success: false,
     error: null,
-    orders: []
+    orders: [],
+    currentOrder: null
 }
 
 export const postSingleOrder = createAsyncThunk(
@@ -41,6 +42,18 @@ export const getCurrentUserOrders = createAsyncThunk(
         try{
            const res = await axiosInstance.get('/api/orders');
            return res.data;
+        }catch(err: any){
+           return rejectWithValue(err.response?.data?.message || err.message)
+        }
+    }
+)
+
+export const getOrderById = createAsyncThunk(
+    "order/orderById",
+    async (orderId: string, { rejectWithValue }) =>{
+        try{
+           const res = await axiosInstance.get(`/api/orders/${orderId}`);
+           return res.data.order
         }catch(err: any){
            return rejectWithValue(err.response?.data?.message || err.message)
         }
@@ -104,6 +117,11 @@ const orderSlice = createSlice({
             state.loading = false;
             state.success = false;
             state.error = action.payload as string;
+        })
+        .addCase(getOrderById.fulfilled, (state, action) =>{
+            state.loading = false;
+            state.success = true;
+            state.currentOrder = action.payload
         })
     }
 });

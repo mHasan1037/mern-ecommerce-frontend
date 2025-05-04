@@ -14,6 +14,8 @@ interface AuthState {
     accessToken: string | null;
     refreshToken: string | null;
     isAuthenticated: boolean;
+    passwordChangeStatus?: "idle" | "loading" | "succeeded" | "failed";
+    passwordChangeError?: string | null;
 }
 
 const initialState: AuthState = {
@@ -21,6 +23,8 @@ const initialState: AuthState = {
     accessToken: null,
     refreshToken: null,
     isAuthenticated: false,
+    passwordChangeStatus: "idle",
+    passwordChangeError: null,
 }
 
 export const loadUser = createAsyncThunk(
@@ -36,6 +40,20 @@ export const loadUser = createAsyncThunk(
            }
         }catch (error){
             return thunkAPI.rejectWithValue("Not authenticated");
+        }
+    }
+)
+
+export const changePassword = createAsyncThunk(
+    "auth/changePassword",
+    async (formData: {password: string; password_confirmation: string}, thunkAPI) =>{
+        try{
+           const res = await axiosInstance.post('/api/user/change-password', formData, {
+            withCredentials: true
+           });
+           return res.data;
+        }catch(error: any){
+           return thunkAPI.rejectWithValue(error.response?.data?.message || "Password change failed")
         }
     }
 )
@@ -61,6 +79,13 @@ const authSlice = createSlice({
             state.user = null;
             state.isAuthenticated = false;
         })
+        builder.addCase(changePassword.fulfilled, (state, action) =>{
+            state.passwordChangeStatus = "succeeded";
+        })
+        builder.addCase(changePassword.rejected, (state, action) => {
+            state.passwordChangeStatus = "failed";
+            state.passwordChangeError = action.payload as string;
+        });
     }
 });
 

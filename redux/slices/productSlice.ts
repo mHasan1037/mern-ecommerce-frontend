@@ -8,6 +8,7 @@ const initialState: ProductState = {
   error: null,
   singleProduct: null,
   singleLoading: false,
+  searchTerm: "",
 };
 
 export const fetchProducts = createAsyncThunk(
@@ -67,6 +68,9 @@ const productSlice = createSlice({
     },
     updateSingleProduct: (state, action) => {
       state.singleProduct = action.payload;
+    },
+    setSearchTerm: (state, action) =>{
+      state.searchTerm = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -98,6 +102,6 @@ const productSlice = createSlice({
   },
 });
 
-export const { clearProducts, updateSingleProduct } = productSlice.actions;
+export const { clearProducts, updateSingleProduct, setSearchTerm  } = productSlice.actions;
 export const productReducer = productSlice.reducer;
 

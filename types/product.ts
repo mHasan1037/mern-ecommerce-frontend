@@ -79,4 +79,5 @@ interface Category {
     error: string | null;
     singleProduct: ProductType | null;
     singleLoading: boolean;
+    searchTerm: string | null;
   }

@@ -3,7 +3,7 @@ import { useAppSelector } from "@/redux/hooks";
 import React from "react";
 import ProductBox from "../ProductBox";
 
-const CategoryProductsSection = () => {
+const ProductsSection = () => {
   const { productsInfo, loading, error } = useAppSelector(
     (state) => state.products
   );
@@ -25,4 +25,4 @@ const CategoryProductsSection = () => {
   );
 };
 
-export default CategoryProductsSection;
+export default ProductsSection;

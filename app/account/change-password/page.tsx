@@ -50,7 +50,7 @@ const ChangePassword = () => {
         <div>
           <span>New Password:</span>
           <input
-            type="text"
+            type="password"
             name="password"
             value={formData.password}
             onChange={handleChange}
@@ -59,7 +59,7 @@ const ChangePassword = () => {
         <div>
           <span>Confirm Password:</span>
           <input
-            type="text"
+            type="password"
             name="password_confirmation"
             value={formData.password_confirmation}
             onChange={handleChange}

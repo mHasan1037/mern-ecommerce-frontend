@@ -10,6 +10,7 @@ const AdminSidebar = () => {
                 <Link href="/admin">Dashboard</Link>
                 <Link href="/admin/product">Product</Link>
                 <Link href="/admin/category">Categories</Link>
+                <Link href="/admin/orders">Orders</Link>
             </li>
         </ul>
     </div>

@@ -5,6 +5,7 @@ import axiosInstance from "@/utils/axiosInstance";
 import React, { useState } from "react";
 import { CiStar } from "react-icons/ci";
 import { FaStar } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 interface newReviewFormProps {
   id: string;
@@ -35,8 +36,9 @@ const NewReviewForm: React.FC<newReviewFormProps> = ({ id }) => {
       );
       dispatch(updateSingleProduct(res.data.product));
       setReviewData(initialReviewFeild);
-    } catch (error) {
-      console.log("Review post error", error);
+    } catch (error: any) {
+      const message = error?.response?.data?.message || "Failed to post review";
+      toast.error(message);
     }
   };
 

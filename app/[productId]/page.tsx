@@ -50,7 +50,7 @@ const ProductDetail = ({ params }: ProductDetailsProps) => {
             height={250}
           />
           <div className="flex gap-2">
-            {product?.images.map((img) => {
+            {product?.images?.map((img) => {
               return (
                 <Image
                   src={img.url}
@@ -65,10 +65,10 @@ const ProductDetail = ({ params }: ProductDetailsProps) => {
         <div>
           <h1>{product.name}</h1>
           <p>$ {product?.price}</p>
-          <p>Category: {product?.category.name.toUpperCase()}</p>
+          <p>Category: {product?.category?.name?.toUpperCase()}</p>
           <div className="flex gap-4">
             <p>{product?.ratings.average}</p>
-            <p>Ratings: {product?.ratings.totalReviews}</p>
+            <p>Ratings: {product?.ratings?.totalReviews}</p>
           </div>
           <p>Stocks: {product?.stock}</p>
           <p>{product?.is_featured && <b>Featured product</b>}</p>
@@ -82,7 +82,14 @@ const ProductDetail = ({ params }: ProductDetailsProps) => {
               onChange={(e) => setProductCartQuantity(Number(e.target.value))}
             />
             <AddToCart productId={product._id} quantity={productCartQuantity} />
-            <ConfirmButton buttonText={"Buy now"} onclick={()=> router.push(`/checkout?productId=${product._id}&quantity=${productCartQuantity}`)}/>
+            <ConfirmButton
+              buttonText={"Buy now"}
+              onclick={() =>
+                router.push(
+                  `/checkout?productId=${product._id}&quantity=${productCartQuantity}`
+                )
+              }
+            />
           </div>
           <p>{product?.description}</p>
         </div>
@@ -96,10 +103,10 @@ const ProductDetail = ({ params }: ProductDetailsProps) => {
           {product?.reviews.map((review) => (
             <div>
               <div>
-                <p>{review.name}</p>
-                <p>Rating: {review.rating} / 5</p>
+                <p>{review?.name}</p>
+                {review?.rating && <p>Rating: {review?.rating} / 5</p>}
               </div>
-              <div>Comment: {review.comment}</div>
+              {review?.comment && <div>Comment: {review?.comment}</div>}
             </div>
           ))}
         </div>

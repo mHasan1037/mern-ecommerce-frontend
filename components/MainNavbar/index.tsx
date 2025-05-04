@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./MainNavbar.module.css";
 import { CiHeart } from "react-icons/ci";
@@ -12,6 +12,8 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchWishlist } from "@/redux/slices/wishListSlice";
 import { fetchCartList } from "@/redux/slices/cartSlice";
+import { useDebounce } from "@/utils/useDebounce";
+import { setSearchTerm } from "@/redux/slices/productSlice";
 
 interface NavbarProps {
   setOpenForm: React.Dispatch<
@@ -29,13 +31,18 @@ function MainNavbar({ setOpenForm }: NavbarProps) {
   const dispatch = useAppDispatch();
   const {wishlist, loading: loadingWishlist, error: wishlistError} = useAppSelector((state) => state.wishlist);
   const {cart, loading: loadingCart, error: cartError} = useAppSelector((state) => state.cart)
+  const [searchValue, setSearchValue] = useState<string>();
+  const debouncedSearch = useDebounce(searchValue, 400)
 
   useEffect(() => {
     if (isAuthenticated) {
       dispatch(fetchWishlist());
       dispatch(fetchCartList())
     }
-  }, [dispatch, isAuthenticated]);
+    if(debouncedSearch){
+      dispatch(setSearchTerm(debouncedSearch.trim()));
+    }
+  }, [dispatch, isAuthenticated, debouncedSearch]);
 
   return (
     <section className={styles.navbar}>
@@ -53,6 +60,17 @@ function MainNavbar({ setOpenForm }: NavbarProps) {
       </div>
       <div className="hidden md:block">
         <input
+          value={searchValue}
+          onChange={(e)=> {
+            setSearchValue(e.target.value)
+            router.push('/')
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              setSearchValue(searchValue)
+              router.push('/')
+            }
+          }}
           className={styles.searchBox}
           type="text"
           placeholder="Search for a product or brand"

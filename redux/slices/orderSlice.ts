@@ -48,6 +48,18 @@ export const getCurrentUserOrders = createAsyncThunk(
     }
 )
 
+export const getAllUsersOrders = createAsyncThunk(
+    "order/allUsersOrders",
+    async (_, {rejectWithValue}) =>{
+        try{
+           const res = await axiosInstance.get('/api/admin/orders');
+           return res.data.orders
+        }catch(err: any){
+           return rejectWithValue(err.response?.data?.message || err.message)
+        }
+    }
+)
+
 export const getOrderById = createAsyncThunk(
     "order/orderById",
     async (orderId: string, { rejectWithValue }) =>{
@@ -117,6 +129,11 @@ const orderSlice = createSlice({
             state.loading = false;
             state.success = false;
             state.error = action.payload as string;
+        })
+        .addCase(getAllUsersOrders.fulfilled, (state, action) =>{
+            state.loading = false;
+            state.success = true;
+            state.orders = action.payload
         })
         .addCase(getOrderById.fulfilled, (state, action) =>{
             state.loading = false;

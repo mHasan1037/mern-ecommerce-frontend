@@ -76,9 +76,9 @@ const ProductDetail = ({ params }: ProductDetailsProps) => {
           <div>
             <input
               type="number"
-              placeholder="0"
+              placeholder="1"
               value={productCartQuantity}
-              min={0}
+              min={1}
               onChange={(e) => setProductCartQuantity(Number(e.target.value))}
             />
             <AddToCart productId={product._id} quantity={productCartQuantity} />

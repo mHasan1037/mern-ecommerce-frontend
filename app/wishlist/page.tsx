@@ -4,14 +4,16 @@ import { RxCross2 } from "react-icons/rx";
 import { clearWishlist, fetchWishlist, removeFromWishlist } from "@/redux/slices/wishListSlice";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import AddToCart from "@/components/AddToCart";
 
 const WishList = () => {
   const dispatch = useAppDispatch();
   const { wishlist, loading, error } = useAppSelector(
     (state) => state.wishlist
   );
+  const [productCartQuantity, setProductCartQuantity] = useState(1)
   const router = useRouter();
 
   useEffect(() => {
@@ -42,7 +44,7 @@ const WishList = () => {
   if (error) return <h1>Error: {error}</h1>;
   return (
     <div>
-      <button onClick={removeAllWishlist}>Clear wishlist</button>
+      <button className="bg-green-400 p-2" onClick={removeAllWishlist}>Clear wishlist</button>
       {wishlist &&
         wishlist.map((list) => {
           return (
@@ -59,15 +61,20 @@ const WishList = () => {
               <button onClick={() => router.push(list._id)}>
                 View product
               </button>
+              <div>
+                <input 
+                   type="number"
+                   value={productCartQuantity}
+                   onChange={(e)=> setProductCartQuantity(Number(e.target.value))}
+                   placeholder="1"
+                   min={1}
+                />
+                <AddToCart productId={list._id} quantity={productCartQuantity}/>
+              </div>
               <RxCross2 onClick={()=> handleRemoveWishlist(list._id)}/>
             </div>
           );
         })}
-
-        <div>
-          <p>Move to cart</p>
-          <p>Clear whole wishlist in a click</p>
-        </div>
     </div>
   );
 };

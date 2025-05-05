@@ -49,7 +49,7 @@ const ProfileDropdown = () => {
       </p>
       {showDropdown && (
         <ul className={styles.profileBox}>
-          <li>Profile</li>
+          <li onClick={()=> {route.push('/account/profile'); setShowDropdown(false)}}>Profile</li>
           <li onClick={()=> {route.push('/account/change-password'); setShowDropdown(false)}}>Change password</li>
           <li onClick={()=> {route.push('/account/all_orders'); setShowDropdown(false)}}>My Orders</li>
           <li onClick={handleLogout}>Log out</li>

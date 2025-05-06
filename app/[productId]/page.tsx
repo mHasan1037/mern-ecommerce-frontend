@@ -10,11 +10,9 @@ export async function generateStaticParams() {
   }));
 }
 
-interface Props {
-  params: {
-    productId: string;
-  };
-}
+type Props = {
+  params: { productId: string };
+};
 
 const ProductPage = ({ params }: Props) => {
   return <ProductDetailClient productId={params.productId} />

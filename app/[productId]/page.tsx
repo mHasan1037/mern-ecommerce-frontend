@@ -1,118 +1,23 @@
-"use client";
-import AddToCart from "@/components/AddToCart";
-import AddWishList from "@/components/AddWishList";
-import ConfirmButton from "@/components/buttons/ConfirmButton";
-import NewReviewForm from "@/components/NewReviewForm";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { fetchProductById } from "@/redux/slices/productSlice";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import ProductDetailClient from "./ProductDetails";
 
-interface ProductDetailsProps {
+export async function generateStaticParams() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products`);
+  const json = await res.json();
+  const products = json.products;
+
+  return products.map((product: { _id: string }) => ({
+    productId: product._id,
+  }));
+}
+
+interface Props {
   params: {
     productId: string;
   };
 }
 
-const ProductDetail = ({ params }: ProductDetailsProps) => {
-  const { productId } = params;
-  const [productCartQuantity, setProductCartQuantity] = useState(1);
-  const dispatch = useAppDispatch();
-  const {
-    singleProduct: product,
-    singleLoading,
-    error,
-  } = useAppSelector((state) => state.products);
-  const router = useRouter();
-
-  useEffect(() => {
-    if (productId) {
-      dispatch(fetchProductById(productId));
-    }
-  }, [dispatch, productId]);
-
-  if (singleLoading) return <p>Loading product details...</p>;
-  if (error) return <p>Error: {error}</p>;
-
-  if (!product) {
-    return <div>No product found</div>;
-  }
-
-  return (
-    <div>
-      <div className="flex gap-10">
-        <div>
-          <Image
-            src={product?.images[0]?.url}
-            alt={product?.name}
-            width={250}
-            height={250}
-          />
-          <div className="flex gap-2">
-            {product?.images?.map((img) => {
-              return (
-                <Image
-                  src={img.url}
-                  alt={product.name}
-                  width={50}
-                  height={50}
-                />
-              );
-            })}
-          </div>
-        </div>
-        <div>
-          <h1>{product.name}</h1>
-          <p>$ {product?.price}</p>
-          <p>Category: {product?.category?.name?.toUpperCase()}</p>
-          <div className="flex gap-4">
-            <p>{product?.ratings.average}</p>
-            <p>Ratings: {product?.ratings?.totalReviews}</p>
-          </div>
-          <p>Stocks: {product?.stock}</p>
-          <p>{product?.is_featured && <b>Featured product</b>}</p>
-          <AddWishList id={product._id} />
-          <div>
-            <input
-              type="number"
-              placeholder="1"
-              value={productCartQuantity}
-              min={1}
-              onChange={(e) => setProductCartQuantity(Number(e.target.value))}
-            />
-            <AddToCart productId={product._id} quantity={productCartQuantity} />
-            <ConfirmButton
-              buttonText={"Buy now"}
-              onclick={() =>
-                router.push(
-                  `/checkout?productId=${product._id}&quantity=${productCartQuantity}`
-                )
-              }
-            />
-          </div>
-          <p>{product?.description}</p>
-        </div>
-      </div>
-
-      {/*Review section*/}
-      <NewReviewForm id={product._id} />
-
-      {product?.reviews !== null && (
-        <div>
-          {product?.reviews.map((review) => (
-            <div>
-              <div>
-                <p>{review?.name}</p>
-                {review?.rating && <p>Rating: {review?.rating} / 5</p>}
-              </div>
-              {review?.comment && <div>Comment: {review?.comment}</div>}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+const ProductPage = ({ params }: Props) => {
+  return <ProductDetailClient productId={params.productId} />
 };
 
-export default ProductDetail;
+export default ProductPage;

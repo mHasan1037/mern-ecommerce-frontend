@@ -19,7 +19,7 @@ const ProductsSection = () => {
     <div className="flex gap-2">
       {productsInfo &&
         productsInfo.products.map((product) => {
-          return <ProductBox product={product} />;
+          return <ProductBox product={product} key={product._id}/>;
         })}
     </div>
   );

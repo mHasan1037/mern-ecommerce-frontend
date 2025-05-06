@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./ConfirmButton.module.css";
 
 interface ConfirmButtonProps {
-  buttonText: String;
+  buttonText: string;
   type?: "button" | "submit" | "reset";
   onclick?: React.MouseEventHandler<HTMLButtonElement>;
 }

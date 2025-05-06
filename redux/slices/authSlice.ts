@@ -21,12 +21,13 @@ interface User {
   isAdmin: boolean;
   recentOrder?: RecentOrder;
   totalCancelledOrders?: number;
-  totalDelivedOrder?: number;
+  totalDeliveredOrders?: number;
   totalSpent?: string;
 }
 
 interface AuthState {
   user: User | null;
+  adminViewedUser: User | null;
   accessToken: string | null;
   refreshToken: string | null;
   isAuthenticated: boolean;
@@ -41,6 +42,7 @@ const initialState: AuthState = {
   isAuthenticated: false,
   passwordChangeStatus: "idle",
   passwordChangeError: null,
+  adminViewedUser: null
 };
 
 export const loadUser = createAsyncThunk(
@@ -59,6 +61,20 @@ export const loadUser = createAsyncThunk(
     }
   }
 );
+
+export const getUserById = createAsyncThunk(
+    "auth/userById",
+    async (id: string, thunkAPI) =>{
+        try{
+           const res = await axiosInstance.get(`/api/user/${id}/profile`, {
+            withCredentials: true
+           });
+           return res.data.user
+        }catch(error){
+            return thunkAPI.rejectWithValue("Not authenticated");
+        }
+    }
+)
 
 export const changePassword = createAsyncThunk(
   "auth/changePassword",
@@ -110,6 +126,9 @@ const authSlice = createSlice({
       state.passwordChangeStatus = "failed";
       state.passwordChangeError = action.payload as string;
     });
+    builder.addCase(getUserById.fulfilled, (state, action) =>{
+        state.adminViewedUser = action.payload;
+    })
   },
 });
 

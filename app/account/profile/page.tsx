@@ -18,10 +18,13 @@ const Profile = () => {
       {user?.isVerified && <h2>Verified: Yes</h2>}
       {user?.isAdmin && <h2>Role: Admin</h2>}
       {user?.totalSpent && <h2>Total amount ordered: {user.totalSpent}</h2>}
-      {user?.totalDelivedOrder && <h2>Total orders: {user.totalDelivedOrder}</h2>}
+      {user?.totalDeliveredOrders != null && (
+        <h2>Total Delivered orders: {user.totalDeliveredOrders}</h2>
+      )}
       {user?.recentOrder && <h2>Recent order: {user?.recentOrder.orderItems[0]?.name}</h2>}
-      {user?.totalDelivedOrder && <h2>Total orders: {user.totalDelivedOrder}</h2>}
-      {user?.totalCancelledOrders && <h2>Total orders: {user.totalCancelledOrders}</h2>}
+      {user?.totalCancelledOrders != null && (
+        <h2>Total Cancel orders: {user.totalCancelledOrders}</h2>
+      )}
     </div>
   )
 }

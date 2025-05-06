@@ -111,7 +111,8 @@ const LayoutForms: React.FC<LayoutFormProps> = ({ openForm, setOpenForm }) => {
                 user,
                 accessToken: access_token,
                 refreshToken: refresh_token,
-                isAuthenticated: is_auth
+                isAuthenticated: is_auth,
+                adminViewedUser: null
               }));
               
               toast.success("Login successfull");

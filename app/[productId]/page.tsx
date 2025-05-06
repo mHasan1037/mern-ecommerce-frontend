@@ -1,6 +1,6 @@
 import ProductDetailClient from "./ProductDetails";
 
-export async function generateStaticParams(): Promise<{ productId: string }[]> {
+export async function generateStaticParams() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products`);
   const json = await res.json();
   const products = json.products;
@@ -10,10 +10,8 @@ export async function generateStaticParams(): Promise<{ productId: string }[]> {
   }));
 }
 
-type Props = {
-  params: { productId: string };
-};
+export default function ProductPage(props: any) {
+  const productId = props.params?.productId;
 
-export default function ProductPage({ params }: Props) {
-  return <ProductDetailClient productId={params.productId} />;
+  return <ProductDetailClient productId={productId} />;
 }

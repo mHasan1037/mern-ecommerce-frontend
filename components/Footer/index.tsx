@@ -1,15 +1,21 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import Link from "next/link";
 
 const Footer = () => {
+  const [year, setYear] = useState<number | null>(null);
   const user = useSelector((state: RootState) => state.auth.user);
+
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
+
   return (
     <div className="bg-mainBg1 flex justify-between p-3">
       <p className="flex gap-2">
-        © {new Date().getFullYear()}
+        © {year}
         <a
           href="https://www.linkedin.com/in/mhasan95/"
           target="_blank"

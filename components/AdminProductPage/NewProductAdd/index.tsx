@@ -12,7 +12,6 @@ const NewProductAdd = () => {
       price: Number(data.price),
       stock: Number(data.stock),
     };
-
     await axiosInstance.post(`/api/upload-product`, payload);
   };
 

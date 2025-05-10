@@ -88,7 +88,12 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onSubmit(formData);
+
+    const uploadingProduct = {
+      ...formData,
+      category: formData.category || categories[0]?._id || ""
+    }
+    await onSubmit(uploadingProduct);
     setFormData({
       name: "",
       description: "",

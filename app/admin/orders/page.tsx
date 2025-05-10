@@ -1,5 +1,6 @@
 "use client";
 import AdminSidebar from "@/components/adminSidebar";
+import LoadingContainer from "@/components/LoadingScreen/LoadingContainer";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { getAllUsersOrders } from "@/redux/slices/orderSlice";
 import Link from "next/link";
@@ -23,7 +24,7 @@ const Orders = () => {
   }, [dispatch, isAuthenticated]);
 
   if (loading) {
-    return <h1>Loading...</h1>;
+    return <LoadingContainer />;
   }
 
   return (

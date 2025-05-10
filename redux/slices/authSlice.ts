@@ -31,6 +31,7 @@ interface AuthState {
   accessToken: string | null;
   refreshToken: string | null;
   isAuthenticated: boolean;
+  loading?: boolean;
   passwordChangeStatus?: "idle" | "loading" | "succeeded" | "failed";
   passwordChangeError?: string | null;
 }
@@ -42,7 +43,8 @@ const initialState: AuthState = {
   isAuthenticated: false,
   passwordChangeStatus: "idle",
   passwordChangeError: null,
-  adminViewedUser: null
+  adminViewedUser: null,
+  loading: false
 };
 
 export const loadUser = createAsyncThunk(
@@ -120,13 +122,18 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(loadUser.pending, (state) =>{
+      state.loading = true;
+    })
     builder.addCase(loadUser.fulfilled, (state, action) => {
       state.user = action.payload.user;
       state.isAuthenticated = action.payload.isAuthenticated;
+      state.loading = false;
     });
     builder.addCase(loadUser.rejected, (state) => {
       state.user = null;
       state.isAuthenticated = false;
+      state.loading = false;
     });
     builder.addCase(changePassword.fulfilled, (state, action) => {
       state.passwordChangeStatus = "succeeded";

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import AddToCart from "@/components/AddToCart";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const WishList = () => {
   const dispatch = useAppDispatch();
@@ -46,7 +47,7 @@ const WishList = () => {
     }
   }
 
-  if (loading) return <h1>Loading</h1>;
+  if (loading) return <LoadingScreen />;
   if (error) return <h1>Error: {error}</h1>;
   return (
     <div>

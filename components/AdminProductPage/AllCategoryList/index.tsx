@@ -3,6 +3,7 @@ import { fetchCategories } from "@/redux/slices/categorySlice";
 import Image from "next/image";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import LoadingContainer from "@/components/LoadingScreen/LoadingContainer";
 
 
 const AllCategoryList = () => {
@@ -13,7 +14,7 @@ const AllCategoryList = () => {
        dispatch(fetchCategories())
     }, [dispatch]);
 
-    if(loading) return <p>Loading</p>
+    if(loading) return <LoadingContainer />
     if(error) return <p>Error: {error}</p>
 
   return (

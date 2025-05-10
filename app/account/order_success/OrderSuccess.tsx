@@ -1,5 +1,6 @@
 "use client";
 
+import LoadingScreen from "@/components/LoadingScreen";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { getOrderById } from "@/redux/slices/orderSlice";
 import Image from "next/image";
@@ -21,9 +22,7 @@ const OrderSuccessClient = () => {
     }
   }, [dispatch, orderId]);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  if (loading) return <LoadingScreen />;
 
   const shippingInfo = currentOrder?.shippingInfo;
 

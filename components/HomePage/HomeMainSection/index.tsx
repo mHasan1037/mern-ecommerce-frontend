@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import ProductSlideSection from "../ProductSliceSection";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchProducts } from "@/redux/slices/productSlice";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const HomeMainSection = () => {
   const dispatch = useAppDispatch();
@@ -12,7 +13,7 @@ const HomeMainSection = () => {
     dispatch(fetchProducts({ is_featured: true }))
   }, [dispatch]);
 
-  if (loading) return <p>Loading products...</p>;
+  if (loading) return <LoadingScreen />;
   if (error) return <p>Error fetching products: {error}</p>;
 
   return (

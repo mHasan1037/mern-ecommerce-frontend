@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchProducts } from "@/redux/slices/productSlice";
 import { toast } from "react-toastify";
+import LoadingContainer from "@/components/LoadingScreen/LoadingContainer";
 
 const AdminProductsList = () => {
   const dispatch = useAppDispatch();
@@ -51,7 +52,7 @@ const AdminProductsList = () => {
     }
   };
 
-  if (loading) return <p>Loading products...</p>;
+  if (loading) return <LoadingContainer />;
   if (error) return <p>Error fetching products: {error}</p>;
 
   return (
@@ -59,7 +60,7 @@ const AdminProductsList = () => {
       <h1>All products</h1>
       <div>
         {!productsInfo ? (
-          <p>Loading...</p>
+          <LoadingContainer />
         ) : (
           <table>
             <tr>

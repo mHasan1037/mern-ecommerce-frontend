@@ -1,15 +1,20 @@
 "use client"
+import LoadingScreen from '@/components/LoadingScreen';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { loadUser } from '@/redux/slices/authSlice';
 import React, { useEffect } from 'react'
 
 const Profile = () => {
   const dispatch = useAppDispatch();
-  const {user} = useAppSelector((state) => state.auth);
+  const {user, loading} = useAppSelector((state) => state.auth);
 
   useEffect(()=>{
      dispatch(loadUser())
   }, [dispatch])
+
+  if(loading){
+    return <LoadingScreen />
+  }
 
   return (
     <div>

@@ -1,4 +1,5 @@
 "use client";
+import LoadingScreen from "@/components/LoadingScreen";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { getCurrentUserOrders } from "@/redux/slices/orderSlice";
 import { Order } from "@/types/order";
@@ -25,7 +26,7 @@ const AllOrders = () => {
     (order: Order) => order.status === orderType
   );
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <LoadingScreen />;
   if (error) return <p>Error: {error}</p>;
 
   return (

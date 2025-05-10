@@ -1,6 +1,7 @@
 "use client";
 import ProductForm from "@/components/AdminProductPage/ProductForm";
 import AdminSidebar from "@/components/adminSidebar";
+import LoadingScreen from "@/components/LoadingScreen";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { clearProducts, fetchProductById } from "@/redux/slices/productSlice";
 import { ProductFormDataType } from "@/types/product";
@@ -55,7 +56,7 @@ const EditProduct = ({ params }: EditProductProps) => {
     }
   };
 
-  if (singleLoading) return <p>Loading product...</p>;
+  if (singleLoading) return <LoadingScreen />;
 
   const initialData: ProductFormDataType = singleProduct
   ? {

@@ -1,4 +1,5 @@
 "use client";
+import LoadingScreen from "@/components/LoadingScreen";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { getUserById } from "@/redux/slices/authSlice";
 import { useParams, useRouter } from "next/navigation";
@@ -10,7 +11,7 @@ const UserProfile = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const { adminViewedUser } = useAppSelector((state) => state.auth);
+  const { adminViewedUser, loading } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     if(!isAuthenticated){
@@ -23,10 +24,14 @@ const UserProfile = () => {
     
   }, [dispatch, id, isAuthenticated]);
 
+  if(loading){
+    return <LoadingScreen />
+  }
+
   return (
     <div>
-      <h1>User name: {adminViewedUser?.name}</h1>
-      <h1>Email: {adminViewedUser?.email}</h1>
+      {adminViewedUser?.name && <h1>User name: {adminViewedUser?.name}</h1>}
+      {adminViewedUser?.email && <h1>Email: {adminViewedUser?.email}</h1>}
       {adminViewedUser?.isVerified && <h2>Verified: Yes</h2>}
       {adminViewedUser?.isAdmin && <h2>Role: Admin</h2>}
       {adminViewedUser?.totalSpent && (

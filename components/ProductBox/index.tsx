@@ -21,7 +21,7 @@ const ProductBox: React.FC<ProductBoxProps> = ({ product }) => {
         alt={product.name}
       />
       <p
-        className="cursor-pointer"
+        className="cursor-pointer text-mainBg2 font-bold"
         onClick={() => router.push(`/${product._id}`)}
       >
         {product.name}

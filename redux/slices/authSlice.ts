@@ -142,7 +142,11 @@ const authSlice = createSlice({
       state.passwordChangeStatus = "failed";
       state.passwordChangeError = action.payload as string;
     });
+    builder.addCase(getUserById.pending, (state) =>{
+      state.loading = true;
+    });
     builder.addCase(getUserById.fulfilled, (state, action) => {
+      state.loading = false;
       state.adminViewedUser = action.payload;
     });
   },

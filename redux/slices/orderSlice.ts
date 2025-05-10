@@ -1,6 +1,7 @@
 import { CartOrderPayload, OrderPayload, OrderState } from "@/types/order";
 import axiosInstance from "@/utils/axiosInstance";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { stat } from "fs";
 
 const initialState: OrderState = {
     loading: false,
@@ -117,6 +118,7 @@ const orderSlice = createSlice({
             state.error = action.payload as string;
         })
         .addCase(getCurrentUserOrders.pending, (state) =>{
+            state.loading = true;
             state.success = false;
             state.error = null;
         })

@@ -1,9 +1,10 @@
 import React, { Suspense } from "react";
 import OrderSuccessClient from "./OrderSuccess";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const OrderSuccessPage = () => {
   return (
-    <Suspense fallback={<p>Loading order details...</p>}>
+    <Suspense fallback={<LoadingScreen />}>
       <OrderSuccessClient />
     </Suspense>
   );

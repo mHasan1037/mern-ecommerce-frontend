@@ -1,5 +1,6 @@
 "use client";
 import ConfirmButton from "@/components/buttons/ConfirmButton";
+import LoadingScreen from "@/components/LoadingScreen";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { deleteCart, fetchCartList } from "@/redux/slices/cartSlice";
 import Image from "next/image";
@@ -37,7 +38,7 @@ const Cart = () => {
       });
   };
 
-  if (loading && (!cartList || cartList.length === 0)) return <p>Loading...</p>;
+  if (loading && (!cartList || cartList.length === 0)) return <LoadingScreen />;
   if (error) return <p>Error: {error}</p>;
 
   return (

@@ -1,9 +1,10 @@
 import React, { Suspense } from "react";
 import Checkout from "./Checkout";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const CheckoutPage = () => {
   return (
-    <Suspense fallback={<p>Loading checkout...</p>}>
+    <Suspense fallback={<LoadingScreen />}>
       <Checkout />
     </Suspense>
   );

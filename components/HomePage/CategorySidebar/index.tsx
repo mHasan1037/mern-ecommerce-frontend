@@ -1,4 +1,5 @@
 "use client";
+import LoadingScreen from "@/components/LoadingScreen";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   fetchCategories,
@@ -17,7 +18,7 @@ const CategorySidebar = () => {
     dispatch(fetchCategories());
   }, [dispatch]);
 
-  if (loading) return <p>Loading</p>;
+  if (loading) return <LoadingScreen />;
   if (error) return <p>Error: {error}</p>;
 
   const handleCategory = (id: string) => {

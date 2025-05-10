@@ -9,6 +9,7 @@ import ConfirmButton from "@/components/buttons/ConfirmButton";
 import NewReviewForm from "@/components/NewReviewForm";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import LoadingScreen from "@/components/LoadingScreen";
 
 interface Props {
   productId: string;
@@ -28,7 +29,7 @@ const ProductDetailClient = ({ productId }: Props) => {
     }
   }, [dispatch, productId]);
 
-  if (singleLoading) return <p>Loading product details...</p>;
+  if (singleLoading) return <LoadingScreen />;
   if (error) return <p>Error: {error}</p>;
   if (!product) return <p>No product found.</p>;
 

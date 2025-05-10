@@ -9,6 +9,7 @@ import { CiShoppingCart } from "react-icons/ci";
 import { FaUserFriends } from "react-icons/fa";
 import { MdOutlineInventory, MdAttachMoney  } from "react-icons/md";
 import AdminInfoBox from "@/components/AdminInfoBox";
+import LoadingScreen from "@/components/LoadingScreen";
 
 type AdminSummary = {
   lowStockProducts: {
@@ -62,9 +63,11 @@ const Admin = () => {
 
   useEffect(() => {
     const fetchSummary = async () => {
+      setIsLoading(true)
       try {
         const res = await axiosInstance.get("/api/admin/summary");
         setAdminSummary(res.data.summary);
+        setIsLoading(false);
       } catch (err: any) {
         console.error(
           "Error fetching admin orders:",
@@ -77,7 +80,7 @@ const Admin = () => {
   }, [user]);
 
   if (isLoading) {
-    return <h1>Loading page</h1>;
+    return <LoadingScreen />;
   }
 
   return (

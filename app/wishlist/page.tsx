@@ -13,12 +13,18 @@ const WishList = () => {
   const { wishlist, loading, error } = useAppSelector(
     (state) => state.wishlist
   );
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const [productCartQuantity, setProductCartQuantity] = useState(1)
   const router = useRouter();
 
   useEffect(() => {
+    if(!isAuthenticated){
+      router.push("/")
+      toast.success("Login to see your wishlist");
+      return;
+    };
     dispatch(fetchWishlist());
-  }, [dispatch]);
+  }, [dispatch, isAuthenticated]);
 
   const handleRemoveWishlist = (productId: string) =>{
     dispatch(removeFromWishlist(productId))

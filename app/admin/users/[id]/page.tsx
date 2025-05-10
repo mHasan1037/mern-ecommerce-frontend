@@ -1,19 +1,27 @@
 "use client";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { getUserById } from "@/redux/slices/authSlice";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
+import { toast } from "react-toastify";
 
 const UserProfile = () => {
   const { id } = useParams();
+  const router = useRouter();
   const dispatch = useAppDispatch();
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const { adminViewedUser } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    if (typeof id === "string") {
+    if(!isAuthenticated){
+      router.push('/')
+      toast.success("Login to see user's details");
+      return;
+    }else if (typeof id === "string") {
       dispatch(getUserById(id));
     }
-  }, [dispatch, id]);
+    
+  }, [dispatch, id, isAuthenticated]);
 
   return (
     <div>

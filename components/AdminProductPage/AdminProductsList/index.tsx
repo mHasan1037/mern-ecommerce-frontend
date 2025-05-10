@@ -7,13 +7,23 @@ import { MdEdit, MdDelete } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchProducts } from "@/redux/slices/productSlice";
+import { toast } from "react-toastify";
 
 const AdminProductsList = () => {
   const dispatch = useAppDispatch();
   const {productsInfo, loading, error} = useAppSelector((state) => state.products);
-
+  const { isAuthenticated }= useAppSelector((state) => state.auth);
   const selectedCategory = useAppSelector(state => state.categories.selectedCategory);
   const router = useRouter();
+
+
+
+  useEffect(()=>{
+    if(!isAuthenticated){
+      router.push('/');
+      toast.success('Login to your account')
+    }
+  }, [isAuthenticated])
 
   useEffect(() => {
     dispatch(fetchProducts({category: selectedCategory ?? undefined }))

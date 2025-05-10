@@ -103,11 +103,20 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    loginSuccess(state, action: PayloadAction<AuthState>) {
-      return { ...state, ...action.payload };
+    loginSuccess(state, action: PayloadAction<Partial<AuthState>>) {
+      state.user = action.payload.user ?? null;
+      state.accessToken = action.payload.accessToken ?? null;
+      state.refreshToken = action.payload.refreshToken ?? null;
+      state.isAuthenticated = !!action.payload.user;
     },
     logout(state) {
-      return initialState;
+      state.user = null;
+      state.accessToken = null;
+      state.refreshToken = null;
+      state.isAuthenticated = false;
+      state.adminViewedUser = null;
+      state.passwordChangeStatus = "idle";
+      state.passwordChangeError = null;
     },
   },
   extraReducers: (builder) => {
@@ -126,9 +135,9 @@ const authSlice = createSlice({
       state.passwordChangeStatus = "failed";
       state.passwordChangeError = action.payload as string;
     });
-    builder.addCase(getUserById.fulfilled, (state, action) =>{
-        state.adminViewedUser = action.payload;
-    })
+    builder.addCase(getUserById.fulfilled, (state, action) => {
+      state.adminViewedUser = action.payload;
+    });
   },
 });
 

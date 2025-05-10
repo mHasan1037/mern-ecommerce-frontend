@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 
 const Cart = () => {
   const dispatch = useAppDispatch();
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const {
     cart: cartList,
     loading,
@@ -17,6 +18,11 @@ const Cart = () => {
   const router = useRouter();
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/");
+      toast.success("Login to see your wishlist");
+      return;
+    }
     dispatch(fetchCartList());
   }, [dispatch]);
 

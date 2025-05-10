@@ -5,15 +5,22 @@ import { getAllUsersOrders } from "@/redux/slices/orderSlice";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
+import { toast } from "react-toastify";
 
 const Orders = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const { orders, loading, error } = useAppSelector((state) => state.order);
 
   useEffect(() => {
+    if(!isAuthenticated){
+      router.push("/")
+      toast.success("Login to see orders");
+      return;
+    }
     dispatch(getAllUsersOrders());
-  }, [dispatch]);
+  }, [dispatch, isAuthenticated]);
 
   if (loading) {
     return <h1>Loading...</h1>;

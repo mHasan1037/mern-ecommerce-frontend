@@ -21,7 +21,7 @@ const Cart = () => {
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/");
-      toast.success("Login to see your wishlist");
+      toast.success("Login to see your Cart");
       return;
     }
     dispatch(fetchCartList());

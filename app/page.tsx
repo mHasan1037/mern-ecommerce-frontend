@@ -30,7 +30,9 @@ export default function Home() {
   return (
     <div className="m-5 flex gap-10">
       <CategorySidebar />
-      {showCategoryOrSearch ? <ProductsSection /> : <HomeMainSection />}
+      <div className="w-full">
+        {showCategoryOrSearch ? <ProductsSection /> : <HomeMainSection />}
+      </div>
     </div>
   );
 }

@@ -17,13 +17,13 @@ const HomeMainSection = () => {
   if (error) return <p>Error fetching products: {error}</p>;
 
   return (
-    <div>
+    <div className="w-full">
       {productsInfo && (
         <>
-          <h1>Featured products</h1>
-          <ProductSlideSection
-            allProductSlideSections={productsInfo}
-          />
+          <h2 className="headline">
+            Featured Products
+          </h2>
+          <ProductSlideSection allProductSlideSections={productsInfo} />
         </>
       )}
     </div>

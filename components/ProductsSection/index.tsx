@@ -22,7 +22,7 @@ const ProductsSection = () => {
   }
 
   return (
-    <div className="flex gap-2">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2">
       {productsInfo &&
         productsInfo.products.map((product) => {
           return <ProductBox product={product} key={product._id} />;

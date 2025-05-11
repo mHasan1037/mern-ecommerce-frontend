@@ -1,5 +1,5 @@
 .profileBox{
-    @apply absolute bg-white right-0 p-2 rounded-md
+    @apply absolute right-0 p-2 rounded-md z-50 bg-gray-50 border border-gray-200 shadow-sm
 }
 
 .profileBox li{

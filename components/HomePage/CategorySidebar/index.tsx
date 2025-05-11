@@ -32,7 +32,7 @@ const CategorySidebar = () => {
         <div
           key={category._id}
           onClick={() => handleCategory(category._id)}
-          className="cursor-pointer"
+          className="cursor-pointer text-nowrap"
         >
           {category.name}
         </div>

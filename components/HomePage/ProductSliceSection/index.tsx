@@ -10,7 +10,7 @@ const ProductSlideSection: React.FC<ProductSlideSectionProps> = ({
   allProductSlideSections,
 }) => {
   return (
-    <div className="flex gap-5">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5">
       {allProductSlideSections.products.map((product) => {
         return (
           <ProductBox key={product._id} product={product}/>

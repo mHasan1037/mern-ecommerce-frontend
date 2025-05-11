@@ -6,6 +6,9 @@
   .mainBtn {
     @apply bg-slate-50 text-gray-400 w-fit
   }
+  .headline{
+    @apply text-2xl font-bold text-gray-800 mb-4
+  }
 }
 
 :root {

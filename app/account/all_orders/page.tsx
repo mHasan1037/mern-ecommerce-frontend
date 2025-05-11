@@ -35,7 +35,7 @@ const AllOrders = () => {
         name="status"
         onChange={(e) => setOrderType(e.target.value as typeof orderType)}
       >
-        {orderStatusType.map((status, idx) => (
+        {orderStatusType?.map((status, idx) => (
           <option key={idx} value={status}>
             {status}
           </option>
@@ -43,9 +43,11 @@ const AllOrders = () => {
       </select>
       <div>
         {
-            filteredOrders.map((order) =>(
+            filteredOrders?.map((order) =>(
                 <div key={order._id}>
-                    {order.orderItems.map((item) =>(
+                    {order.orderItems
+                    .filter((item) => item.product && item.product.name)
+                    .map((item) =>(
                         <div className="flex gap-3">
                             <p>Name: {item.product.name}</p>
                             <p>Quantity: {item.quantity}</p>

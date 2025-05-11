@@ -1,4 +1,4 @@
-import { CartOrderPayload, OrderPayload, OrderState } from "@/types/order";
+import { CartOrderPayload, Order, OrderPayload, OrderState } from "@/types/order";
 import axiosInstance from "@/utils/axiosInstance";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { stat } from "fs";
@@ -135,7 +135,7 @@ const orderSlice = createSlice({
         .addCase(getAllUsersOrders.fulfilled, (state, action) =>{
             state.loading = false;
             state.success = true;
-            state.orders = action.payload
+            state.orders = action.payload;
         })
         .addCase(getOrderById.fulfilled, (state, action) =>{
             state.loading = false;

@@ -27,8 +27,8 @@ const ProductBox: React.FC<ProductBoxProps> = ({ product }) => {
         {product.name}
       </p>
       <div className="flex justify-between">
-        <p>{product.price}</p>
-        <p>{product.ratings?.average}</p>
+        <p>Price: {product.price}</p>
+        <p>{product.ratings?.average === 0 ? "No ratings" : `Rating: ${product.ratings?.average}`}</p>
       </div>
       <AddWishList id={product._id} />
       <AddToCart productId={product._id} quantity={1} />

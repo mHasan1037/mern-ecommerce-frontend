@@ -106,7 +106,7 @@ const cartSlice = createSlice({
           })
           .addCase(fetchCartList.fulfilled, (state, action) =>{
             state.loading = false;
-            state.cart = action.payload;
+            state.cart = action.payload.filter((item: any) => item.product !== null);
           })
           .addCase(fetchCartList.rejected, (state, action) =>{
             state.loading = false;
@@ -118,7 +118,7 @@ const cartSlice = createSlice({
           })
           .addCase(deleteCart.fulfilled, (state, action) =>{
             state.loading = false;
-            state.cart = state.cart.filter(item => item.product._id !== action.payload);
+            state.cart = state.cart.filter(item => item.product && item.product?._id !== action.payload);
           })
           .addCase(deleteCart.rejected, (state, action) =>{
             state.loading = false;

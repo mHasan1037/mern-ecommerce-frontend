@@ -25,7 +25,7 @@ const Cart = () => {
       return;
     }
     dispatch(fetchCartList());
-  }, [dispatch]);
+  }, [dispatch, isAuthenticated]);
 
   const handleDeleteCart = (productId: string) => {
     dispatch(deleteCart(productId))
@@ -54,10 +54,11 @@ const Cart = () => {
           </tr>
         </thead>
         <tbody>
-          {cartList.map((cart) => {
+          {cartList
+          .map((cart) => {
               if (!cart.product) return null;
               return (
-                <tr key={cart.product?._id} className="border-t">
+                <tr key={cart._id || `${cart.product?._id}-${cart.quantity}`} className="border-t">
                   <td className="px-4 py-2 border">
                     {cart.product.images[0]?.url ? (
                       <Image
@@ -75,7 +76,7 @@ const Cart = () => {
                   <td className="px-4 py-2 border">{cart.quantity}</td>
                   <td
                     className="px-4 py-2 border"
-                    onClick={() => handleDeleteCart(cart.product._id)}
+                    onClick={() => cart.product?._id && handleDeleteCart(cart.product._id)}
                   >
                     X
                   </td>

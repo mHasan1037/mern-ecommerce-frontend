@@ -50,7 +50,7 @@ const Checkout = () => {
     } else {
       dispatch(fetchCartList()).then((res) => {
         const cart = res.payload || [];
-        const formatted = cart.map((item: any) => ({
+        const formatted = cart.filter((item: any) => item.product).map((item: any) => ({
           productId: item.product._id,
           quantity: item.quantity,
           price: item.product.price,

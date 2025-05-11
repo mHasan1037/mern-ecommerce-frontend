@@ -27,6 +27,8 @@ const Orders = () => {
     return <LoadingContainer />;
   }
 
+  if(!orders.length) return <p>No order found</p>
+
   return (
     <div className="adminMainSection">
       <AdminSidebar />
@@ -44,7 +46,9 @@ const Orders = () => {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
+            {orders
+            .filter(order => order && order._id)
+            .map((order) => (
               <tr key={order._id} className="border-b text-sm">
                 <td className="p-3">{order._id.slice(-6)}</td>
                 <td className="p-3 text-blue-600 cursor-pointer hover:underline">
@@ -66,7 +70,9 @@ const Orders = () => {
                     }}
                   >
                     <option value="">Select product</option>
-                    {order.orderItems.map((item) => (
+                    {order.orderItems
+                    .filter((item) => item.product && item.product._id)
+                    .map((item) => (
                       <option
                         key={item.product._id}
                         value={`/${item.product._id}`}

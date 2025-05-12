@@ -5,12 +5,15 @@ import React from "react";
 import AddWishList from "../AddWishList";
 import AddToCart from "../AddToCart";
 import ConfirmButton from "../buttons/ConfirmButton";
+import { useAppSelector } from "@/redux/hooks";
+import { toast } from "react-toastify";
 
 interface ProductBoxProps {
   product: ProductType;
 }
 
 const ProductBox: React.FC<ProductBoxProps> = ({ product }) => {
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const router = useRouter();
   return (
     <div
@@ -29,6 +32,7 @@ const ProductBox: React.FC<ProductBoxProps> = ({ product }) => {
       <p
         className="cursor-pointer text-mainBg2 font-bold h-10"
         onClick={() => router.push(`/${product._id}`)}
+        title={product.name}
       >
         {product.name.length > 40
           ? `${product.name.slice(0, 40)}...`
@@ -47,9 +51,13 @@ const ProductBox: React.FC<ProductBoxProps> = ({ product }) => {
         <AddToCart productId={product._id} quantity={1} />
         <ConfirmButton
           buttonText={"Buy now"}
-          onclick={() =>
-            router.push(`/checkout?productId=${product._id}&quantity=1`)
-          }
+          onclick={() => {
+            if (isAuthenticated) {
+              router.push(`/checkout?productId=${product._id}&quantity=1`);
+            } else {
+              toast.error("Please log in to place order");
+            }
+          }}
         />
       </div>
     </div>

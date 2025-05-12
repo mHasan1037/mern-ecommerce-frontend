@@ -24,7 +24,11 @@ const AddToCart: React.FC<AddToCartProps> = ({ productId, quantity }) => {
       await dispatch(fetchCartList());
       toast.success("Added to cart!");
     } catch (error) {
-      toast.error("Failed to add to cart");
+      if ((error = "Refresh token is missing")) {
+        toast.error("Login to add to the cart");
+      } else {
+        toast.error("Failed to add to cart");
+      }
     } finally {
       setIsLoading(false);
     }

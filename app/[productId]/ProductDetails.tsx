@@ -19,9 +19,11 @@ const ProductDetailClient = ({ productId }: Props) => {
   const [productCartQuantity, setProductCartQuantity] = useState(1);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { singleProduct: product, singleLoading, error } = useAppSelector(
-    (state) => state.products
-  );
+  const {
+    singleProduct: product,
+    singleLoading,
+    error,
+  } = useAppSelector((state) => state.products);
 
   useEffect(() => {
     if (productId) {
@@ -35,71 +37,104 @@ const ProductDetailClient = ({ productId }: Props) => {
 
   return (
     <div>
-      <div className="flex gap-10">
-        <div>
-          <Image
-            src={product?.images[0]?.url}
-            alt={product?.name}
-            width={250}
-            height={250}
-          />
-          <div className="flex gap-2">
-            {product?.images?.map((img) => (
-              <Image
-                key={img.url}
-                src={img.url}
-                alt={product.name}
-                width={50}
-                height={50}
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="flex flex-col md:flex-row gap-10">
+          <div className="w-full md:w-1/2">
+            <Image
+              src={product?.images[0]?.url}
+              alt={product?.name}
+              width={250}
+              height={250}
+              className="rounded-md border object-cover w-[70%] h-auto"
+            />
+            <div className="flex gap-2 mt-4">
+              {product?.images?.map((img) => (
+                <Image
+                  key={img.url}
+                  src={img.url}
+                  alt={product.name}
+                  width={70}
+                  height={70}
+                  className="rounded-md border cursor-pointer hover:scale-105 transition"
+                />
+              ))}
+            </div>
+          </div>
+          <div className="w-full md:w-1/2 space-y-4">
+            <h1 className="text-2xl font-bold">{product.name}</h1>
+            <p className="text-lg font-semibold text-green-700">
+              ${product?.price}
+            </p>
+            <p className="text-sm text-gray-500 uppercase">
+              Category: {product?.category?.name?.toUpperCase()}
+            </p>
+            <div className="flex gap-4 items-center">
+              <span className="text-yellow-500 font-semibold">
+                Ratings: {product?.ratings.average}
+              </span>
+              <span className="text-gray-600">
+                Total review: {product?.ratings?.totalReviews}
+              </span>
+            </div>
+            <p className="text-sm text-gray-700">Stocks: {product?.stock}</p>
+            {product?.is_featured && (
+              <p className="text-sm font-medium text-white bg-blue-600 inline-block px-3 py-1 rounded">
+                Featured
+              </p>
+            )}
+            <div className="mt-4">
+              <AddWishList id={product._id} />
+            </div>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-4">
+              <input
+                type="number"
+                placeholder="1"
+                className="border rounded px-3 py-1 w-24 focus:outline-none"
+                value={productCartQuantity}
+                min={1}
+                onChange={(e) => setProductCartQuantity(Number(e.target.value))}
               />
-            ))}
+              <AddToCart
+                productId={product._id}
+                quantity={productCartQuantity}
+              />
+              <ConfirmButton
+                buttonText={"Buy now"}
+                onclick={() =>
+                  router.push(
+                    `/checkout?productId=${product._id}&quantity=${productCartQuantity}`
+                  )
+                }
+              />
+            </div>
+            <p className="mt-4 text-gray-700">{product?.description}</p>
           </div>
-        </div>
-        <div>
-          <h1>{product.name}</h1>
-          <p>${product?.price}</p>
-          <p>Category: {product?.category?.name?.toUpperCase()}</p>
-          <div className="flex gap-4">
-            <p>{product?.ratings.average}</p>
-            <p>Ratings: {product?.ratings?.totalReviews}</p>
-          </div>
-          <p>Stocks: {product?.stock}</p>
-          <p>{product?.is_featured && <b>Featured product</b>}</p>
-          <AddWishList id={product._id} />
-          <div>
-            <input
-              type="number"
-              placeholder="1"
-              value={productCartQuantity}
-              min={1}
-              onChange={(e) => setProductCartQuantity(Number(e.target.value))}
-            />
-            <AddToCart
-              productId={product._id}
-              quantity={productCartQuantity}
-            />
-            <ConfirmButton
-              buttonText={"Buy now"}
-              onclick={() =>
-                router.push(
-                  `/checkout?productId=${product._id}&quantity=${productCartQuantity}`
-                )
-              }
-            />
-          </div>
-          <p>{product?.description}</p>
         </div>
       </div>
 
-      <NewReviewForm id={product._id} />
+      <div className="mt-12">
+        <NewReviewForm id={product._id} />
+      </div>
 
-      {product?.reviews !== null && (
-        <div>
+      {product?.reviews !== null && product?.reviews.length > 0 && (
+        <div className="mb-10 mx-20 space-y-6">
+          <h2 className="text-xl font-semibold border-b pb-2">
+            Customer Reviews
+          </h2>
           {product?.reviews.map((review, idx) => (
-            <div key={idx}>
-              <p>{review?.name}</p>
-              {review?.rating && <p>Rating: {review?.rating} / 5</p>}
-              {review?.comment && <div>Comment: {review?.comment}</div>}
+            <div
+              key={idx}
+              className="border p-4 rounded-md bg-gray-50 shadow-sm"
+            >
+              <p className="font-semibold">{review?.name}</p>
+              {review?.rating && (
+                <p className="text-sm text-yellow-600">
+                  Rating: {review?.rating} / 5
+                </p>
+              )}
+              {review?.comment && (
+                <div className="text-gray-700 mt-1">“{review?.comment}”</div>
+              )}
             </div>
           ))}
         </div>

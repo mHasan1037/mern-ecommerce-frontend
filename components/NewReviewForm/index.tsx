@@ -38,7 +38,7 @@ const NewReviewForm: React.FC<newReviewFormProps> = ({ id }) => {
         );
         dispatch(updateSingleProduct(res.data.product));
         setReviewData(initialReviewFeild);
-        toast.success("Review and rating added successfully")
+        toast.success("Review and rating added successfully");
       } else {
         toast.error("Login to give review");
       }
@@ -49,30 +49,38 @@ const NewReviewForm: React.FC<newReviewFormProps> = ({ id }) => {
   };
 
   return (
-    <div>
-      <div>
-        <h1>Add your review</h1>
-        <div className="flex gap-1">
-          {[...Array(5)].map((_, i) => (
-            <span
-              key={i}
-              onClick={() => handleStarClick(i)}
-              className="cursor-pointer"
-            >
-              {i < reviewData.rating ? (
-                <FaStar size={24} />
-              ) : (
-                <CiStar size={24} />
-              )}
-            </span>
-          ))}
-        </div>
-        <textarea
-          value={reviewData.comment}
-          onChange={handleCommentChange}
-          className="border border-green-400"
-        ></textarea>
-        <button onClick={handlePost}>Post</button>
+    <div className="mt-12 mb-10 bg-white border rounded-lg shadow-sm p-6 max-w-3xl mx-auto">
+      <h1 className="text-xl font-semibold mb-4">Add your review</h1>
+      <div className="flex items-center mb-4 gap-2">
+        {[...Array(5)].map((_, i) => (
+          <span
+            key={i}
+            onClick={() => handleStarClick(i)}
+            className="cursor-pointer text-yellow-500 hover:scale-110 transition-transform"
+          >
+            {i < reviewData.rating ? (
+              <FaStar size={24} />
+            ) : (
+              <CiStar size={24} />
+            )}
+          </span>
+        ))}
+        <span className="ml-2 text-sm text-gray-500">
+          {reviewData.rating} / 5
+        </span>
+      </div>
+      <textarea
+        value={reviewData.comment}
+        onChange={handleCommentChange}
+        className="w-full h-28 border rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+      ></textarea>
+      <div className="mt-4">
+        <button
+          onClick={handlePost}
+          className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
+        >
+          Post
+        </button>
       </div>
     </div>
   );

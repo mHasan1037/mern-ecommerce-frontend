@@ -4,6 +4,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState: ProductState = {
   productsInfo: null,
+  mostSoldProducts: [],
   loading: false,
   error: null,
   singleProduct: null,
@@ -55,6 +56,18 @@ export const fetchProductById = createAsyncThunk(
   }
 );
 
+export const fetchMostSoldProducts = createAsyncThunk(
+  "products/fetchMostSoldProducts",
+  async (limit: number = 10, {rejectWithValue}) =>{
+    try{
+      const res = await axiosInstance.get(`/api/products/most-sold?limit=${limit}`);
+      return res.data.products;
+    }catch(err: any){
+      return rejectWithValue(err.response?.data?.message || "Something went wrong")
+    }
+  }
+)
+
 const productSlice = createSlice({
   name: "products",
   initialState,
@@ -98,7 +111,19 @@ const productSlice = createSlice({
       .addCase(fetchProductById.rejected, (state, action) => {
         state.singleLoading = false;
         state.error = action.payload as string;
-      });
+      })
+      .addCase(fetchMostSoldProducts.pending, (state) =>{
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchMostSoldProducts.fulfilled, (state, action) =>{
+        state.loading = false;
+        state.mostSoldProducts = action.payload;
+      })
+      .addCase(fetchMostSoldProducts.rejected, (state, action) =>{
+        state.loading = false;
+        state.error = action.payload as string;
+      })
   },
 });
 

@@ -37,6 +37,7 @@ interface Category {
     reviews: Review[];
     createdAt: string;
     updatedAt: string;
+    totalSold?: number;
   }
 
   export interface CloudinaryImage {
@@ -75,6 +76,7 @@ interface Category {
 
   export interface ProductState {
     productsInfo: ProductResponse | null;
+    mostSoldProducts?: ProductType[];
     loading: boolean;
     error: string | null;
     singleProduct: ProductType | null;

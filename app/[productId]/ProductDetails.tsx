@@ -57,7 +57,7 @@ const ProductDetailClient = ({ productId }: Props) => {
         </div>
         <div>
           <h1>{product.name}</h1>
-          <p>$ {product?.price}</p>
+          <p>${product?.price}</p>
           <p>Category: {product?.category?.name?.toUpperCase()}</p>
           <div className="flex gap-4">
             <p>{product?.ratings.average}</p>

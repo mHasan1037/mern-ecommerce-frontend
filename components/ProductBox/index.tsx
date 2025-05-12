@@ -39,7 +39,7 @@ const ProductBox: React.FC<ProductBoxProps> = ({ product }) => {
           : product.name}
       </p>
       <div className="flex justify-between">
-        <p>Price: {product.price}</p>
+        <p>Price: ${product.price}</p>
         <p>
           {product.ratings?.average === 0
             ? "No ratings"

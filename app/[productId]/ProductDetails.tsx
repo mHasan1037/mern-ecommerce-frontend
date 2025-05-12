@@ -17,6 +17,7 @@ interface Props {
 
 const ProductDetailClient = ({ productId }: Props) => {
   const [productCartQuantity, setProductCartQuantity] = useState(1);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const {
@@ -31,6 +32,8 @@ const ProductDetailClient = ({ productId }: Props) => {
     }
   }, [dispatch, productId]);
 
+  const mainImage = selectedImage || product?.images[0]?.url;
+
   if (singleLoading) return <LoadingScreen />;
   if (error) return <p>Error: {error}</p>;
   if (!product) return <p>No product found.</p>;
@@ -40,13 +43,14 @@ const ProductDetailClient = ({ productId }: Props) => {
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row gap-10">
           <div className="w-full md:w-1/2">
-            <Image
-              src={product?.images[0]?.url}
-              alt={product?.name}
-              width={250}
-              height={250}
-              className="rounded-md border object-cover w-[70%] h-auto"
-            />
+            <div className="w-[400px] h-[400px] relative rounded-md border overflow-hidden">
+              <Image
+                src={mainImage as string}
+                alt={product?.name || "Product Image"}
+                fill
+                className="object-cover"
+              />
+            </div>
             <div className="flex gap-2 mt-4">
               {product?.images?.map((img) => (
                 <Image
@@ -55,6 +59,7 @@ const ProductDetailClient = ({ productId }: Props) => {
                   alt={product.name}
                   width={70}
                   height={70}
+                  onClick={() => setSelectedImage(img.url)}
                   className="rounded-md border cursor-pointer hover:scale-105 transition"
                 />
               ))}

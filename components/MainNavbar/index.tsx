@@ -14,6 +14,7 @@ import { fetchWishlist } from "@/redux/slices/wishListSlice";
 import { fetchCartList } from "@/redux/slices/cartSlice";
 import { useDebounce } from "@/utils/useDebounce";
 import { setSearchTerm } from "@/redux/slices/productSlice";
+import { resetStates } from "@/utils/resetStates";
 
 interface NavbarProps {
   setOpenForm: React.Dispatch<
@@ -53,7 +54,10 @@ function MainNavbar({ setOpenForm }: NavbarProps) {
             alt="Logo"
             width={200}
             height={100}
-            onClick={() => router.push("/")}
+            onClick={() => {
+              router.push("/");
+              dispatch(resetStates())
+            }}
           />
         </div>
         <SmallScreenSearchbox />

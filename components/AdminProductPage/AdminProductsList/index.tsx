@@ -74,7 +74,7 @@ const AdminProductsList = () => {
             {productsInfo.products.map((product) => {
               return (
                 <tr key={product._id}>
-                  <td>{product.name}</td>
+                  <td className="cursor-pointer hover:text-mainBg2" onClick={()=> router.push(`/${product._id}`)}>{product.name}</td>
                   <td>{product.category?.name}</td>
                   <td>{product.stock}</td>
                   <td>{product.price}</td>

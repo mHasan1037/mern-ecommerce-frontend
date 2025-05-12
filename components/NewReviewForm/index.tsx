@@ -1,5 +1,5 @@
 "use client";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { updateSingleProduct } from "@/redux/slices/productSlice";
 import axiosInstance from "@/utils/axiosInstance";
 import React, { useState } from "react";
@@ -19,6 +19,7 @@ const initialReviewFeild = {
 const NewReviewForm: React.FC<newReviewFormProps> = ({ id }) => {
   const dispatch = useAppDispatch();
   const [reviewData, setReviewData] = useState(initialReviewFeild);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   const handleStarClick = (index: number) => {
     setReviewData((prev) => ({ ...prev, rating: index + 1 }));
@@ -30,12 +31,17 @@ const NewReviewForm: React.FC<newReviewFormProps> = ({ id }) => {
 
   const handlePost = async () => {
     try {
-      const res = await axiosInstance.post(
-        `/api/products/${id}/review`,
-        reviewData
-      );
-      dispatch(updateSingleProduct(res.data.product));
-      setReviewData(initialReviewFeild);
+      if (isAuthenticated) {
+        const res = await axiosInstance.post(
+          `/api/products/${id}/review`,
+          reviewData
+        );
+        dispatch(updateSingleProduct(res.data.product));
+        setReviewData(initialReviewFeild);
+        toast.success("Review and rating added successfully")
+      } else {
+        toast.error("Login to give review");
+      }
     } catch (error: any) {
       const message = error?.response?.data?.message || "Failed to post review";
       toast.error(message);

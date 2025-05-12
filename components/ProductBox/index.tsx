@@ -46,7 +46,9 @@ const ProductBox: React.FC<ProductBoxProps> = ({ product }) => {
             : `Rating: ${product.ratings?.average}`}
         </p>
       </div>
-      <AddWishList id={product._id} />
+      <div className="absolute top-3 right-3">
+        <AddWishList id={product._id} />
+      </div>
       <div className="flex justify-between">
         <AddToCart productId={product._id} quantity={1} />
         <ConfirmButton

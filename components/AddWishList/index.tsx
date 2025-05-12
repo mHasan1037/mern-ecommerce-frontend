@@ -45,7 +45,7 @@ const AddWishList: React.FC<AddWishListProps> = ({ id }) => {
 
   const addedToWishlist = wishlist.some((list) => list._id === id);
 
-  const baseStyle = "text-mainBg2 absolute top-3 right-3 cursor-pointer hover:scale-110 transition-transform duration-200"
+  const baseStyle = "text-mainBg2 cursor-pointer hover:scale-110 transition-transform duration-200"
 
   if (error) return <h1>Error...{error}</h1>;
 

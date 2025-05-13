@@ -3,6 +3,7 @@ import { useAppSelector } from "@/redux/hooks";
 import React from "react";
 import ProductBox from "../ProductBox";
 import LoadingContainer from "../LoadingScreen/LoadingContainer";
+import NoProductFound from "../HomePage/NoProductFound";
 
 const ProductsSection = () => {
   const { productsInfo, loading, error } = useAppSelector(
@@ -18,7 +19,7 @@ const ProductsSection = () => {
   if (error) return <p>Error fetching category products: {error}</p>;
 
   if (productsInfo?.products.length === 0) {
-    return <h1>No product found</h1>;
+    return <NoProductFound />;
   }
 
   return (

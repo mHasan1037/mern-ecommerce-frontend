@@ -1,12 +1,13 @@
 "use client";
+import React, { useEffect } from "react";
 import ConfirmButton from "@/components/buttons/ConfirmButton";
 import LoadingScreen from "@/components/LoadingScreen";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { deleteCart, fetchCartList } from "@/redux/slices/cartSlice";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
 import { toast } from "react-toastify";
+import { RxCross2 } from "react-icons/rx";
 
 const Cart = () => {
   const dispatch = useAppDispatch();
@@ -39,11 +40,12 @@ const Cart = () => {
   };
 
   if (loading && (!cartList || cartList.length === 0)) return <LoadingScreen />;
-  if (error) return <p>Error: {error}</p>;
+  if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   return (
-    <div>
-      <table className="table-auto w-full border border-gray-300">
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      <h2 className="text-2xl font-semibold mb-6 text-center">My Cart</h2>
+      {/* <table className="table-auto w-full border border-gray-300">
         <thead>
           <tr className="bg-gray-100 text-left">
             <th className="px-4 py-2 border">Image</th>
@@ -84,8 +86,67 @@ const Cart = () => {
               );
             })}
         </tbody>
-      </table>
-      <ConfirmButton buttonText={"Checkout"} onclick={()=> router.push('/checkout')}/>
+      </table> */}
+      {cartList && cartList.length > 0 ? (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {cartList.map((cart) => {
+              const product = cart.product;
+              if (!product) return null;
+
+              return (
+                <div
+                  key={cart._id || `${product._id}-${cart.quantity}`}
+                  className="flex flex-col sm:flex-row items-center gap-4 p-4 border rounded-md shadow-sm bg-white relative"
+                >
+                  <div className="relative w-[100px] h-[100px]">
+                    <Image
+                      src={product.images[0]?.url || "/images/placeholder.png"}
+                      alt={product.name}
+                      fill
+                      className="object-cover rounded border"
+                    />
+                  </div>
+
+                  <div className="flex-1 space-y-1 w-full">
+                    <p
+                      className="text-lg font-semibold hover:text-green-500 hover:underline cursor-pointer"
+                      title={product.name}
+                      onClick={() => router.push(`/product/${product._id}`)}
+                    >
+                      {product.name.length > 40
+                        ? product.name.slice(0, 40) + "..."
+                        : product.name}
+                    </p>
+                    <p className="text-green-700 font-medium">
+                      ${product.price}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Quantity: {cart.quantity}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => handleDeleteCart(product._id)}
+                    className="absolute top-2 right-2 p-1 text-red-500 hover:text-red-700"
+                  >
+                    <RxCross2 size={20} />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="mt-8 text-center">
+            <ConfirmButton
+              buttonText={"Proceed to Checkout"}
+              onclick={() => router.push("/checkout")}
+            />
+          </div>
+        </>
+      ) : (
+        <p className="text-center text-gray-500">Your cart is empty.</p>
+      )}
     </div>
   );
 };

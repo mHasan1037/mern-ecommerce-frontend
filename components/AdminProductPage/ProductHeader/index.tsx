@@ -43,14 +43,16 @@ const ProductHeader = () => {
   }, [selectedCategory, isFeatured, dispatch, debouncedSearch]);
 
   return (
-    <div className="flex justify-between items-start w-full mb-10">
-      <div className="flex gap-2">
+    <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
+      <div className="flex flex-wrap gap-3 items-center">
         <select
           name="category"
           value={selectedCategory ?? ""}
           onChange={handleCategoryChange}
+          className="border px-3 py-1 rounded-md text-sm"
           required
         >
+          <option value="">All Categories</option>
           {categories.map((category) => {
             return (
               <option key={category._id} value={category._id}>
@@ -59,16 +61,16 @@ const ProductHeader = () => {
             );
           })}
         </select>
-        <div>
-          Featured{" "}
+        <label className="flex items-center gap-2 text-sm">
           <input
             type="checkbox"
             checked={isFeatured}
             onChange={handleFeaturedChange}
           />
-        </div>
+          Featured
+        </label>
       </div>
-      <div className="flex gap-5">
+      <div className="flex gap-4 w-full md:w-auto">
         <input
           type="text"
           placeholder="Search product"
@@ -79,7 +81,7 @@ const ProductHeader = () => {
               setSearchTerm(searchTerm)
             }
           }}
-          className="px-3 rounded-md focus:outline-none"
+          className="border px-3 py-1 rounded-md w-full md:w-60 text-sm focus:outline-none"
         />
         <ConfirmButton
           buttonText={"Add product"}

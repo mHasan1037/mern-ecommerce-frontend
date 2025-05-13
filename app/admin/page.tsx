@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { CiShoppingCart } from "react-icons/ci";
 import { FaUserFriends } from "react-icons/fa";
-import { MdOutlineInventory, MdAttachMoney  } from "react-icons/md";
+import { MdOutlineInventory, MdAttachMoney } from "react-icons/md";
 import AdminInfoBox from "@/components/AdminInfoBox";
 import LoadingScreen from "@/components/LoadingScreen";
 
@@ -63,7 +63,7 @@ const Admin = () => {
 
   useEffect(() => {
     const fetchSummary = async () => {
-      setIsLoading(true)
+      setIsLoading(true);
       try {
         const res = await axiosInstance.get("/api/admin/summary");
         setAdminSummary(res.data.summary);
@@ -114,13 +114,16 @@ const Admin = () => {
           />
         </div>
 
-        <div>
-          <div>
-            Low stock products:{" "}
-            {adminSummary?.lowStockProducts.map((product) => (
-              <div>
-                <p>Name: {product.name}</p>
-                <p>Stock: {product.stock}</p>
+        <div className="pt-10">
+          <h2 className="text-lg font-semibold mb-4">⚠️ Low Stock Products</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {adminSummary?.lowStockProducts.map((product, idx) => (
+              <div
+                key={idx}
+                className="border border-red-300 bg-red-50 p-4 rounded-md shadow-sm"
+              >
+                <p className="font-semibold text-red-700">{product.name}</p>
+                <p className="text-sm text-red-500">Stock: {product.stock}</p>
               </div>
             ))}
           </div>

@@ -12,22 +12,24 @@ import LoadingContainer from "@/components/LoadingScreen/LoadingContainer";
 
 const AdminProductsList = () => {
   const dispatch = useAppDispatch();
-  const {productsInfo, loading, error} = useAppSelector((state) => state.products);
-  const { isAuthenticated }= useAppSelector((state) => state.auth);
-  const selectedCategory = useAppSelector(state => state.categories.selectedCategory);
+  const { productsInfo, loading, error } = useAppSelector(
+    (state) => state.products
+  );
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const selectedCategory = useAppSelector(
+    (state) => state.categories.selectedCategory
+  );
   const router = useRouter();
 
-
-
-  useEffect(()=>{
-    if(!isAuthenticated){
-      router.push('/');
-      toast.success('Login to your account')
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/");
+      toast.success("Login to your account");
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated]);
 
   useEffect(() => {
-    dispatch(fetchProducts({category: selectedCategory ?? undefined }))
+    dispatch(fetchProducts({ category: selectedCategory ?? undefined }));
   }, [selectedCategory, dispatch]);
 
   const handleDeleteProduct = async (id: string) => {
@@ -46,7 +48,7 @@ const AdminProductsList = () => {
 
       await axiosInstance.delete(`/api/products/${id}`);
 
-      dispatch(fetchProducts({category: selectedCategory ?? undefined }));
+      dispatch(fetchProducts({ category: selectedCategory ?? undefined }));
     } catch (error) {
       console.error("Error deleting product", error);
     }
@@ -56,45 +58,64 @@ const AdminProductsList = () => {
   if (error) return <p>Error fetching products: {error}</p>;
 
   return (
-    <div>
-      <h1>All products</h1>
+    <div className="bg-white p-6 rounded-md shadow-md">
+      <h2 className="text-xl font-semibold mb-4">All Products</h2>
       <div>
         {!productsInfo ? (
           <LoadingContainer />
         ) : (
-          <table>
-            <tr>
-              <th>Title</th>
-              <th>Category</th>
-              <th>Stock status</th>
-              <th>Price</th>
-              <th>Ratings</th>
-              <th>Action</th>
-            </tr>
-            {productsInfo.products.map((product) => {
-              return (
-                <tr key={product._id}>
-                  <td className="cursor-pointer hover:text-mainBg2" onClick={()=> router.push(`/${product._id}`)}>{product.name}</td>
-                  <td>{product.category?.name}</td>
-                  <td>{product.stock}</td>
-                  <td>{product.price}</td>
-                  <td>{product.ratings?.average}</td>
-                  <td className="flex gap-2">
-                    <button
-                      onClick={() =>
-                        router.push(`/admin/product/edit/${product._id}`)
-                      }
-                    >
-                      <MdEdit />
-                    </button>
-                    <button onClick={() => handleDeleteProduct(product._id)}>
-                      <MdDelete />
-                    </button>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm border border-gray-200">
+              <thead>
+                <tr className="bg-gray-100 text-left">
+                  <th className="px-4 py-2 border">Title</th>
+                  <th className="px-4 py-2 border">Category</th>
+                  <th className="px-4 py-2 border">Stock</th>
+                  <th className="px-4 py-2 border">Price</th>
+                  <th className="px-4 py-2 border">Ratings</th>
+                  <th className="px-4 py-2 border">Action</th>
                 </tr>
-              );
-            })}
-          </table>
+              </thead>
+              <tbody>
+                {productsInfo.products.map((product) => (
+                  <tr key={product._id} className="hover:bg-gray-50">
+                    <td
+                      className="px-4 py-2 border cursor-pointer text-mainBg2 hover:underline"
+                      onClick={() => router.push(`/${product._id}`)}
+                    >
+                      {product.name}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {product.category?.name}
+                    </td>
+                    <td className="px-4 py-2 border">{product.stock}</td>
+                    <td className="px-4 py-2 border">${product.price}</td>
+                    <td className="px-4 py-2 border">
+                      {product.ratings?.average ?? 0}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() =>
+                            router.push(`/admin/product/edit/${product._id}`)
+                          }
+                          className="text-blue-600 hover:text-blue-800 transition"
+                        >
+                          <MdEdit size={18} />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteProduct(product._id)}
+                          className="text-red-600 hover:text-red-800 transition"
+                        >
+                          <MdDelete size={18} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>

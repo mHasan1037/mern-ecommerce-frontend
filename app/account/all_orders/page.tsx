@@ -42,7 +42,6 @@ const AllOrders = () => {
     <div className="max-w-5xl mx-auto px-4 py-10">
       <h1 className="text-2xl font-bold text-center mb-6">My Orders</h1>
 
-      {/* Filter Tabs */}
       <div className="flex gap-4 justify-center mb-8">
         {orderStatusType.map((status) => (
           <button
@@ -59,7 +58,6 @@ const AllOrders = () => {
         ))}
       </div>
 
-      {/* Order List */}
       {filteredOrders.length === 0 ? (
         <p className="text-center text-gray-500">
           No {orderType} orders found.
@@ -71,7 +69,6 @@ const AllOrders = () => {
               key={order._id}
               className="border rounded-lg shadow-sm bg-white p-5 space-y-4"
             >
-              {/* Order Header */}
               <div className="flex justify-between items-start flex-wrap gap-4">
                 <div>
                   <p className="text-sm text-gray-500">Order ID</p>
@@ -96,7 +93,6 @@ const AllOrders = () => {
                 </div>
               </div>
 
-              {/* Order Items */}
               <div className="grid sm:grid-cols-2 gap-4">
                 {order.orderItems
                   .filter((item) => item.product)

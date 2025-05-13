@@ -74,7 +74,15 @@ const WishList = () => {
                   />
                 </div>
                 <div className="flex-1 space-y-1 w-full">
-                  <p className="text-lg font-semibold" title={list.name}>{list.name.length > 40 ? list.name.slice(0, 40) + "..." : list.name}</p>
+                  <p
+                    className="text-lg font-semibold hover:text-green-500 hover:underline cursor-pointer"
+                    title={list.name}
+                    onClick={() => router.push(list._id)}
+                  >
+                    {list.name.length > 40
+                      ? list.name.slice(0, 40) + "..."
+                      : list.name}
+                  </p>
                   <p className="text-green-700 font-medium">${list.price}</p>
                   <p
                     className={`text-sm ${
@@ -83,12 +91,6 @@ const WishList = () => {
                   >
                     {list.stock > 0 ? "In stock" : "Out of stock"}
                   </p>
-                  <button
-                    onClick={() => router.push(list._id)}
-                    className="text-sm text-blue-600 underline hover:text-blue-800"
-                  >
-                    View product
-                  </button>
                   <div className="flex gap-2 items-center mt-2">
                     <input
                       type="number"
@@ -98,7 +100,7 @@ const WishList = () => {
                       }
                       placeholder="1"
                       min={1}
-                      className="w-16 px-2 py-1 border rounded text-sm"
+                      className="w-16 px-2 py-1 border rounded text-sm outline-none"
                     />
                     <AddToCart
                       productId={list._id}

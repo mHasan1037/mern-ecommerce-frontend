@@ -43,6 +43,7 @@ export interface Order {
         name: string;
         email: string;
       };
+  placedAt: string;
   orderItems: PopulatedOrderItem[];
   shippingInfo: shippingInfo;
   totalAmount: number;

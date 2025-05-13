@@ -10,7 +10,7 @@ interface RecentOrder {
   id: string;
   status: string;
   placedAt: string;
-  orderItems: ProductSummary[];
+  orderItems: ProductSummary;
 }
 
 interface User {

@@ -41,9 +41,9 @@ const UserProfile = () => {
         <h2>Total Delivered orders: {adminViewedUser.totalDeliveredOrders}</h2>
       )}
       {adminViewedUser?.recentOrder ? (
-        adminViewedUser.recentOrder.orderItems?.[0]?.name ? (
+        adminViewedUser.recentOrder.orderItems?.name ? (
           <h2>
-            Recent order: {adminViewedUser.recentOrder.orderItems[0].name}
+            Recent order: {adminViewedUser.recentOrder.orderItems?.name}
           </h2>
         ) : (
           <h2>Recent order: None</h2>

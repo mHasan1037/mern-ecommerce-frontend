@@ -17,12 +17,15 @@ interface CategoryFormData {
   image: CloudinaryImage | null;
 }
 
-const CategoryForm: React.FC<CategoryProps> = ({ title, setShowCategoryForm }) => {
+const CategoryForm: React.FC<CategoryProps> = ({
+  title,
+  setShowCategoryForm,
+}) => {
   const [formData, setFormData] = useState<CategoryFormData>({
     name: "",
     description: "",
     parentCategory: "",
-    image: null
+    image: null,
   });
 
   const handleChange = (
@@ -50,65 +53,73 @@ const CategoryForm: React.FC<CategoryProps> = ({ title, setShowCategoryForm }) =
 
   const handleImageDelete = async (publicId: string) => {
     try {
-        await axiosInstance.delete(`/api/products/delete-image/${publicId}`);
-        setFormData((prev) => ({
-          ...prev,
-          image: null,
-        }));
-      } catch (error) {
-        console.error("Failed to delete image", error);
-      }
+      await axiosInstance.delete(`/api/products/delete-image/${publicId}`);
+      setFormData((prev) => ({
+        ...prev,
+        image: null,
+      }));
+    } catch (error) {
+      console.error("Failed to delete image", error);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    try{
-        e.preventDefault();
-        await axiosInstance.post(`/api/categories`, formData)
-        setFormData({
-          name: "",
-          description: "",
-          parentCategory: "",
-          image: null,
-        });
-        setShowCategoryForm(false);
-    }catch(error){
-
-    }
-
+    try {
+      e.preventDefault();
+      await axiosInstance.post(`/api/categories`, formData);
+      setFormData({
+        name: "",
+        description: "",
+        parentCategory: "",
+        image: null,
+      });
+      setShowCategoryForm(false);
+    } catch (error) {}
   };
 
   return (
-    <div>
-      <button onClick={()=> setShowCategoryForm(false)}>Go to categories</button>
-      <h1>{title}</h1>
+    <div className="bg-white p-6 rounded-md shadow-md">
+      <button
+        onClick={() => setShowCategoryForm(false)}
+        className="mb-4 text-sm text-blue-600 hover:underline"
+      >
+        ← Back to categories
+      </button>
+      <h1 className="text-xl font-semibold mb-4">{title}</h1>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <p>Name:</p>
+          <label className="block mb-1 text-sm font-medium">Name</label>
           <input
             type="text"
             name="name"
             placeholder="Name"
             value={formData.name}
             onChange={handleChange}
+            className="w-full border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
         <div>
-          <p>Description:</p>
+          <label className="block mb-1 text-sm font-medium">Description</label>
           <textarea
             name="description"
             placeholder="Description"
             value={formData.description}
             onChange={handleChange}
+            className="w-full min-h-[100px] border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
           ></textarea>
         </div>
         <div>
-          <p>Parent Category:</p>
+          <label className="block mb-1 text-sm font-medium">
+            Parent Category
+          </label>
           <input
             type="text"
             name="parentCategory"
             value={formData.parentCategory}
             onChange={handleChange}
+            placeholder="Optional"
+            className="w-full border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
         <CldUploadWidget
@@ -117,22 +128,36 @@ const CategoryForm: React.FC<CategoryProps> = ({ title, setShowCategoryForm }) =
           onSuccess={handleImageUpload}
         >
           {({ open }: { open: () => void }) => (
-            <button type="button" onClick={() => open()}>
-              Upload Image
-            </button>
+            <div>
+              <label className="block mb-1 text-sm font-medium">
+                Upload image of the category
+              </label>
+              <button
+                type="button"
+                onClick={() => open()}
+                className="bg-green-600 block hover:bg-green-700 text-white px-4 py-2 rounded-md transition"
+              >
+                Upload Image
+              </button>
+            </div>
           )}
         </CldUploadWidget>
         {formData.image && (
-          <div key={formData?.image.public_id} className="relative">
+          <div
+            key={formData?.image.public_id}
+            className="relative w-[100px] h-[100px] mt-2"
+          >
             <Image
               src={formData?.image.url}
               alt="Preview"
               width={100}
               height={100}
+              className="rounded-md object-cover border"
             />
             <button
               type="button"
               onClick={() => handleImageDelete(formData.image!.public_id)}
+              className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-1 text-xs"
             >
               ❌
             </button>

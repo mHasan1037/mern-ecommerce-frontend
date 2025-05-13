@@ -25,15 +25,15 @@ const Category = () => {
     <div className="adminMainSection">
       <AdminSidebar />
       <div className="w-full">
-        <div className="w-full flex justify-between items-start">
-          <h1>Category</h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-semibold">Product Categories</h1>
           <ConfirmButton
             buttonText="Add Category"
             onclick={() => setShowCategoryForm(true)}
           />
         </div>
         {showCategoryForm ? (
-          <CategoryForm title="Add Category" setShowCategoryForm={setShowCategoryForm}/>
+          <CategoryForm title="Upload Category" setShowCategoryForm={setShowCategoryForm}/>
         ) : (
           <AllCategoryList />
         )}

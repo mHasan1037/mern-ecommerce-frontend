@@ -52,13 +52,13 @@ const ProductForm: React.FC<ProductFormProps> = ({
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    const {name, value, type} = e.target;
-    
-    if(type === 'checkbox'){
+    const { name, value, type } = e.target;
+
+    if (type === "checkbox") {
       const target = e.target as HTMLInputElement;
-      setFormData({...formData, [name]: target.checked})
-    }else{
-      setFormData({...formData, [name]: value})
+      setFormData({ ...formData, [name]: target.checked });
+    } else {
+      setFormData({ ...formData, [name]: value });
     }
   };
 
@@ -91,8 +91,8 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
     const uploadingProduct = {
       ...formData,
-      category: formData.category || categories[0]?._id || ""
-    }
+      category: formData.category || categories[0]?._id || "",
+    };
     await onSubmit(uploadingProduct);
     setFormData({
       name: "",
@@ -106,14 +106,20 @@ const ProductForm: React.FC<ProductFormProps> = ({
     router.push("/admin/product");
   };
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-      <h2>{mode === "edit" ? "Edit Product" : "Create Product"}</h2>
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-6xl w-full mx-auto bg-white p-6 rounded-md shadow-md space-y-5"
+    >
+      <h2 className="text-xl font-semibold mb-4">
+        {mode === "edit" ? "Edit Product" : "Create Product"}
+      </h2>
       <input
         name="name"
         value={formData.name}
         onChange={handleChange}
         required
         placeholder="Name"
+        className="w-full border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
       />
       <textarea
         name="description"
@@ -121,21 +127,37 @@ const ProductForm: React.FC<ProductFormProps> = ({
         onChange={handleChange}
         placeholder="Decription"
         required
+        className="w-full min-h-[200px] border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
       />
-      <input
-        type="number"
-        name="price"
-        value={formData.price}
-        onChange={handleChange}
-        placeholder="Price"
-        required
-      />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <input
+          type="number"
+          name="price"
+          value={formData.price}
+          onChange={handleChange}
+          placeholder="Price"
+          required
+          className="w-full border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+        />
+        <input
+          type="number"
+          name="stock"
+          value={formData.stock}
+          onChange={handleChange}
+          placeholder="Stock"
+          required
+          className="w-full border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+        />
+      </div>
+
       <select
         name="category"
         value={formData.category}
         onChange={handleChange}
         required
+        className="w-full border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
       >
+        <option value="">Select category</option>
         {categories.map((category) => {
           return (
             <option key={category._id} value={category._id}>
@@ -144,14 +166,6 @@ const ProductForm: React.FC<ProductFormProps> = ({
           );
         })}
       </select>
-      <input
-        type="number"
-        name="stock"
-        value={formData.stock}
-        onChange={handleChange}
-        placeholder="Stock"
-        required
-      />
 
       {formData.images.length < 4 && (
         <CldUploadWidget
@@ -160,20 +174,31 @@ const ProductForm: React.FC<ProductFormProps> = ({
           onSuccess={handleImageUpload}
         >
           {({ open }: { open: () => void }) => (
-            <button type="button" onClick={() => open()}>
+            <button
+              type="button"
+              onClick={() => open()}
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition"
+            >
               Upload Image
             </button>
           )}
         </CldUploadWidget>
       )}
 
-      <div className="flex gap-4 mt-4">
+      <div className="flex flex-wrap gap-4">
         {formData.images.map((img) => (
-          <div key={img.public_id} className="relative">
-            <Image src={img.url} alt="Preview" width={100} height={100} />
+          <div key={img.public_id} className="relative w-[100px] h-[100px]">
+            <Image
+              src={img.url}
+              alt="Preview"
+              width={100}
+              height={100}
+              className="object-cover rounded-md border"
+            />
             <button
               type="button"
               onClick={() => handleImageDelete(img.public_id)}
+              className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-1 text-xs"
             >
               ❌
             </button>
@@ -181,21 +206,24 @@ const ProductForm: React.FC<ProductFormProps> = ({
         ))}
       </div>
 
-      <div>
-        <label htmlFor="is_featured">Featured:</label>
+      <label className="inline-flex items-center gap-2 mt-4">
         <input
           type="checkbox"
           name="is_featured"
           id="is_featured"
           checked={formData.is_featured}
           onChange={handleChange}
+          className="accent-green-600"
+        />
+        <span className="text-sm text-gray-700">Mark as featured</span>
+      </label>
+
+      <div className="mt-6">
+        <ConfirmButton
+          buttonText={mode === "edit" ? "Update" : "Upload"}
+          type="submit"
         />
       </div>
-
-      <ConfirmButton
-        buttonText={mode === "edit" ? "Update" : "Upload"}
-        type="submit"
-      />
     </form>
   );
 };

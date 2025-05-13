@@ -3,20 +3,21 @@ import { useAppDispatch } from "@/redux/hooks";
 import { clearCart, fetchCartList } from "@/redux/slices/cartSlice";
 import { postCartOrders, postSingleOrder } from "@/redux/slices/orderSlice";
 import { fetchProductById } from "@/redux/slices/productSlice";
-import { CheckoutOrderItem , shippingInfo } from "@/types/order";
+import { CheckoutOrderItem, shippingInfo } from "@/types/order";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import style from "./checkout.module.css";
 
 const initialShippingInfo = {
-    fullName: "",
-    address: "",
-    city: "",
-    postCode: "",
-    country: "",
-    phone: "",
-}
+  fullName: "",
+  address: "",
+  city: "",
+  postCode: "",
+  country: "",
+  phone: "",
+};
 
 const Checkout = () => {
   const router = useRouter();
@@ -24,8 +25,9 @@ const Checkout = () => {
   const productId = searchParams.get("productId");
   const quantity = searchParams.get("quantity");
   const dispatch = useAppDispatch();
-  const [orderItems, setOrderItems] = useState<CheckoutOrderItem []>([]);
-  const [shippingInfo, setShippingInfo] = useState<shippingInfo>(initialShippingInfo)
+  const [orderItems, setOrderItems] = useState<CheckoutOrderItem[]>([]);
+  const [shippingInfo, setShippingInfo] =
+    useState<shippingInfo>(initialShippingInfo);
   const [isDirectOrder, setIsDirectOrder] = useState(false);
 
   useEffect(() => {
@@ -50,46 +52,63 @@ const Checkout = () => {
     } else {
       dispatch(fetchCartList()).then((res) => {
         const cart = res.payload || [];
-        const formatted = cart.filter((item: any) => item.product).map((item: any) => ({
-          productId: item.product._id,
-          quantity: item.quantity,
-          price: item.product.price,
-          name: item.product.name,
-          image: item.product.images?.[0]?.url || "",
-        }));
+        const formatted = cart
+          .filter((item: any) => item.product)
+          .map((item: any) => ({
+            productId: item.product._id,
+            quantity: item.quantity,
+            price: item.product.price,
+            name: item.product.name,
+            image: item.product.images?.[0]?.url || "",
+          }));
         setOrderItems(formatted);
       });
     }
   }, []);
 
-  const totalAmount = orderItems.reduce((sum, item) => sum + item.price * item.quantity , 0);
+  const totalAmount = orderItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
-  const handleShippingInfo = (e: React.ChangeEvent<HTMLInputElement>) =>{
+  const handleShippingInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setShippingInfo((prev)=>({
-        ...prev,
-        country: "Bangladesh",
-        [name]: value
+    setShippingInfo((prev) => ({
+      ...prev,
+      country: "Bangladesh",
+      [name]: value,
     }));
-  }
+  };
 
-  const handlePlaceOrder = () =>{
-    if(isDirectOrder){
-        dispatch(postSingleOrder({
-            productId: productId as string,
-            quantity: parseInt(quantity as string),
-            totalAmount,
-            shippingInfo
-        }))
+  const handlePlaceOrder = () => {
+    if (
+      !shippingInfo.fullName ||
+      !shippingInfo.address ||
+      !shippingInfo.city ||
+      !shippingInfo.postCode ||
+      !shippingInfo.phone
+    ) {
+      toast.error("Please fill in all shipping fields.");
+      return;
+    }
+    if (isDirectOrder) {
+      dispatch(
+        postSingleOrder({
+          productId: productId as string,
+          quantity: parseInt(quantity as string),
+          totalAmount,
+          shippingInfo,
+        })
+      )
         .unwrap()
-        .then((res)=>{
-            router.push(`/account/order_success?orderId=${res.order._id}`)
-            toast.success("Order placed successfully!")
+        .then((res) => {
+          router.push(`/account/order_success?orderId=${res.order._id}`);
+          toast.success("Order placed successfully!");
         })
-        .catch((err) =>{
-            toast.error("Failed to place order: ", err)
-        })
-    }else{
+        .catch((err) => {
+          toast.error("Failed to place order: ", err);
+        });
+    } else {
       dispatch(
         postCartOrders({
           totalAmount,
@@ -98,7 +117,7 @@ const Checkout = () => {
       )
         .unwrap()
         .then((res) => {
-          router.push(`/account/order_success?orderId=${res.order._id}`)
+          router.push(`/account/order_success?orderId=${res.order._id}`);
           dispatch(clearCart());
           toast.success("Cart order placed successfully!");
         })
@@ -106,47 +125,103 @@ const Checkout = () => {
           toast.error("Failed to place cart order: " + err);
         });
     }
-  }
+  };
 
-  return <div>
-    <div>
-        {orderItems.map((item) =>(
-            <div className="flex gap-3" key={item.productId}>
-                <p>Name: {item.name}</p>
-                <Image src={item.image} alt={item.name} width={50} height={50}/>
-                <p>Quantity: {item.quantity}</p>
-                <p>Price: ${item.price}</p>
-            </div>
-        ))}
+  return (
+    <div className={style.container}>
+      <h1 className={style.heading}>Checkout</h1>
+      <div className={style.tableWrapper}>
+        <table className={style.table}>
+          <thead>
+            <tr className="bg-gray-100 text-left text-sm">
+              <th className={style.tableCell}>Image</th>
+              <th className={style.tableCell}>Name</th>
+              <th className={style.tableCell}>Qty</th>
+              <th className={style.tableCell}>Rate</th>
+              <th className={style.tableCell}>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orderItems.map((item) => (
+              <tr key={item.productId} className="text-sm">
+                <td className={`${style.tableCell} w-[60px]`}>
+                  <Image
+                    src={item.image}
+                    alt={item.name}
+                    width={50}
+                    height={50}
+                    className="rounded object-cover"
+                  />
+                </td>
+                <td className={style.tableCell}>{item.name}</td>
+                <td className={style.tableCell}>{item.quantity}</td>
+                <td className={style.tableCell}>${item.price}</td>
+                <td className={style.tableCell}>
+                  ${item.price * item.quantity}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className={style.totalAmount}>
+        Total Price: <span className={style.totalPrice}>${totalAmount}</span>
+      </div>
+
+      <div className={style.formSection}>
+        <h2 className={style.formTitle}>Shipping Address</h2>
+        <div className={style.formGrid}>
+          <input
+            type="text"
+            name="fullName"
+            placeholder="Full Name"
+            value={shippingInfo.fullName}
+            onChange={handleShippingInfo}
+            className={style.input}
+          />
+          <input
+            type="text"
+            name="phone"
+            placeholder="Phone"
+            value={shippingInfo.phone}
+            onChange={handleShippingInfo}
+            className={style.input}
+          />
+          <input
+            type="text"
+            name="address"
+            placeholder="Address"
+            value={shippingInfo.address}
+            onChange={handleShippingInfo}
+            className={style.input}
+          />
+          <input
+            type="text"
+            name="city"
+            placeholder="City"
+            value={shippingInfo.city}
+            onChange={handleShippingInfo}
+            className={style.input}
+          />
+          <input
+            type="number"
+            name="postCode"
+            placeholder="Post Code"
+            value={shippingInfo.postCode}
+            onChange={handleShippingInfo}
+            className={style.input}
+          />
+        </div>
+      </div>
+
+      <div className="text-center">
+        <button onClick={handlePlaceOrder} className={style.submitButton}>
+          Place Order
+        </button>
+      </div>
     </div>
-    <div>
-        <h1>Total price: <span>${totalAmount}</span></h1>
-    </div>
-    <h1>Add your shipping address:</h1>
-    <form>
-        <div className="flex gap-2">
-            <p>Name:</p>
-            <input type="text" placeholder="Name" name="fullName" value={shippingInfo.fullName} onChange={handleShippingInfo}/>
-        </div>
-        <div className="flex gap-2">
-            <p>Address:</p>
-            <input type="text" placeholder="Address" name="address" value={shippingInfo.address} onChange={handleShippingInfo}/>
-        </div>
-        <div className="flex gap-2">
-            <p>City:</p>
-            <input type="text" placeholder="City" name="city" value={shippingInfo.city} onChange={handleShippingInfo}/>
-        </div>
-        <div className="flex gap-2">
-            <p>Post code:</p>
-            <input type="number" placeholder="Post code" name="postCode" value={shippingInfo.postCode} onChange={handleShippingInfo}/>
-        </div>
-        <div className="flex gap-2">
-            <p>Phone:</p>
-            <input type="number" placeholder="Phone" name="phone" value={shippingInfo.phone} onChange={handleShippingInfo}/>
-        </div>
-    </form>
-    <button onClick={handlePlaceOrder}>Place order</button>
-  </div>;
+  );
 };
 
 export default Checkout;

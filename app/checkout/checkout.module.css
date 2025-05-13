@@ -1,0 +1,50 @@
+@tailwind components;
+@tailwind utilities;
+
+.container {
+    @apply max-w-5xl mx-auto px-4 py-8 space-y-8;
+}
+
+.heading {
+    @apply text-2xl font-semibold text-center;
+}
+
+.tableWrapper {
+    @apply overflow-x-auto;
+}
+
+.table {
+    @apply min-w-full border border-gray-300 rounded;
+}
+
+.tableCell {
+    @apply p-2 border text-sm;
+}
+
+.totalAmount {
+    @apply text-right text-lg font-medium;
+}
+
+.totalPrice {
+    @apply text-green-600;
+}
+
+.formSection {
+    @apply bg-white border rounded p-6 shadow-sm;
+}
+
+.formTitle {
+    @apply text-lg font-semibold mb-4;
+}
+
+.formGrid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+}
+
+.input {
+    @apply border px-3 py-2 rounded w-full focus:outline-none;
+}
+
+.submitButton {
+    @apply bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md text-base transition;
+}

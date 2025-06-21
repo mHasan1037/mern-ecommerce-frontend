@@ -1,4 +1,5 @@
 import ConfirmButton from "@/components/buttons/ConfirmButton";
+import { Category } from "@/redux/slices/categorySlice";
 import { CloudinaryImage } from "@/types/product";
 import axiosInstance from "@/utils/axiosInstance";
 import { CldUploadWidget } from "next-cloudinary";
@@ -8,6 +9,8 @@ import React, { useState } from "react";
 interface CategoryProps {
   title: string;
   setShowCategoryForm: React.Dispatch<React.SetStateAction<boolean>>;
+  isEdit?: boolean;
+  initialData?: Category;
 }
 
 interface CategoryFormData {
@@ -20,12 +23,19 @@ interface CategoryFormData {
 const CategoryForm: React.FC<CategoryProps> = ({
   title,
   setShowCategoryForm,
+  isEdit = false,
+  initialData
 }) => {
   const [formData, setFormData] = useState<CategoryFormData>({
-    name: "",
-    description: "",
-    parentCategory: "",
-    image: null,
+    name: initialData?.name || "",
+    description: initialData?.description || "",
+    parentCategory: initialData?.parentCategory  ||  "",
+    image: initialData?.image
+    ? {
+      url: initialData.image.url,
+      public_id: initialData.image.public_id || "", 
+    }
+    : null,
   });
 
   const handleChange = (
@@ -39,7 +49,17 @@ const CategoryForm: React.FC<CategoryProps> = ({
     }));
   };
 
-  const handleImageUpload = (result: any) => {
+  const handleImageUpload = async (result: any) => {
+    if(isEdit && formData.image?.public_id){
+      try{
+         await axiosInstance.delete(
+            `/api/products/delete-image/${formData.image.public_id}`
+         )
+      } catch (err){
+        console.error("Failed to delete old image:", err);
+      }
+    }
+
     const newImage = {
       url: result.info.secure_url,
       public_id: result.info.public_id,
@@ -64,9 +84,14 @@ const CategoryForm: React.FC<CategoryProps> = ({
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
-      e.preventDefault();
-      await axiosInstance.post(`/api/categories`, formData);
+      if (isEdit && initialData?._id) {
+        await axiosInstance.put(`/api/categories/${initialData._id}`, formData);
+      } else {
+        await axiosInstance.post(`/api/categories`, formData);
+      }
+
       setFormData({
         name: "",
         description: "",
@@ -74,7 +99,9 @@ const CategoryForm: React.FC<CategoryProps> = ({
         image: null,
       });
       setShowCategoryForm(false);
-    } catch (error) {}
+    } catch (error) {
+      console.error("Form submit failed:", error);
+    }
   };
 
   return (
@@ -137,7 +164,7 @@ const CategoryForm: React.FC<CategoryProps> = ({
                 onClick={() => open()}
                 className="bg-green-600 block hover:bg-green-700 text-white px-4 py-2 rounded-md transition"
               >
-                Upload Image
+                {isEdit && formData?.image?.url ? 'Change' : 'Upload'} Image
               </button>
             </div>
           )}
@@ -154,13 +181,13 @@ const CategoryForm: React.FC<CategoryProps> = ({
               height={100}
               className="rounded-md object-cover border"
             />
-            <button
+            {/* <button
               type="button"
               onClick={() => handleImageDelete(formData.image!.public_id)}
               className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-1 text-xs"
             >
               ❌
-            </button>
+            </button> */}
           </div>
         )}
         <ConfirmButton buttonText={title} type="submit" />

@@ -184,7 +184,6 @@ const LayoutForms: React.FC<LayoutFormProps> = ({ openForm, setOpenForm }) => {
             }
           ]}
           onsubmit={async (data) => {
-            console.log('data', data)
             try {
               const res = await axiosInstance.post(
                 "/api/user/reset-password-link",

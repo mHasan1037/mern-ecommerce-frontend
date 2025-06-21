@@ -1,11 +1,15 @@
 "use client";
-import { fetchCategories } from "@/redux/slices/categorySlice";
+import { Category, fetchCategories } from "@/redux/slices/categorySlice";
 import Image from "next/image";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import LoadingContainer from "@/components/LoadingScreen/LoadingContainer";
 
-const AllCategoryList = () => {
+interface AllCategoryListProps{
+  onEdit: (category: Category) => void;
+}
+
+const AllCategoryList: React.FC<AllCategoryListProps> = ({onEdit}) => {
   const dispatch = useAppDispatch();
   const { categories, loading, error } = useAppSelector(
     (state) => state.categories
@@ -39,7 +43,10 @@ const AllCategoryList = () => {
             <div>
               <p className="text-sm text-gray-600">{category.description}</p>
               <div className="flex gap-2 mt-2">
-                <button className="text-blue-600 hover:underline text-sm">
+                <button 
+                  className="text-blue-600 hover:underline text-sm"
+                  onClick={()=> onEdit(category)}
+                >
                   Edit
                 </button>
                 <button className="text-red-600 hover:underline text-sm">

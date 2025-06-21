@@ -22,9 +22,6 @@ const HomeMainSection = () => {
   if (loading) return <LoadingScreen />;
   if (error) return <p>Error fetching products: {error}</p>;
 
-  console.log("featured products", productsInfo);
-  console.log("most sold products", mostSoldProducts);
-
   return (
     <div className="w-full flex flex-col gap-16">
       {productsInfo && (

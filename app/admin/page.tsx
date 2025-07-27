@@ -13,6 +13,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 
 type AdminSummary = {
   lowStockProducts: {
+    _id: string;
     name: string;
     stock: number;
   }[];
@@ -120,7 +121,8 @@ const Admin = () => {
             {adminSummary?.lowStockProducts.map((product, idx) => (
               <div
                 key={idx}
-                className="border border-red-300 bg-red-50 p-4 rounded-md shadow-sm"
+                className="border border-red-300 bg-red-50 p-4 rounded-md shadow-sm cursor-pointer"
+                onClick={()=> router.push(`/admin/product/edit/${product._id}`)}
               >
                 <p className="font-semibold text-red-700">{product.name}</p>
                 <p className="text-sm text-red-500">Stock: {product.stock}</p>

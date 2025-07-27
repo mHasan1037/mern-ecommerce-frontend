@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchProducts } from "@/redux/slices/productSlice";
 import { toast } from "react-toastify";
 import LoadingContainer from "@/components/LoadingScreen/LoadingContainer";
+import NoProductFound from "@/components/HomePage/NoProductFound";
 
 const AdminProductsList = () => {
   const dispatch = useAppDispatch();
@@ -56,6 +57,13 @@ const AdminProductsList = () => {
 
   if (loading) return <LoadingContainer />;
   if (error) return <p>Error fetching products: {error}</p>;
+  if (productsInfo?.products.length === 0) {
+    return (
+      <div className="bg-white p-6 rounded-md shadow-md">
+        <NoProductFound />
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white p-6 rounded-md shadow-md">

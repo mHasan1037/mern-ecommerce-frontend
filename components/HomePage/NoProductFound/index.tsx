@@ -5,7 +5,7 @@ const NoProductFound = () => {
   return (
     <div className='w-fullmin-h-[75vh] h-full flex flex-col gap-4 justify-center items-center'>
         <Image 
-           src={'images/No_Product_Found.png'}
+           src={'/images/No_Product_Found.png'}
            alt='No product found'
            height={200}
            width={200}

@@ -19,6 +19,7 @@ const WishList = () => {
     (state) => state.wishlist
   );
   const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { cart } = useAppSelector((state) => state.cart);
   const [productCartQuantity, setProductCartQuantity] = useState(1);
   const router = useRouter();
 
@@ -99,8 +100,15 @@ const WishList = () => {
                         setProductCartQuantity(Number(e.target.value))
                       }
                       placeholder="1"
+                      disabled={
+                        cart && cart.some((c) => c.product._id === list._id)
+                      }
                       min={1}
-                      className="w-16 px-2 py-1 border rounded text-sm outline-none"
+                      className={`w-16 px-2 py-1 rounded text-sm outline-none ${
+                        cart && cart.some((c) => c.product._id === list._id)
+                          ? "cursor-not-allowed border-none"
+                          : "border"
+                      }`}
                     />
                     <AddToCart
                       productId={list._id}

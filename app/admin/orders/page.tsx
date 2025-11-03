@@ -3,6 +3,7 @@ import AdminSidebar from "@/components/adminSidebar";
 import LoadingContainer from "@/components/LoadingScreen/LoadingContainer";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { getAllUsersOrders } from "@/redux/slices/orderSlice";
+import { firstLetterCapital } from "@/utils/firstLetterCapital";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
@@ -111,11 +112,11 @@ const Orders = () => {
                             : "bg-gray-100 text-gray-700"
                         }`}
                       >
-                        {order.status}
+                        {firstLetterCapital(order.status)}
                       </span>
                     </td>
                     <td className="p-3 border-b">
-                      <button className="text-blue-600 hover:underline text-sm">
+                      <button className="text-blue-600 hover:underline text-sm" onClick={()=> router.push(`/admin/orders/details/${order._id}`)}>
                         View
                       </button>
                     </td>

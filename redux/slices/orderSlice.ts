@@ -1,7 +1,6 @@
 import { CartOrderPayload, Order, OrderPayload, OrderState } from "@/types/order";
 import axiosInstance from "@/utils/axiosInstance";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { stat } from "fs";
 
 const initialState: OrderState = {
     loading: false,
@@ -69,6 +68,21 @@ export const getOrderById = createAsyncThunk(
            return res.data.order
         }catch(err: any){
            return rejectWithValue(err.response?.data?.message || err.message)
+        }
+    }
+);
+
+export const updateOrderStatus = createAsyncThunk(
+    "order/updateStatus",
+    async(
+        {orderId, status} : { orderId: string; status: string},
+        { rejectWithValue }
+    ) => {
+        try{
+            const res = await axiosInstance.patch(`/api/admin/orders/${orderId}/status`, { status });
+            return res.data.order;
+        }catch(err: any){
+            return rejectWithValue(err.response?.data?.message || err.message);
         }
     }
 )
@@ -141,6 +155,11 @@ const orderSlice = createSlice({
             state.loading = false;
             state.success = true;
             state.currentOrder = action.payload
+        })
+        .addCase(updateOrderStatus.fulfilled, (state, action) =>{
+            state.loading = false;
+            state.currentOrder = action.payload;
+            state.success = true;
         })
     }
 });

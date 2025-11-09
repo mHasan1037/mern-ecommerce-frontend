@@ -20,7 +20,7 @@ const WishList = () => {
   );
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const { cart } = useAppSelector((state) => state.cart);
-  const [productCartQuantity, setProductCartQuantity] = useState(1);
+  const [productCartQuantity, setProductCartQuantity] = useState<{ [id: string]: number }>({});
   const router = useRouter();
 
   useEffect(() => {
@@ -95,10 +95,14 @@ const WishList = () => {
                   <div className="flex gap-2 items-center mt-2">
                     <input
                       type="number"
-                      value={productCartQuantity}
-                      onChange={(e) =>
-                        setProductCartQuantity(Number(e.target.value))
-                      }
+                      value={productCartQuantity[list._id] ?? 1}
+                      onChange={(e) => {
+                        const newQuantity = Math.max(1, Number(e.target.value)); 
+                        setProductCartQuantity((prev) => ({
+                          ...prev,
+                          [list._id]: newQuantity,
+                        }));
+                      }}
                       placeholder="1"
                       disabled={
                         cart && cart.some((c) => c.product._id === list._id)
@@ -112,7 +116,7 @@ const WishList = () => {
                     />
                     <AddToCart
                       productId={list._id}
-                      quantity={productCartQuantity}
+                      quantity={productCartQuantity[list._id] ?? 1}
                     />
                   </div>
                 </div>

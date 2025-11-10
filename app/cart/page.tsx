@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import ConfirmButton from "@/components/buttons/ConfirmButton";
 import LoadingScreen from "@/components/LoadingScreen";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { deleteCart, fetchCartList } from "@/redux/slices/cartSlice";
+import { deleteCart, fetchCartList, updateCartQuantity } from "@/redux/slices/cartSlice";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -79,9 +79,27 @@ const Cart = () => {
                     <p className="text-green-700 font-medium">
                       ${product.price}
                     </p>
-                    <p className="text-sm text-gray-600">
-                      Quantity: {cart.quantity}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <label htmlFor={`qty-${product._id}`} className="text-sm text-gray-600">
+                        Quantity:
+                      </label>
+                      <input 
+                        id={`qty-${product._id}`}
+                        type="number"
+                        min="1"
+                        value={cart.quantity}
+                        onChange={(e) =>{
+                          const newQuantity = Number(e.target.value);
+                          if(newQuantity > 0){
+                            dispatch(updateCartQuantity({ productId: product._id, quantity: newQuantity }))
+                            .unwrap()
+                            .then(() => toast.success("Cart updated successfully"))
+                            .catch(()=> toast.error("Failed to update cart"))
+                          }
+                        }}
+                        className="w-16 border rounded text-center text-sm focus:outline-none focus:ring-1 focus:ring-green-500"
+                      />
+                    </div>
                   </div>
 
                   <button

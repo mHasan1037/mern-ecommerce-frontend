@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { addToCart, fetchCartList } from "@/redux/slices/cartSlice";
-import React, { useState } from "react";
+import { fetchProductById } from "@/redux/slices/productSlice";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 interface AddToCartProps {
@@ -11,12 +12,21 @@ interface AddToCartProps {
 const AddToCart: React.FC<AddToCartProps> = ({ productId, quantity }) => {
   const dispatch = useAppDispatch();
   const { cart } = useAppSelector((state) => state.cart);
+  const {singleProduct} = useAppSelector((state) => state.products);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(()=>{
+   dispatch(fetchProductById(productId))
+  }, [productId])
 
   const isAddedToCart = cart && cart.some((c) => c.product._id === productId);
 
   const handleAddToCart = async () => {
     if (isAddedToCart) return;
+    if(singleProduct && singleProduct?.stock < quantity){
+      toast.error(`We only have ${singleProduct?.stock} products available in the stock!`)
+      return;
+    };
     setIsLoading(true);
 
     try {

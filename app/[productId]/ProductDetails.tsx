@@ -102,6 +102,7 @@ const ProductDetailClient = ({ productId }: Props) => {
               <AddToCart
                 productId={product._id}
                 quantity={productCartQuantity}
+                stock={product.stock}
               />
               <ConfirmButton
                 buttonText={"Buy now"}

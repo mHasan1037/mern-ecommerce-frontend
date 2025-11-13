@@ -117,6 +117,7 @@ const WishList = () => {
                     <AddToCart
                       productId={list._id}
                       quantity={productCartQuantity[list._id] ?? 1}
+                      stock={list.stock}
                     />
                   </div>
                 </div>

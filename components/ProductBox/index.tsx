@@ -50,7 +50,7 @@ const ProductBox: React.FC<ProductBoxProps> = ({ product }) => {
         <AddWishList id={product._id} />
       </div>
       <div className="flex justify-between">
-        <AddToCart productId={product._id} quantity={1} />
+        <AddToCart productId={product._id} quantity={1} stock={product.stock}/>
         <ConfirmButton
           buttonText={"Buy now"}
           onclick={() => {

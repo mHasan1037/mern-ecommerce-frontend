@@ -113,59 +113,74 @@ const ProductForm: React.FC<ProductFormProps> = ({
       <h2 className="text-xl font-semibold mb-4">
         {mode === "edit" ? "Edit Product" : "Create Product"}
       </h2>
-      <input
-        name="name"
-        value={formData.name}
-        onChange={handleChange}
-        required
-        placeholder="Name"
-        className="w-full border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-      />
-      <textarea
-        name="description"
-        value={formData.description}
-        onChange={handleChange}
-        placeholder="Decription"
-        required
-        className="w-full min-h-[200px] border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-      />
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <h3>Product Name</h3>
         <input
-          type="number"
-          name="price"
-          value={formData.price}
+          name="name"
+          value={formData.name}
           onChange={handleChange}
-          placeholder="Price"
           required
-          className="w-full border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-        />
-        <input
-          type="number"
-          name="stock"
-          value={formData.stock}
-          onChange={handleChange}
-          placeholder="Stock"
-          required
+          placeholder="Name"
           className="w-full border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
         />
       </div>
+      <div>
+        <h3>Description</h3>
+        <textarea
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          placeholder="Decription"
+          required
+          className="w-full min-h-[200px] border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+        />
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <h3>Price</h3>
+          <input
+            type="number"
+            name="price"
+            value={formData.price}
+            onChange={handleChange}
+            placeholder="Price"
+            required
+            className="w-full border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+        </div>
+        <div>
+          <h3>Stock</h3>
+          <input
+            type="number"
+            name="stock"
+            value={formData.stock}
+            onChange={handleChange}
+            placeholder="Stock"
+            required
+            className="w-full border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+        </div>
+      </div>
 
-      <select
-        name="category"
-        value={formData.category}
-        onChange={handleChange}
-        required
-        className="w-full border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-      >
-        <option value="">Select category</option>
-        {categories.map((category) => {
-          return (
-            <option key={category._id} value={category._id}>
-              {category.name}
-            </option>
-          );
-        })}
-      </select>
+      <div>
+        <h3>Category</h3>
+        <select
+          name="category"
+          value={formData.category}
+          onChange={handleChange}
+          required
+          className="w-full border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+        >
+          <option value="">Select category</option>
+          {categories.map((category) => {
+            return (
+              <option key={category._id} value={category._id}>
+                {category.name}
+              </option>
+            );
+          })}
+        </select>
+      </div>
 
       {formData.images.length < 4 && (
         <CldUploadWidget

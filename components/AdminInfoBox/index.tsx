@@ -20,7 +20,7 @@ const AdminInfoBox: React.FC<Props> = ({
       <div className={styles.totalCountFlex}>
         <div>
           <p className="text-xl text-gray-800 font-medium">{title}</p>
-          <h1 className="text-3xl font-semibold">{amount}</h1>
+          <h1 className="text-3xl font-semibold">{amount && amount % 1 === 0 ? amount : amount?.toFixed(2)}</h1>
         </div>
         <Icon className="text-green-500 text-5xl"/>
       </div>

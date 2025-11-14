@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ConfirmButton from "@/components/buttons/ConfirmButton";
 import LoadingScreen from "@/components/LoadingScreen";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -7,8 +7,10 @@ import { deleteCart, fetchCartList } from "@/redux/slices/cartSlice";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import CartItem from "@/components/CartItem/CartItem";
+import { fetchProductById } from "@/redux/slices/productSlice";
 
 const Cart = () => {
+  const [productStocks, setProductStocks] = useState<{ [key: string]: number }>({});
   const dispatch = useAppDispatch();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const {
@@ -24,7 +26,19 @@ const Cart = () => {
       toast.success("Login to see your Cart");
       return;
     }
-    dispatch(fetchCartList());
+    dispatch(fetchCartList())
+      .unwrap()
+      .then(async (cart) => {
+        for (const item of cart) {
+          const res = await dispatch(
+            fetchProductById(item.product._id)
+          ).unwrap();
+          setProductStocks((prev) => ({
+            ...prev,
+            [res._id]: res.stock,
+          }));
+        }
+      });
   }, [dispatch, isAuthenticated]);
 
   const handleDeleteCart = (productId: string) => {
@@ -47,7 +61,14 @@ const Cart = () => {
       {cartList && cartList.length > 0 ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {cartList.map((cart) => <CartItem key={cart._id} cart={cart} onDelete={handleDeleteCart}/>)}
+            {cartList.map((cart) => (
+              <CartItem
+                key={cart._id}
+                cart={cart}
+                stock={productStocks[cart.product._id]}
+                onDelete={handleDeleteCart}
+              />
+            ))}
           </div>
 
           <div className="mt-8 text-center">

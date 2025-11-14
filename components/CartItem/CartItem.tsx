@@ -11,10 +11,11 @@ import { useDebounce } from "@/utils/useDebounce";
 
 interface CartItemProps{
     cart: CartItemType;
+    stock?: number;
     onDelete: (productId: string) => void;
 }
 
-const CartItem: React.FC<CartItemProps> = ({ cart, onDelete }) => {
+const CartItem: React.FC<CartItemProps> = ({ cart, stock, onDelete }) => {
   const [localQuantity, setLocalQuantity] = useState(cart.quantity);
   const dispatch = useAppDispatch();
   const product = cart.product;
@@ -24,13 +25,19 @@ const CartItem: React.FC<CartItemProps> = ({ cart, onDelete }) => {
   const debounceQuantity = useDebounce(localQuantity, 800);
 
   useEffect(()=>{
-    if(debounceQuantity !== cart.quantity){
-        dispatch(updateCartQuantity({productId: product._id, quantity: debounceQuantity}))
+    if(!stock) return;
+    if(debounceQuantity === cart.quantity) return;
+    if(debounceQuantity > stock){
+      toast.warning(`Only ${stock} items available in stock.`);
+      setLocalQuantity(stock);
+      return;
+    }
+    
+    dispatch(updateCartQuantity({productId: product._id, quantity: debounceQuantity}))
         .unwrap()
         .then(()=> toast.success("Cart updated successfully"))
         .catch(()=> toast.error("Failed to update cart"))
-    }
-  }, [debounceQuantity])
+  }, [debounceQuantity, stock])
 
   return (
     <div

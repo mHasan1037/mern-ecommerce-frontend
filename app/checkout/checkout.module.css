@@ -48,3 +48,23 @@
 .submitButton {
     @apply bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md text-base transition;
 }
+
+.paymentSection {
+    @apply mt-8 bg-white border rounded p-6 shadow-sm;
+}
+
+.paymentOptions {
+    @apply flex gap-4 mt-2;
+}
+
+.paymentOption {
+    @apply flex items-center gap-2 px-3 py-2 border border-gray-300 rounded bg-gray-50 cursor-pointer transition;
+}
+
+.paymentOption:hover {
+    @apply bg-gray-100;
+}
+
+.paymentOption input {
+    @apply cursor-pointer;
+}

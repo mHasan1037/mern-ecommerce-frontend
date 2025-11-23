@@ -1,5 +1,5 @@
 "use client";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { clearCart, fetchCartList } from "@/redux/slices/cartSlice";
 import { postCartOrders, postSingleOrder } from "@/redux/slices/orderSlice";
 import { fetchProductById } from "@/redux/slices/productSlice";
@@ -12,6 +12,7 @@ import style from "./checkout.module.css";
 
 const initialShippingInfo = {
   fullName: "",
+  email: "",
   address: "",
   city: "",
   postCode: "",
@@ -26,9 +27,11 @@ const Checkout = () => {
   const quantity = searchParams.get("quantity");
   const dispatch = useAppDispatch();
   const [orderItems, setOrderItems] = useState<CheckoutOrderItem[]>([]);
+  const [paymentMethod, setPaymentMethod] = useState<"COD" | "SSL">("COD");
   const [shippingInfo, setShippingInfo] =
     useState<shippingInfo>(initialShippingInfo);
   const [isDirectOrder, setIsDirectOrder] = useState(false);
+  const { user } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     if (productId) {
@@ -75,55 +78,67 @@ const Checkout = () => {
     const { name, value } = e.target;
     setShippingInfo((prev) => ({
       ...prev,
+      email: user?.email,
       country: "Bangladesh",
       [name]: value,
     }));
   };
 
-  const handlePlaceOrder = () => {
-    if (
-      !shippingInfo.fullName ||
-      !shippingInfo.address ||
-      !shippingInfo.city ||
-      !shippingInfo.postCode ||
-      !shippingInfo.phone
-    ) {
+  const validateShipping = () => {
+    const { fullName, address, city, postCode, phone } = shippingInfo;
+
+    if (!fullName || !address || !city || !postCode || !phone ) {
       toast.error("Please fill in all shipping fields.");
       return;
     }
-    if (isDirectOrder) {
-      dispatch(
-        postSingleOrder({
-          productId: productId as string,
-          quantity: parseInt(quantity as string),
-          totalAmount,
-          shippingInfo,
-        })
-      )
-        .unwrap()
-        .then((res) => {
-          router.push(`/account/order_success?orderId=${res.order._id}`);
-          toast.success("Order placed successfully!");
-        })
-        .catch((err) => {
-          toast.error("Failed to place order: ", err);
-        });
-    } else {
-      dispatch(
-        postCartOrders({
-          totalAmount,
-          shippingInfo,
-        })
-      )
-        .unwrap()
-        .then((res) => {
-          router.push(`/account/order_success?orderId=${res.order._id}`);
-          dispatch(clearCart());
-          toast.success("Cart order placed successfully!");
-        })
-        .catch((err) => {
-          toast.error("Failed to place cart order: " + err);
-        });
+    return true;
+  };
+
+  const placeCOD = async () => {
+    try {
+          console.log('the shipping info', shippingInfo)
+      if (isDirectOrder) {
+        const res = await dispatch(
+          postSingleOrder({
+            productId: productId!,
+            quantity: parseInt(quantity!),
+            totalAmount,
+            shippingInfo,
+          })
+        ).unwrap();
+        router.push(`/account/order_success?orderId=${res.order._id}`);
+        toast.success("Order placed successfully!");
+      } else {
+        const res = await dispatch(
+          postCartOrders({
+            totalAmount,
+            shippingInfo,
+          })
+        ).unwrap();
+        dispatch(clearCart());
+        router.push(`/account/order_success?orderId=${res.order._id}`);
+        toast.success("Cart order placed successfully!");
+      }
+    } catch (error) {
+      toast.error("Failed to place order");
+    }
+  };
+
+  const placeSSLPayment = async () =>{
+    try{
+      console.log('the big lol')
+    }catch(error){
+      toast.error('SSL payment failed to start')
+    }
+  }
+
+  const handlePlaceOrder = () => {
+    if (!validateShipping()) return;
+
+    if(paymentMethod === "COD"){
+      placeCOD();
+    }else{
+      placeSSLPayment();
     }
   };
 
@@ -212,6 +227,32 @@ const Checkout = () => {
             onChange={handleShippingInfo}
             className={style.input}
           />
+        </div>
+      </div>
+
+      <div className={style.paymentSection}>
+        <h2 className={style.formTitle}>Payment Method</h2>
+
+        <div className={style.paymentOptions}>
+          <label className={style.paymentOption}>
+            <input
+              type="radio"
+              value="COD"
+              checked={paymentMethod === "COD"}
+              onChange={() => setPaymentMethod("COD")}
+            />
+            <span>Cash on Delivery</span>
+          </label>
+
+          <label className={style.paymentOption}>
+            <input
+              type="radio"
+              value="SSL"
+              checked={paymentMethod === "SSL"}
+              onChange={() => setPaymentMethod("SSL")}
+            />
+            <span>SSLCOMMERZ</span>
+          </label>
         </div>
       </div>
 

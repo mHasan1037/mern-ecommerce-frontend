@@ -9,6 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import style from "./checkout.module.css";
+import PaymentStatus from "./PaymentStatus";
 
 const initialShippingInfo = {
   fullName: "",
@@ -25,6 +26,7 @@ const Checkout = () => {
   const searchParams = useSearchParams();
   const productId = searchParams.get("productId");
   const quantity = searchParams.get("quantity");
+  const paymentStatus = searchParams.get("payment");
   const dispatch = useAppDispatch();
   const [orderItems, setOrderItems] = useState<CheckoutOrderItem[]>([]);
   const [paymentMethod, setPaymentMethod] = useState<"COD" | "SSL">("COD");
@@ -163,6 +165,39 @@ const Checkout = () => {
       placeSSLPayment();
     }
   };
+
+  if (paymentStatus === "failed") {
+    return (
+      <PaymentStatus
+        headline={"Payment Failed"}
+        message={"Your payment could not be processed. Please try again."}
+        buttonText={"Back to Checkout"}
+        buttonLink={"/checkout"}
+      />
+    );
+  }
+
+  if (paymentStatus === "cancelled") {
+    return (
+      <PaymentStatus
+        headline={"Payment Cancelled"}
+        message={"You cancelled the payment. No order was placed."}
+        buttonText={"Try again"}
+        buttonLink={"/checkout"}
+      />
+    );
+  }
+
+  if (paymentStatus === "error") {
+    return (
+      <PaymentStatus
+        headline={"Payment Error"}
+        message={"An unexpected error occurred. Please try again."}
+        buttonText={"Back to Checkout"}
+        buttonLink={"/checkout"}
+      />
+    );
+  }
 
   return (
     <div className={style.container}>

@@ -87,7 +87,7 @@ const Checkout = () => {
   const validateShipping = () => {
     const { fullName, address, city, postCode, phone } = shippingInfo;
 
-    if (!fullName || !address || !city || !postCode || !phone ) {
+    if (!fullName || !address || !city || !postCode || !phone) {
       toast.error("Please fill in all shipping fields.");
       return;
     }
@@ -96,7 +96,6 @@ const Checkout = () => {
 
   const placeCOD = async () => {
     try {
-          console.log('the shipping info', shippingInfo)
       if (isDirectOrder) {
         const res = await dispatch(
           postSingleOrder({
@@ -124,20 +123,43 @@ const Checkout = () => {
     }
   };
 
-  const placeSSLPayment = async () =>{
-    try{
-      console.log('the big lol')
-    }catch(error){
-      toast.error('SSL payment failed to start')
+  const placeSSLPayment = async () => {
+    try {
+      const payload = {
+        orderItems,
+        shippingInfo,
+        totalAmount,
+        userId: user?.id,
+        currency: "BDT",
+      };
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/payment/ssl/init`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
+      const data = await res.json();
+
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error("Failed to start SSLCOMMERZ payment");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("SSL payment failed to start");
     }
-  }
+  };
 
   const handlePlaceOrder = () => {
     if (!validateShipping()) return;
 
-    if(paymentMethod === "COD"){
+    if (paymentMethod === "COD") {
       placeCOD();
-    }else{
+    } else {
       placeSSLPayment();
     }
   };

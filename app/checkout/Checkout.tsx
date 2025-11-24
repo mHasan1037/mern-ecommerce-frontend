@@ -134,6 +134,7 @@ const Checkout = () => {
         userId: user?.id,
         currency: "BDT",
       };
+      console.log('the environtment', `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/payment/ssl/init`)
 
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/payment/ssl/init`,

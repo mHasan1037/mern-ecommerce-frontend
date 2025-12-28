@@ -31,7 +31,7 @@ const ProductBox: React.FC<ProductBoxProps> = ({ product }) => {
       </div>
       <p
         className="cursor-pointer text-mainBg2 font-bold h-10"
-        onClick={() => router.push(`/${product._id}`)}
+        onClick={() => router.push(`/products/${product._id}`)}
         title={product.name}
       >
         {product.name.length > 40

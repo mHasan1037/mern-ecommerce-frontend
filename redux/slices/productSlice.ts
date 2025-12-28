@@ -47,6 +47,7 @@ export const fetchProductById = createAsyncThunk(
   async (id: string, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.get(`/api/products/${id}`);
+      console.log("Fetched product:", res.data.product);
       return res.data.product;
     } catch (err: any) {
       return rejectWithValue(
@@ -102,6 +103,7 @@ const productSlice = createSlice({
       })
       .addCase(fetchProductById.pending, (state) => {
         state.singleLoading = true;
+        state.singleProduct = null;
         state.error = null;
       })
       .addCase(fetchProductById.fulfilled, (state, action) => {

@@ -1,4 +1,4 @@
-Live preview:- <a href="https://mern-ecommerce-frontend-jg1w.onrender.com">https://mern-ecommerce-frontend-jg1w.onrender.com</a>
+Live preview:- <a href="https://mern-ecommerce-frontend-seven-sigma.vercel.app/">https://mern-ecommerce-frontend-seven-sigma.vercel.app/</a>
 
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).

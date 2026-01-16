@@ -9,7 +9,10 @@ const initialState: OrderState = {
     success: false,
     error: null,
     orders: [],
-    currentOrder: null
+    currentOrder: null,
+    totalOrders: 0,
+    totalPages: 0,
+    currentPage: 1,
 }
 
 export const postSingleOrder = createAsyncThunk(
@@ -50,10 +53,12 @@ export const getCurrentUserOrders = createAsyncThunk(
 
 export const getAllUsersOrders = createAsyncThunk(
     "order/allUsersOrders",
-    async (_, {rejectWithValue}) =>{
+    async ({page = 1, limit = 30} : {page?: number; limit?: number}, {rejectWithValue}) =>{
         try{
-           const res = await axiosInstance.get('/api/admin/orders');
-           return res.data.orders
+           const res = await axiosInstance.get(
+            `/api/admin/orders?page=${page}&limit=${limit}`
+           );
+           return res.data;
         }catch(err: any){
            return rejectWithValue(err.response?.data?.message || err.message)
         }
@@ -146,10 +151,22 @@ const orderSlice = createSlice({
             state.success = false;
             state.error = action.payload as string;
         })
+        .addCase(getAllUsersOrders.pending, (state) =>{
+            state.loading = true;
+            state.error = null;
+        })
         .addCase(getAllUsersOrders.fulfilled, (state, action) =>{
             state.loading = false;
             state.success = true;
-            state.orders = action.payload;
+            state.orders = action.payload.orders;
+            state.totalOrders = action.payload.pagination.totalOrders;
+            state.totalPages = action.payload.pagination.totalPages;
+            state.currentPage = action.payload.pagination.currentPage;
+        })
+        .addCase(getAllUsersOrders.rejected, (state, action) => {
+            state.loading = false;
+            state.success = false;
+            state.error = action.payload as string;
         })
         .addCase(getOrderById.fulfilled, (state, action) =>{
             state.loading = false;

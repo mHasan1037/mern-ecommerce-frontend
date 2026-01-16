@@ -1,19 +1,23 @@
 "use client";
 import AdminSidebar from "@/components/adminSidebar";
 import LoadingContainer from "@/components/LoadingScreen/LoadingContainer";
+import Pagination from "@/components/Pagination";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { getAllUsersOrders } from "@/redux/slices/orderSlice";
 import { firstLetterCapital } from "@/utils/firstLetterCapital";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const Orders = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const { orders, loading, error } = useAppSelector((state) => state.order);
+  const { orders, loading, totalPages } = useAppSelector(
+    (state) => state.order
+  );
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -21,8 +25,8 @@ const Orders = () => {
       toast.success("Login to see orders");
       return;
     }
-    dispatch(getAllUsersOrders());
-  }, [dispatch, isAuthenticated]);
+    dispatch(getAllUsersOrders({ page, limit: 10 }));
+  }, [dispatch, isAuthenticated, page]);
 
   if (loading) {
     return <LoadingContainer />;
@@ -116,7 +120,12 @@ const Orders = () => {
                       </span>
                     </td>
                     <td className="p-3 border-b">
-                      <button className="text-blue-600 hover:underline text-sm" onClick={()=> router.push(`/admin/orders/details/${order._id}`)}>
+                      <button
+                        className="text-blue-600 hover:underline text-sm"
+                        onClick={() =>
+                          router.push(`/admin/orders/details/${order._id}`)
+                        }
+                      >
                         View
                       </button>
                     </td>
@@ -124,6 +133,9 @@ const Orders = () => {
                 ))}
             </tbody>
           </table>
+        </div>
+        <div className="mx-auto w-fit mt-10">
+          <Pagination totalPages={totalPages} page={page} setPage={setPage} />
         </div>
       </div>
     </div>

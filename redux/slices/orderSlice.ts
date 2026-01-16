@@ -159,10 +159,13 @@ const orderSlice = createSlice({
         .addCase(getAllUsersOrders.fulfilled, (state, action) =>{
             state.loading = false;
             state.success = true;
-            state.adminOrders = action.payload.orders;
-            state.totalOrders = action.payload.pagination.totalOrders;
-            state.totalPages = action.payload.pagination.totalPages;
-            state.currentPage = action.payload.pagination.currentPage;
+
+            const payload = action.payload;
+
+            state.adminOrders = payload?.orders ?? [];
+            state.totalOrders = payload?.pagination?.totalOrders ?? 0;
+            state.totalPages = payload?.pagination?.totalPages ?? 0;
+            state.currentPage = payload?.pagination?.currentPage ?? 1;
         })
         .addCase(getAllUsersOrders.rejected, (state, action) => {
             state.loading = false;

@@ -57,7 +57,14 @@ export const getAllUsersOrders = createAsyncThunk(
     async ({page = 1, limit = 30} : {page?: number; limit?: number}, {rejectWithValue}) =>{
         try{
            const res = await axiosInstance.get(
-            `/api/admin/orders?page=${page}&limit=${limit}`
+            `/api/admin/orders`, 
+            {
+               params: { page, limit},
+               headers: {
+                "Cache-Control": "no-cache",
+                Pragma: "no-cache",
+               }
+            }
            );
            return res.data;
         }catch(err: any){

@@ -59,6 +59,9 @@ export interface OrderState {
   error: string | null;
   orders: Order[];
   currentOrder: Order | null;
+  totalOrders: number,
+  totalPages: number,
+  currentPage: number,
 }
 
 export interface CartOrderPayload {

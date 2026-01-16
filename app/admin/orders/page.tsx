@@ -14,7 +14,7 @@ const Orders = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const { orders, loading, totalPages } = useAppSelector(
+  const { adminOrders: orders, loading, totalPages } = useAppSelector(
     (state) => state.order
   );
   const [page, setPage] = useState(1);
@@ -135,7 +135,11 @@ const Orders = () => {
           </table>
         </div>
         <div className="mx-auto w-fit mt-10">
-          <Pagination totalPages={totalPages} page={page} setPage={setPage} />
+          {
+            totalPages > 1 && (
+              <Pagination totalPages={totalPages} page={page} setPage={setPage} />
+            )
+          }
         </div>
       </div>
     </div>

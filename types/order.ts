@@ -58,6 +58,7 @@ export interface OrderState {
   success: boolean;
   error: string | null;
   orders: Order[];
+  adminOrders: Order[],
   currentOrder: Order | null;
   totalOrders: number,
   totalPages: number,

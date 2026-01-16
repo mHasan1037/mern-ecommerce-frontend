@@ -9,6 +9,7 @@ const initialState: OrderState = {
     success: false,
     error: null,
     orders: [],
+    adminOrders: [],
     currentOrder: null,
     totalOrders: 0,
     totalPages: 0,
@@ -158,7 +159,7 @@ const orderSlice = createSlice({
         .addCase(getAllUsersOrders.fulfilled, (state, action) =>{
             state.loading = false;
             state.success = true;
-            state.orders = action.payload.orders;
+            state.adminOrders = action.payload.orders;
             state.totalOrders = action.payload.pagination.totalOrders;
             state.totalPages = action.payload.pagination.totalPages;
             state.currentPage = action.payload.pagination.currentPage;

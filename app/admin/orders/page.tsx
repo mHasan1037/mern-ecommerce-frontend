@@ -34,6 +34,8 @@ const Orders = () => {
 
   if (!orders.length) return <p>No order found</p>;
 
+  console.log("API BASE URL:", process.env.NEXT_PUBLIC_API_BASE_URL);
+
   return (
     <div className="adminMainSection">
       <AdminSidebar />

@@ -58,6 +58,8 @@ const OrderDetails = () => {
   const { user, shippingInfo, paymentMethod, status, totalAmount, orderItems } =
     currentOrder;
 
+  console.log('the item is', orderItems);
+
   const canUpdate = status !== "cancelled" && status !== "delivered";
   const validNextStatuses =
     status === "processing"
@@ -207,7 +209,7 @@ const OrderDetails = () => {
                     />
                   </div>
                   <div>
-                    <p className="font-medium text-gray-800">
+                    <p className="font-medium text-gray-800 cursor-pointer hover:text-mainBg2" onClick={()=> router.push(`/products/${item.product?._id}`)}>
                       {item.product?.name}
                     </p>
                     <p className="text-sm text-gray-500">

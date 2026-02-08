@@ -89,7 +89,7 @@ const AdminProductsList = () => {
                   <tr key={product._id} className="hover:bg-gray-50">
                     <td
                       className="px-4 py-2 border cursor-pointer text-mainBg2 hover:underline"
-                      onClick={() => router.push(`/${product._id}`)}
+                      onClick={() => router.push(`/products/${product._id}`)}
                     >
                       {product.name}
                     </td>

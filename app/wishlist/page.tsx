@@ -78,7 +78,7 @@ const WishList = () => {
                   <p
                     className="text-lg font-semibold hover:text-green-500 hover:underline cursor-pointer"
                     title={list.name}
-                    onClick={() => router.push(list._id)}
+                    onClick={() => router.push(`products/${list._id}`)}
                   >
                     {list.name.length > 40
                       ? list.name.slice(0, 40) + "..."

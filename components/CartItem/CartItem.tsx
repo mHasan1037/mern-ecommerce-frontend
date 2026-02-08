@@ -57,7 +57,7 @@ const CartItem: React.FC<CartItemProps> = ({ cart, stock, onDelete }) => {
         <p
           className="text-lg font-semibold hover:text-green-500 hover:underline cursor-pointer"
           title={product.name}
-          onClick={() => router.push(`/product/${product._id}`)}
+          onClick={() => router.push(`/products/${product._id}`)}
         >
           {product.name.length > 40
             ? product.name.slice(0, 40) + "..."

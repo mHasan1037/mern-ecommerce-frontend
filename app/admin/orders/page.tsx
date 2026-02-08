@@ -88,7 +88,7 @@ const Orders = () => {
                           .map((item) => (
                             <option
                               key={item.product._id}
-                              value={`/${item.product._id}`}
+                              value={`/products/${item.product._id}`}
                             >
                               {item.product.name.length > 30
                                 ? item.product.name.slice(0, 30) + "..."

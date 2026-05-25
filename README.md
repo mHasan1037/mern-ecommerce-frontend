@@ -2,7 +2,7 @@
 
 A full-featured ecommerce frontend built with **Next.js 16**, **TypeScript**, **Redux Toolkit**, and **Tailwind CSS** — part of a MERN stack ecommerce application.
 
-🎬 [Watch Video Presentation](https://www.youtube.com/watch?v=LNnoBmY9ezc) &nbsp;|&nbsp; 🌐 [Live Demo](https://mern-ecommerce-frontend-seven-sigma.vercel.app/)
+🎬 [Watch Video Presentation](https://www.youtube.com/watch?v=LNnoBmY9ezc) &nbsp;|&nbsp; 🌐 [Live Demo](https://mern-ecommerce-frontend-jg1w.onrender.com/)
 
 ---
 

@@ -10,6 +10,7 @@ import NewReviewForm from "@/components/NewReviewForm";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import LoadingScreen from "@/components/LoadingScreen";
+import { toast } from "react-toastify";
 
 interface Props {
   productId: string;
@@ -18,6 +19,7 @@ interface Props {
 const ProductDetailClient = ({ productId }: Props) => {
   const [productCartQuantity, setProductCartQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const {
@@ -106,11 +108,15 @@ const ProductDetailClient = ({ productId }: Props) => {
               />
               <ConfirmButton
                 buttonText={"Buy now"}
-                onclick={() =>
-                  router.push(
-                    `/checkout?productId=${product._id}&quantity=${productCartQuantity}`
-                  )
-                }
+                onclick={() => {
+                  if (isAuthenticated) {
+                    router.push(
+                      `/checkout?productId=${product._id}&quantity=${productCartQuantity}`,
+                    );
+                  } else {
+                    toast.error("Please log in to place order");
+                  }
+                }}
               />
             </div>
             <p className="mt-4 text-gray-700">{product?.description}</p>

@@ -2,11 +2,19 @@
 import LoadingScreen from "@/components/LoadingScreen";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { loadUser } from "@/redux/slices/authSlice";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 const Profile = () => {
   const dispatch = useAppDispatch();
-  const { user, loading } = useAppSelector((state) => state.auth);
+  const { user, loading, isAuthenticated } = useAppSelector((state) => state.auth);
+  const router = useRouter();
+  
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      router.replace("/");
+    }
+  }, [loading, isAuthenticated, router]);
 
   useEffect(() => {
     dispatch(loadUser());

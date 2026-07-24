@@ -34,6 +34,13 @@ const Checkout = () => {
     useState<shippingInfo>(initialShippingInfo);
   const [isDirectOrder, setIsDirectOrder] = useState(false);
   const { user } = useAppSelector((state) => state.auth);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.replace("/");
+    }
+  }, [isAuthenticated, router]);
 
   useEffect(() => {
     if (productId) {

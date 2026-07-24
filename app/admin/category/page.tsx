@@ -29,6 +29,8 @@ const Category = () => {
       setShowCategoryForm(false);
   }
 
+  console.log('editCategory editCategory', editCategory)
+
   return (
     <div className="adminMainSection">
       <AdminSidebar />

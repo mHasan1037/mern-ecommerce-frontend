@@ -58,8 +58,6 @@ const OrderDetails = () => {
   const { user, shippingInfo, paymentMethod, status, totalAmount, orderItems } =
     currentOrder;
 
-  console.log('the item is', orderItems);
-
   const canUpdate = status !== "cancelled" && status !== "delivered";
   const validNextStatuses =
     status === "processing"

@@ -16,7 +16,10 @@ interface CategoryProps {
 interface CategoryFormData {
   name: string;
   description: string;
-  parentCategory: string;
+  parentCategory: {
+    _id: string;
+    name: string;
+  } | null;
   image: CloudinaryImage | null;
 }
 
@@ -29,7 +32,12 @@ const CategoryForm: React.FC<CategoryProps> = ({
   const [formData, setFormData] = useState<CategoryFormData>({
     name: initialData?.name || "",
     description: initialData?.description || "",
-    parentCategory: initialData?.parentCategory  ||  "",
+    parentCategory: initialData?.parentCategory
+       ? {
+        _id: initialData.parentCategory._id,
+        name: initialData.parentCategory.name,
+      }
+    : null,
     image: initialData?.image
     ? {
       url: initialData.image.url,
@@ -95,7 +103,7 @@ const CategoryForm: React.FC<CategoryProps> = ({
       setFormData({
         name: "",
         description: "",
-        parentCategory: "",
+        parentCategory: null,
         image: null,
       });
       setShowCategoryForm(false);
@@ -143,10 +151,12 @@ const CategoryForm: React.FC<CategoryProps> = ({
           <input
             type="text"
             name="parentCategory"
-            value={formData.parentCategory}
+            value={formData.parentCategory?.name || ""}
             onChange={handleChange}
             placeholder="Optional"
-            className="w-full border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full border px-4 py-2 rounded-md focus:outline-none"
+            //className="w-full border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            readOnly={true}
           />
         </div>
         <CldUploadWidget

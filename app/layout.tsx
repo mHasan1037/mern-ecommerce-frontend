@@ -4,6 +4,7 @@ import "./globals.css";
 import ReduxProvider from "@/providers/ReduxProvider";
 import LayoutTopSection from "@/components/LayoutTopSection";
 import Footer from "@/components/Footer";
+import { AiChatBubble } from "@/components/AiChatBubble/AiChatBubble";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,7 @@ export default function RootLayout({
             <div className="flex-grow">
             {children}
             </div>
+            <AiChatBubble />
           <Footer />
         </ReduxProvider>
       </body>

@@ -15,16 +15,10 @@ import { fetchCartList } from "@/redux/slices/cartSlice";
 import { useDebounce } from "@/utils/useDebounce";
 import { setSearchTerm } from "@/redux/slices/productSlice";
 import { resetStates } from "@/utils/resetStates";
+import { openAuthForm } from "@/redux/slices/uiSlice";
 
-interface NavbarProps {
-  setOpenForm: React.Dispatch<
-    React.SetStateAction<
-      null | "login" | "signup" | "verifyEmail" | "resetPasswordLink"
-    >
-  >;
-}
 
-function MainNavbar({ setOpenForm }: NavbarProps) {
+function MainNavbar() {
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
@@ -100,14 +94,14 @@ function MainNavbar({ setOpenForm }: NavbarProps) {
         ) : (
           <div className="flex gap-2">
             <p
-              onClick={() => setOpenForm(() => "login")}
+              onClick={() => dispatch(openAuthForm({ form: "login" }))}
               className="cursor-pointer hover:text-mainBg2"
             >
               Log In
             </p>{" "}
             /
             <p
-              onClick={() => setOpenForm(() => "signup")}
+              onClick={() => dispatch(openAuthForm({ form: "signup" }))}
               className="cursor-pointer hover:text-mainBg2"
             >
               Sign up

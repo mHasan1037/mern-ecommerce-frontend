@@ -5,18 +5,15 @@ import { toast } from "react-toastify";
 import axiosInstance from "@/utils/axiosInstance";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "@/redux/slices/authSlice";
+import { AppDispatch } from "@/redux/store";
+import { closeAuthForm, openAuthForm } from "@/redux/slices/uiSlice";
 
 interface LayoutFormProps {
   openForm: null | "login" | "signup" | "verifyEmail" | "resetPasswordLink";
-  setOpenForm: React.Dispatch<
-    React.SetStateAction<
-      null | "login" | "signup" | "verifyEmail" | "resetPasswordLink"
-    >
-  >;
 }
 
-const LayoutForms: React.FC<LayoutFormProps> = ({ openForm, setOpenForm }) => {
-  const dispatch = useDispatch();
+const LayoutForms: React.FC<LayoutFormProps> = ({ openForm }) => {
+  const dispatch = useDispatch<AppDispatch>();
   
   if (!openForm) return null;
   return (
@@ -58,7 +55,7 @@ const LayoutForms: React.FC<LayoutFormProps> = ({ openForm, setOpenForm }) => {
             try {
               await axiosInstance.post("/api/user/register", data);
               toast.success("Account created successfully.");
-              setOpenForm("verifyEmail");
+              dispatch(openAuthForm({ form: "verifyEmail" }));
             } catch (err: any) {
               const errorData = err.response?.data;
               if (errorData?.status === "failed" && errorData?.message) {
@@ -68,12 +65,12 @@ const LayoutForms: React.FC<LayoutFormProps> = ({ openForm, setOpenForm }) => {
               }
             }
           }}
-          onclose={() => setOpenForm(null)}
+          onclose={() => dispatch(closeAuthForm())}
           footerText={
             <p>
               Already have an account?{" "}
               <span
-                onClick={() => setOpenForm("login")}
+                onClick={() => dispatch(openAuthForm({ form: "login" }))}
                 className="cursor-pointer text-mainBg2 font-bold"
               >
                 Log in
@@ -116,17 +113,17 @@ const LayoutForms: React.FC<LayoutFormProps> = ({ openForm, setOpenForm }) => {
               }));
               
               toast.success("Login successfull");
-              setOpenForm(null);
+              dispatch(closeAuthForm());
             } catch (err: any) {
               console.log(err);
               toast.error("Incorrect email or password");
             }
           }}
-          onclose={() => setOpenForm(null)}
+          onclose={() => dispatch(closeAuthForm())}
           footerText={
             <span
               className="cursor-pointer hover:text-mainBg2"
-              onClick={() => setOpenForm("resetPasswordLink")}
+              onClick={() => dispatch(openAuthForm({ form: "resetPasswordLink" }))}
             >
               Forgot your password?{" "}
             </span>
@@ -160,13 +157,13 @@ const LayoutForms: React.FC<LayoutFormProps> = ({ openForm, setOpenForm }) => {
                 data
               );
               toast.success("Email successfully verified");
-              setOpenForm("login");
+              dispatch(openAuthForm({ form: "login" }));
             } catch (err: any) {
               console.log(err);
               toast.error("Invalid email or verification number");
             }
           }}
-          onclose={() => setOpenForm(null)}
+          onclose={() => dispatch(closeAuthForm())}
           footerText={<a href="">Resent OTP </a>}
           submitText="Submit"
         />
@@ -190,13 +187,13 @@ const LayoutForms: React.FC<LayoutFormProps> = ({ openForm, setOpenForm }) => {
                 data
               );
               toast.success("Check your email");
-              setOpenForm(null);
+              dispatch(closeAuthForm());
             } catch (err: any) {
               console.log(err);
               toast.error("Invalid email");
             }
           }}
-          onclose={() => setOpenForm(null)}
+          onclose={() => dispatch(closeAuthForm())}
           submitText="Submit"
         />
       )}

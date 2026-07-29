@@ -3,12 +3,12 @@ import React, { useEffect, useState } from "react";
 import LayoutForms from "../LayoutForms";
 import MainNavbar from "../MainNavbar";
 import { ToastContainer } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "@/redux/slices/authSlice";
-import { AppDispatch } from "@/redux/store";
+import { AppDispatch, RootState } from "@/redux/store";
 
 const LayoutTopSection = () => {
-  const [openForm, setOpenForm] = useState<null | "login" | "signup" | "verifyEmail" | "resetPasswordLink">(null);
+  const openForm = useSelector((state: RootState) => state.ui.openForm);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(()=>{
@@ -18,8 +18,8 @@ const LayoutTopSection = () => {
 
   return (
     <div>
-      <LayoutForms openForm={openForm} setOpenForm={setOpenForm}/>
-      <MainNavbar setOpenForm={setOpenForm} />
+      <LayoutForms openForm={openForm}/>
+      <MainNavbar/>
       <ToastContainer position="bottom-left"/>
     </div>
   );

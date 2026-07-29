@@ -7,6 +7,8 @@ import { addUserMessage, sendChatMessage } from "@/redux/slices/aiChatSlice";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { openAuthForm } from "@/redux/slices/uiSlice";
+import OrderCard from "./AiOrderCard";
+import ProductListCard from "./AiProductCard";
 
 interface AiChatBoxProps {
   setIsOpen: (open: boolean) => void;
@@ -69,6 +71,11 @@ const AiChatBox = ({ setIsOpen }: AiChatBoxProps) => {
             }`}
           >
             <p>{msg.content}</p>
+            {msg.card?.type === "order" && <OrderCard card={msg.card} />}
+            {msg.card?.type === "product_list" && (
+              <ProductListCard card={msg.card} />
+            )}
+
             {msg.link && (
               <Link
                 href={msg.link}

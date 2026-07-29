@@ -23,6 +23,7 @@ export const sendChatMessage = createAsyncThunk<
       message: data.message ?? data.reply,
       link: data.link,
       action: data.action, 
+      card: data.card
     };
   } catch (err: any) {
     return rejectWithValue(
@@ -62,6 +63,7 @@ const chatSlice = createSlice({
           content: data.message ?? "Please log in to continue.",
           link: action.payload.link,
           action: action.payload.action,
+          card: data.card
         });
       })
       .addCase(sendChatMessage.rejected, (state, action) => {

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
+import { baseStyle } from "@/app/style";
 
 interface AddWishListProps {
   id: string;
@@ -14,7 +15,6 @@ const AddWishList: React.FC<AddWishListProps> = ({ id }) => {
   const dispatch = useAppDispatch();
   const { wishlist, error } = useAppSelector((state) => state.wishlist);
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -32,20 +32,15 @@ const AddWishList: React.FC<AddWishListProps> = ({ id }) => {
         toast.error("You need to login first!");
         return;
       }
-      setIsLoading(true);
       await dispatch(addToWishList(id)).unwrap();
       await dispatch(fetchWishlist());
       toast.success("Added to wishlist!");
     } catch (error) {
       console.error("Failed to add to wishlist", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const addedToWishlist = wishlist.some((list) => list._id === id);
-
-  const baseStyle = "text-mainBg2 cursor-pointer hover:scale-110 transition-transform duration-200"
 
   if (error) return <h1>Error...{error}</h1>;
 

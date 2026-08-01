@@ -10,6 +10,8 @@ import { toast } from "react-toastify";
 import { useAppDispatch } from "@/redux/hooks";
 import { stageProductForCompare } from "@/redux/slices/aiChatSlice";
 import { openAiChat } from "@/redux/slices/uiSlice";
+import { FaCodeCompare } from "react-icons/fa6";
+import { baseStyle } from "@/app/style";
 
 interface ProductBoxProps {
   product: ProductType;
@@ -61,8 +63,8 @@ const ProductBox: React.FC<ProductBoxProps> = ({ product }) => {
             : `Rating: ${product.ratings?.average}`}
         </p>
       </div>
-      <div className="absolute top-3 right-3 flex gap-3">
-        <p onClick={handleCompareClick}>C</p>
+      <div className="absolute top-3 right-3 flex items-center gap-1">
+        <FaCodeCompare title="Add to Compare" className={baseStyle} onClick={handleCompareClick} />
         <AddWishList id={product._id} />
       </div>
       <div className="flex justify-between">

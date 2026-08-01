@@ -11,6 +11,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import LoadingScreen from "@/components/LoadingScreen";
 import { toast } from "react-toastify";
+import { baseStyle } from "@/app/style";
+import { FaCodeCompare } from "react-icons/fa6";
+import { stageProductForCompare } from "@/redux/slices/aiChatSlice";
+import { openAiChat } from "@/redux/slices/uiSlice";
 
 interface Props {
   productId: string;
@@ -39,6 +43,17 @@ const ProductDetailClient = ({ productId }: Props) => {
   if (singleLoading) return <LoadingScreen />;
   if (error) return <p>Error: {error}</p>;
   if (!product) return <p>No product found.</p>;
+
+  const handleCompareClick = () => {
+    dispatch(openAiChat());
+    dispatch(
+      stageProductForCompare({
+        id: product._id,
+        name: product.name,
+        image: product.images?.[0]?.url ?? null,
+      }),
+    );
+  };
 
   return (
     <div>
@@ -89,7 +104,12 @@ const ProductDetailClient = ({ productId }: Props) => {
                 Featured
               </p>
             )}
-            <div className="mt-4">
+            <div className="mt-4 flex items-center gap-2">
+              <FaCodeCompare
+                title="Add to Compare"
+                className={baseStyle}
+                onClick={handleCompareClick}
+              />
               <AddWishList id={product._id} />
             </div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-4">

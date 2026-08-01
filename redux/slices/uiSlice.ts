@@ -5,6 +5,7 @@ const initialState: UIState = {
   openForm: null,
   returnTo: null,
   pendingRetry: null,
+  aiChatOpen: false,
 };
 
 const uiSlice = createSlice({
@@ -21,8 +22,17 @@ const uiSlice = createSlice({
       state.returnTo = null;
       state.pendingRetry = null;
     },
+    openAiChat(state) {
+      state.aiChatOpen = true;
+    },
+    closeAiChat(state) {
+      state.aiChatOpen = false;
+    },
+    toggleAiChat(state) {
+      state.aiChatOpen = !state.aiChatOpen;
+    }
   },
 });
 
-export const { openAuthForm, closeAuthForm } = uiSlice.actions;
+export const { openAuthForm, closeAuthForm, openAiChat, closeAiChat, toggleAiChat } = uiSlice.actions;
 export const uiReducer = uiSlice.reducer;

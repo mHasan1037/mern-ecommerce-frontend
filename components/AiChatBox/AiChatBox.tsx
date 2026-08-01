@@ -3,21 +3,23 @@ import { IoClose } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 
 import { AppDispatch, RootState } from "@/redux/store";
-import { addUserMessage, sendChatMessage } from "@/redux/slices/aiChatSlice";
-import { useRouter } from "next/navigation";
+import {
+  addUserMessage,
+  clearComparisonStaging,
+  sendChatMessage,
+  sendComparisonRequest,
+} from "@/redux/slices/aiChatSlice";
 import Link from "next/link";
-import { openAuthForm } from "@/redux/slices/uiSlice";
+import { closeAiChat, openAuthForm } from "@/redux/slices/uiSlice";
 import OrderCard from "./AiOrderCard";
 import ProductListCard from "./AiProductCard";
+import AiComparisonCard from "./AiComparisonCard";
+import CompareProduct from "../CompareProduct/CompareProduct";
 
-interface AiChatBoxProps {
-  setIsOpen: (open: boolean) => void;
-}
-
-const AiChatBox = ({ setIsOpen }: AiChatBoxProps) => {
+const AiChatBox = () => {
   const [input, setInput] = useState("");
   const dispatch = useDispatch<AppDispatch>();
-  const { messages, loading, error } = useSelector(
+  const { messages, loading, error, comparisonStaging } = useSelector(
     (state: RootState) => state.chat,
   );
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -27,7 +29,7 @@ const AiChatBox = ({ setIsOpen }: AiChatBoxProps) => {
       top: scrollRef.current.scrollHeight,
       behavior: "smooth",
     });
-  }, [messages, loading]);
+  }, [messages, loading, comparisonStaging]);
 
   const handleSend = () => {
     const trimmed = input.trim();
@@ -42,12 +44,20 @@ const AiChatBox = ({ setIsOpen }: AiChatBoxProps) => {
     if (e.key === "Enter") handleSend();
   };
 
+  const { first, second } = comparisonStaging;
+  const showStagingChip = !!first;
+
+  const handleCompareNow = () => {
+    if (!first || !second || loading) return;
+    dispatch(sendComparisonRequest({ productIds: [first.id, second.id] }));
+  };
+
   return (
     <div className="fixed bottom-5 right-5 w-80 h-96 bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden">
       <div className="flex items-center justify-between px-4 py-3 bg-green-600 hover:bg-green-700 text-white">
         <span className="font-medium">AI Chat</span>
         <button
-          onClick={() => setIsOpen(false)}
+          onClick={() => dispatch(closeAiChat())}
           className="hover:bg-white/10 rounded-full p-1 transition-colors"
         >
           <IoClose />
@@ -62,54 +72,67 @@ const AiChatBox = ({ setIsOpen }: AiChatBoxProps) => {
           <p className="text-gray-500">Start chatting...</p>
         )}
         {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={`max-w-[80%] px-3 py-2 rounded-2xl ${
-              msg.role === "user"
-                ? "bg-green-600 text-white ml-auto"
-                : "bg-gray-100 text-gray-800"
-            }`}
-          >
-            <p>{msg.content}</p>
-            {msg.card?.type === "order" && <OrderCard card={msg.card} />}
-            {msg.card?.type === "product_list" && (
-              <ProductListCard card={msg.card} />
-            )}
-
-            {msg.link && (
-              <Link
-                href={msg.link}
-                className="underline text-blue-600 block mt-1"
-              >
-                View details →
-              </Link>
-            )}
-            {msg.action?.type === "open_auth_form" && msg.action && (
-              <button
-                onClick={() =>
-                  dispatch(
-                    openAuthForm({
-                      form: msg.action!.form,
-                      retry: msg.action!.retryIntent
-                        ? {
-                            intent: msg.action!.retryIntent!,
-                            args: msg.action!.retryArgs,
-                          }
-                        : undefined,
-                    }),
-                  )
-                }
-                className="mt-2 rounded bg-mainBg2 px-3 py-1 text-white"
-              >
-                Log in
-              </button>
+          <div key={msg.id}>
+            <div
+              className={`max-w-[80%] px-3 py-2 rounded-2xl ${
+                msg.role === "user"
+                  ? "bg-green-600 text-white ml-auto"
+                  : "bg-gray-100 text-gray-800"
+              }`}
+            >
+              <p>{msg.content}</p>
+              {msg.card?.type === "order" && <OrderCard card={msg.card} />}
+              {msg.card?.type === "product_list" && (
+                <ProductListCard card={msg.card} />
+              )}
+              {msg.link && (
+                <Link
+                  href={msg.link}
+                  className="underline text-blue-600 block mt-1"
+                >
+                  View details →
+                </Link>
+              )}
+              {msg.action?.type === "open_auth_form" && msg.action && (
+                <button
+                  onClick={() =>
+                    dispatch(
+                      openAuthForm({
+                        form: msg.action!.form,
+                        retry: msg.action!.retryIntent
+                          ? {
+                              intent: msg.action!.retryIntent!,
+                              args: msg.action!.retryArgs,
+                            }
+                          : undefined,
+                      }),
+                    )
+                  }
+                  className="mt-2 rounded bg-mainBg2 px-3 py-1 text-white"
+                >
+                  Log in
+                </button>
+              )}
+            </div>
+            {msg.card?.type === "comparison" && (
+              <div className="w-full mt-2">
+                <AiComparisonCard card={msg.card} />
+              </div>
             )}
           </div>
         ))}
         {loading && <p className="text-gray-400 italic">Thinking...</p>}
         {error && <p className="text-red-500">{error}</p>}
       </div>
-
+      {showStagingChip && (
+        <CompareProduct 
+           first={first}
+           second={second}
+           loading={loading}
+           onCompareNow={handleCompareNow}
+           onClear={() => dispatch(clearComparisonStaging())}
+        />
+      )}
       <div className="p-3 border-t border-gray-200 flex gap-2">
         <input
           type="text"

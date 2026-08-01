@@ -32,7 +32,26 @@ export interface ProductListCard {
   products: ProductCardItem[];
 }
 
-export type ChatCard = OrderCard | ProductListCard;
+export interface ComparisonProduct {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: string | null;
+  stock: number;
+  inStock: boolean;
+  rating: number;
+  totalReviews: number;
+  image?: string | null;
+  link?: string;
+}
+
+export interface ComparisonCard{
+  type: "comparison";
+  products: ComparisonProduct[];
+}
+
+export type ChatCard = OrderCard | ProductListCard | ComparisonCard;
 
 export interface ChatMessage{
     id: string;
@@ -43,10 +62,22 @@ export interface ChatMessage{
     card?: ChatCard;
 }
 
+export interface StagedProduct {
+  id: string;
+  name: string;
+  image?: string | null;
+}
+
+export interface ComparisonStaging {
+  first: StagedProduct | null;
+  second: StagedProduct | null;
+}
+
 export interface chatState {
     messages: ChatMessage[]
     loading: boolean,
     error: string | null;
+    comparisonStaging: ComparisonStaging;
 }
 
 export interface ChatResponse {
@@ -67,4 +98,5 @@ export interface UIState {
   openForm: AuthFormType;
   returnTo: string | null;
   pendingRetry: PendingRetry | null;
+  aiChatOpen: boolean;
 }

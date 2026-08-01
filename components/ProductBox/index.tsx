@@ -7,14 +7,29 @@ import AddToCart from "../AddToCart";
 import ConfirmButton from "../buttons/ConfirmButton";
 import { useAppSelector } from "@/redux/hooks";
 import { toast } from "react-toastify";
+import { useAppDispatch } from "@/redux/hooks";
+import { stageProductForCompare } from "@/redux/slices/aiChatSlice";
+import { openAiChat } from "@/redux/slices/uiSlice";
 
 interface ProductBoxProps {
   product: ProductType;
 }
 
 const ProductBox: React.FC<ProductBoxProps> = ({ product }) => {
+  const dispatch = useAppDispatch();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const router = useRouter();
+
+  const handleCompareClick = () => {
+    dispatch(openAiChat());
+    dispatch(
+      stageProductForCompare({
+        id: product._id,
+        name: product.name,
+        image: product.images?.[0]?.url ?? null,
+      }),
+    );
+  };
   return (
     <div
       key={product._id}
@@ -46,11 +61,12 @@ const ProductBox: React.FC<ProductBoxProps> = ({ product }) => {
             : `Rating: ${product.ratings?.average}`}
         </p>
       </div>
-      <div className="absolute top-3 right-3">
+      <div className="absolute top-3 right-3 flex gap-3">
+        <p onClick={handleCompareClick}>C</p>
         <AddWishList id={product._id} />
       </div>
       <div className="flex justify-between">
-        <AddToCart productId={product._id} quantity={1} stock={product.stock}/>
+        <AddToCart productId={product._id} quantity={1} stock={product.stock} />
         <ConfirmButton
           buttonText={"Buy now"}
           onclick={() => {

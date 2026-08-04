@@ -8,6 +8,7 @@ import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 interface ProductFormProps {
   initialData?: ProductFormDataType;
@@ -88,6 +89,11 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (formData.images.length === 0) {
+      toast.error("Please upload at least one image.");
+      return;
+    }
 
     const uploadingProduct = {
       ...formData,

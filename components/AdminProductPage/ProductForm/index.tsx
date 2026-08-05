@@ -32,11 +32,11 @@ const ProductForm: React.FC<ProductFormProps> = ({
   mode = "create",
 }) => {
   const [formData, setFormData] = useState<ProductFormDataType>(
-    initialData || defaultFormData
+    initialData || defaultFormData,
   );
   const dispatch = useAppDispatch();
   const { categories, loading, error } = useAppSelector(
-    (state) => state.categories
+    (state) => state.categories,
   );
   const router = useRouter();
 
@@ -51,7 +51,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value, type } = e.target;
 
@@ -206,20 +206,20 @@ const ProductForm: React.FC<ProductFormProps> = ({
         </CldUploadWidget>
       )}
 
-      <div className="flex flex-wrap gap-4">
+      <div className="grid grid-cols-[repeat(auto-fill,100px)] gap-4 mb-8">
         {formData.images.map((img) => (
-          <div key={img.public_id} className="relative w-[100px] h-[100px]">
+          <div key={img.public_id} className="relative">
             <Image
               src={img.url}
               alt="Preview"
               width={100}
               height={100}
-              className="object-cover rounded-md border"
+              className="object-cover rounded-md border w-full h-full"
             />
             <button
               type="button"
               onClick={() => handleImageDelete(img.public_id)}
-              className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-1 text-xs"
+              className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-1 text-xs z-20"
             >
               ❌
             </button>
@@ -227,17 +227,19 @@ const ProductForm: React.FC<ProductFormProps> = ({
         ))}
       </div>
 
-      <label className="inline-flex items-center gap-2 mt-4">
-        <input
-          type="checkbox"
-          name="is_featured"
-          id="is_featured"
-          checked={formData.is_featured}
-          onChange={handleChange}
-          className="accent-green-600"
-        />
-        <span className="text-sm text-gray-700">Mark as featured</span>
-      </label>
+      <div className="mt-2">
+        <label className="inline-flex items-center gap-2">
+          <input
+            type="checkbox"
+            name="is_featured"
+            id="is_featured"
+            checked={formData.is_featured}
+            onChange={handleChange}
+            className="accent-green-600"
+          />
+          <span className="text-sm text-gray-700">Mark as featured</span>
+        </label>
+      </div>
 
       <div className="mt-6">
         <ConfirmButton

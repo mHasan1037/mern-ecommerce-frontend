@@ -42,10 +42,12 @@ export const postCartOrders = createAsyncThunk(
 
 export const getCurrentUserOrders = createAsyncThunk(
     "order/currentUserOrder",
-    async (_, {rejectWithValue}) =>{
+    async ({page = 1, limit = 10, status}: {page?: number; limit?: number, status?: string} = {}, {rejectWithValue}) =>{
         try{
-           const res = await axiosInstance.get('/api/orders');
-           return res.data.orders;
+           const res = await axiosInstance.get('/api/orders', {
+            params: { page, limit, status },
+           });
+           return res.data;
         }catch(err: any){
            return rejectWithValue(err.response?.data?.message || err.message)
         }
@@ -152,7 +154,10 @@ const orderSlice = createSlice({
         .addCase(getCurrentUserOrders.fulfilled, (state, action) =>{
             state.loading = false;
             state.success = true;
-            state.orders = action.payload
+            state.orders = action.payload.orders;
+            state.totalOrders = action.payload.pagination.total;
+            state.totalPages = action.payload.pagination.totalPages;
+            state.currentPage = action.payload.pagination.page;
         })
         .addCase(getCurrentUserOrders.rejected, (state, action) =>{
             state.loading = false;

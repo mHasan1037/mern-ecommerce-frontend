@@ -9,7 +9,7 @@ interface PaginationProps{
 const Pagination = ({totalPages, page, setPage}: PaginationProps) => {
 
   return (
-    <div>
+    <div className='flex gap-1'>
         {Array.from({length: totalPages}, (_, i) =>(
             <button
                key={i}

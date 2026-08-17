@@ -26,7 +26,7 @@ function MainNavbar() {
   const dispatch = useAppDispatch();
   const {wishlist, loading: loadingWishlist, error: wishlistError} = useAppSelector((state) => state.wishlist);
   const {cart, loading: loadingCart, error: cartError} = useAppSelector((state) => state.cart)
-  const [searchValue, setSearchValue] = useState<string>();
+  const [searchValue, setSearchValue] = useState<string>("");
   const debouncedSearch = useDebounce(searchValue, 400)
 
   useEffect(() => {

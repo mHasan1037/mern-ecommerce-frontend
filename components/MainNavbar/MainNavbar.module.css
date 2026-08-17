@@ -5,8 +5,16 @@
   @apply flex justify-between items-center bg-mainBg1 p-4;
 }
 
+.storefrontNavbar {
+  @apply sticky top-0 z-40 flex items-center justify-between border-b border-mist bg-pearl/95 px-4 py-3 font-body shadow-[0_10px_35px_rgba(30,36,32,0.05)] backdrop-blur sm:px-6 lg:px-8;
+}
+
 .searchBox {
   @apply w-[400px] px-3 py-2 rounded-md outline-none;
+}
+
+.storefrontSearchBox {
+  @apply w-[420px] border border-mist bg-white/80 px-4 py-3 text-sm text-ink placeholder:text-ink/45 shadow-boutique-sm transition focus:border-brass focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2 focus-visible:ring-offset-pearl;
 }
 
 .wishlist,
@@ -14,7 +22,12 @@
   @apply flex items-center gap-1 cursor-pointer;
 }
 
+.storefrontNavAction {
+  @apply flex cursor-pointer items-center gap-2 px-2 py-2 text-ink/75 transition duration-200 ease-out hover:text-laurel hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2 focus-visible:ring-offset-pearl;
+}
+
 .count {
   @apply absolute -top-3 -left-3 bg-mainBg2 h-[20px] w-[20px] rounded-full flex justify-center items-center text-white text-xs;
 }
+
 

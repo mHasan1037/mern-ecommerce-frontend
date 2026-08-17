@@ -40,9 +40,9 @@ function MainNavbar() {
   }, [dispatch, isAuthenticated, debouncedSearch]);
 
   return (
-    <section className={styles.navbar}>
+    <section className={styles.storefrontNavbar}>
       <div className="flex items-center">
-        <div className="w-20 cursor-pointer">
+        <div className={"w-24 cursor-pointer transition duration-200 hover:opacity-80"}>
           <Image
             src="/images/logo.png"
             alt="Logo"
@@ -69,20 +69,20 @@ function MainNavbar() {
               router.push('/')
             }
           }}
-          className={styles.searchBox}
+          className={styles.storefrontSearchBox}
           type="text"
           placeholder="Search for a product or brand"
         />
       </div>
-      <div className="flex gap-5">
-        <div className={styles.wishlist} onClick={()=> router.push('/wishlist')}>
+      <div className={"flex items-center gap-2 text-sm font-semibold text-ink/80 sm:gap-4"}>
+        <div className={styles.storefrontNavAction} onClick={()=> router.push('/wishlist')}>
           <div className="relative">
             <span className={styles.count}>{loadingWishlist ? "..." : wishlist.length > 0 ? wishlist.length : "0"}</span>
             <CiHeart size={24} />
           </div>{" "}
           Wishlist
         </div>
-        <div className={styles.cart} onClick={()=> router.push('/cart')}>
+        <div className={styles.storefrontNavAction} onClick={()=> router.push('/cart')}>
           <div className="relative">
             <span className={styles.count}>{loadingCart ? "..." : cart && cart.length > 0 ? cart.length : "0"} </span>
             <CiShoppingCart size={24} />
@@ -92,17 +92,17 @@ function MainNavbar() {
         {isAuthenticated ? (
           <ProfileDropdown />
         ) : (
-          <div className="flex gap-2">
+          <div className={"flex items-center gap-2 border-l border-mist pl-3"}>
             <p
               onClick={() => dispatch(openAuthForm({ form: "login" }))}
-              className="cursor-pointer hover:text-mainBg2"
+              className={"storefront-focus cursor-pointer px-2 py-1 transition duration-200 ease-out hover:text-laurel hover:scale-105"}
             >
               Log In
             </p>{" "}
             /
             <p
               onClick={() => dispatch(openAuthForm({ form: "signup" }))}
-              className="cursor-pointer hover:text-mainBg2"
+              className={"storefront-focus cursor-pointer px-2 py-1 transition duration-200 ease-out hover:text-laurel hover:scale-105"}
             >
               Sign up
             </p>

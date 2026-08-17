@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import styles from "./ConfirmButton.module.css";
 
@@ -13,7 +14,11 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
   onclick,
 }) => {
   return (
-    <button type={type} className={styles.buttonStyle} onClick={onclick}>
+    <button
+      type={type}
+      className={styles.buttonStyle}
+      onClick={onclick}
+    >
       {buttonText}
     </button>
   );

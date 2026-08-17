@@ -56,19 +56,19 @@ const ProductDetailClient = ({ productId }: Props) => {
   };
 
   return (
-    <div>
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row gap-10">
-          <div className="w-full md:w-1/2">
-            <div className="w-[400px] h-[400px] relative rounded-md border overflow-hidden">
+    <main className="storefront-page">
+      <div className="storefront-shell py-8 md:py-12">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.95fr)] lg:gap-12">
+          <div className="w-full">
+            <div className="relative aspect-square w-full overflow-hidden border border-mist bg-white p-6 shadow-boutique">
               <Image
                 src={mainImage as string}
                 alt={product?.name || "Product Image"}
                 fill
-                className="object-cover"
+                className="object-contain p-6"
               />
             </div>
-            <div className="flex gap-2 mt-4">
+            <div className="mt-4 grid grid-cols-4 gap-3 sm:flex">
               {product?.images?.map((img) => (
                 <Image
                   key={img.url}
@@ -77,34 +77,36 @@ const ProductDetailClient = ({ productId }: Props) => {
                   width={70}
                   height={70}
                   onClick={() => setSelectedImage(img.url)}
-                  className="rounded-md border cursor-pointer hover:scale-105 transition"
+                  className={`h-20 w-full cursor-pointer border bg-white p-2 object-contain transition duration-200 hover:border-brass hover:shadow-boutique-sm sm:w-20 ${
+                    selectedImage === img.url ? "border-brass" : "border-mist"
+                  }`}
                 />
               ))}
             </div>
           </div>
-          <div className="w-full md:w-1/2 space-y-4">
-            <h1 className="text-2xl font-bold">{product.name}</h1>
-            <p className="text-lg font-semibold text-green-700">
+          <div className="storefront-card space-y-5 p-6 md:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brass">
+              {product?.category?.name}
+            </p>
+            <h1 className="font-display text-4xl font-semibold leading-tight text-ink md:text-5xl">{product.name}</h1>
+            <p className="text-3xl font-semibold text-laurel">
               ${product?.price}
             </p>
-            <p className="text-sm text-gray-500 uppercase">
-              Category: {product?.category?.name?.toUpperCase()}
-            </p>
-            <div className="flex gap-4 items-center">
-              <span className="text-yellow-500 font-semibold">
+            <div className="flex flex-wrap gap-3 border-y border-mist py-4 text-sm text-ink/65">
+              <span className="font-semibold text-brass">
                 Ratings: {product?.ratings.average}
               </span>
-              <span className="text-gray-600">
+              <span>
                 Total review: {product?.ratings?.totalReviews}
               </span>
+              <span>Stock: {product?.stock}</span>
             </div>
-            <p className="text-sm text-gray-700">Stocks: {product?.stock}</p>
             {product?.is_featured && (
-              <p className="text-sm font-medium text-white bg-blue-600 inline-block px-3 py-1 rounded">
+              <p className="inline-block border border-brass bg-brass/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-laurel">
                 Featured
               </p>
             )}
-            <div className="mt-4 flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <FaCodeCompare
                 title="Add to Compare"
                 className={baseStyle}
@@ -112,11 +114,11 @@ const ProductDetailClient = ({ productId }: Props) => {
               />
               <AddWishList id={product._id} />
             </div>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-4">
+            <div className="flex flex-col items-start gap-4 border-t border-mist pt-5 sm:flex-row sm:items-center">
               <input
                 type="number"
                 placeholder="1"
-                className="border rounded px-3 py-1 w-24 focus:outline-none"
+                className="storefront-focus w-24 border border-mist bg-white px-3 py-2 text-center"
                 value={productCartQuantity}
                 min={1}
                 onChange={(e) => setProductCartQuantity(Number(e.target.value))}
@@ -139,39 +141,39 @@ const ProductDetailClient = ({ productId }: Props) => {
                 }}
               />
             </div>
-            <p className="mt-4 text-gray-700">{product?.description}</p>
+            <p className="text-base leading-7 text-ink/70">{product?.description}</p>
           </div>
         </div>
       </div>
 
-      <div className="mt-12">
+      <div className="storefront-shell pb-8">
         <NewReviewForm id={product._id} />
       </div>
 
       {product?.reviews !== null && product?.reviews.length > 0 && (
-        <div className="mb-10 mx-20 space-y-6">
-          <h2 className="text-xl font-semibold border-b pb-2">
+        <div className="storefront-shell mb-10 space-y-5">
+          <h2 className="border-b border-mist pb-3 font-display text-2xl font-semibold text-ink">
             Customer Reviews
           </h2>
           {product?.reviews.map((review, idx) => (
             <div
               key={idx}
-              className="border p-4 rounded-md bg-gray-50 shadow-sm"
+              className="border border-mist bg-white/85 p-5 shadow-boutique-sm"
             >
-              <p className="font-semibold">{review?.name}</p>
+              <p className="font-semibold text-ink">{review?.name}</p>
               {review?.rating && (
-                <p className="text-sm text-yellow-600">
+                <p className="text-sm text-brass">
                   Rating: {review?.rating} / 5
                 </p>
               )}
               {review?.comment && (
-                <div className="text-gray-700 mt-1">“{review?.comment}”</div>
+                <div className="mt-2 text-ink/70">"{review?.comment}"</div>
               )}
             </div>
           ))}
         </div>
       )}
-    </div>
+    </main>
   );
 };
 

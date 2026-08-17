@@ -40,14 +40,14 @@ const AddToCart: React.FC<AddToCartProps> = ({ productId, quantity, stock }) => 
   };
 
   if (isAddedToCart) {
-    return <div>Added to cart</div>;
+    return <div className="border border-sage/60 bg-mist px-4 py-2 text-center text-sm font-semibold text-laurel">Added to cart</div>;
   }
 
   return (
     <button
       onClick={handleAddToCart}
       disabled={isLoading}
-      className="px-4 py-2 bg-blue-600 text-white rounded"
+      className="storefront-focus border border-laurel px-4 py-2 text-sm font-semibold text-laurel transition duration-200 hover:bg-laurel hover:text-pearl disabled:cursor-wait disabled:opacity-60"
     >
       {isLoading ? "Adding..." : "Add to Cart"}
     </button>

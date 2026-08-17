@@ -1,1 +1,1 @@
-export const baseStyle = "text-mainBg2 cursor-pointer hover:scale-110 transition-transform duration-200";
+export const baseStyle = "text-laurel cursor-pointer hover:text-brass hover:scale-110 transition duration-200";

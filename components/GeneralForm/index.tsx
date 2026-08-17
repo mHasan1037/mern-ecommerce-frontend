@@ -43,9 +43,9 @@ const GeneralForm: React.FC<GeneralFormProps> = ({
   return (
     <div className={styles.background}>
       <div className={styles.mainContainer}>
-        <div className="flex justify-between items-center">
-          <h2 className="font-bold text-lg">{title}</h2>
-          <IoMdClose className="cursor-pointer" onClick={()=> onclose(null)}/> 
+        <div className="flex items-start justify-between gap-4 border-b border-mist pb-4">
+          <h2 className="font-display text-2xl font-semibold text-ink">{title}</h2>
+          <IoMdClose className="storefront-focus cursor-pointer text-ink/60 transition hover:text-ink" onClick={()=> onclose(null)}/> 
         </div>
         <form onSubmit={handleSubmit}>
           <div className="py-2">
@@ -63,8 +63,8 @@ const GeneralForm: React.FC<GeneralFormProps> = ({
               </div>
             ))}
           </div>
-          <div className="flex justify-between items-center mt-3">
-            <div>{footerText && footerText}</div>
+          <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="text-sm text-ink/60">{footerText && footerText}</div>
             <ConfirmButton buttonText={submitText} type="submit" />
           </div>
         </form>

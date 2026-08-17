@@ -28,11 +28,13 @@ export default function Home() {
   }, [dispatch, searchTerm, selectedCategory])
 
   return (
-    <div className="m-5 flex gap-10">
+    <main className="storefront-page">
+      <div className="storefront-shell flex flex-col gap-6 py-6 lg:flex-row lg:gap-8 lg:py-10">
       <CategorySidebar />
-      <div className="w-full">
+      <div className="w-full min-w-0">
         {showCategoryOrSearch ? <ProductsSection /> : <HomeMainSection />}
       </div>
-    </div>
+      </div>
+    </main>
   );
 }

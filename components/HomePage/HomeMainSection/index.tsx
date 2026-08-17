@@ -7,6 +7,7 @@ import {
   fetchProducts,
 } from "@/redux/slices/productSlice";
 import LoadingScreen from "@/components/LoadingScreen";
+import HeroHomeSection from "../HeroHomePage";
 
 const HomeMainSection = () => {
   const dispatch = useAppDispatch();
@@ -23,15 +24,20 @@ const HomeMainSection = () => {
   if (error) return <p>Error fetching products: {error}</p>;
 
   return (
-    <div className="w-full flex flex-col gap-16">
+    <div className="w-full flex flex-col gap-14 md:gap-18">
+      <HeroHomeSection 
+        headerText="Curated essentials"
+        TitleText="Elevated finds for a quieter kind of luxury."
+        descriptionText="Discover polished pieces selected for everyday utility, lasting texture, and a refined point of view."
+      />
       {productsInfo && (
-        <div>
+        <section>
           <h2 className="headline">Featured Products</h2>
           <ProductSlideSection allProductSlideSections={productsInfo} />
-        </div>
+        </section>
       )}
       {mostSoldProducts && (
-        <div>
+        <section>
           <h2 className="headline">Best Selling Products</h2>
           <ProductSlideSection
             allProductSlideSections={{
@@ -41,7 +47,7 @@ const HomeMainSection = () => {
               products: mostSoldProducts,
             }}
           />
-        </div>
+        </section>
       )}
     </div>
   );

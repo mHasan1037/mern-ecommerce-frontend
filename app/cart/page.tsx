@@ -56,11 +56,12 @@ const Cart = () => {
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <h2 className="text-2xl font-semibold mb-6 text-center">My Cart</h2>
+    <main className="storefront-page">
+      <div className="storefront-shell py-8 md:py-12">
+      <h2 className="mb-8 text-center font-display text-4xl font-semibold text-ink">My Cart</h2>
       {cartList && cartList.length > 0 ? (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
             {cartList.map((cart) => (
               <CartItem
                 key={cart._id}
@@ -71,7 +72,7 @@ const Cart = () => {
             ))}
           </div>
 
-          <div className="mt-8 text-center">
+          <div className="mt-8 flex justify-center">
             <ConfirmButton
               buttonText={"Proceed to Checkout"}
               onclick={() => router.push("/checkout")}
@@ -79,9 +80,10 @@ const Cart = () => {
           </div>
         </>
       ) : (
-        <p className="text-center text-gray-500">Your cart is empty.</p>
+        <p className="border border-mist bg-white/80 p-10 text-center text-ink/60 shadow-boutique-sm">Your cart is empty.</p>
       )}
-    </div>
+      </div>
+    </main>
   );
 };
 

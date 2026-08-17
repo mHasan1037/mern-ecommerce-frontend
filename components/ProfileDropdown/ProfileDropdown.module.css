@@ -1,11 +1,23 @@
-.profileBox{
+.adminProfileBox{
     @apply absolute right-0 p-2 rounded-md z-50 bg-gray-50 border border-gray-200 shadow-sm
 }
 
-.profileBox li{
+.adminProfileBox li{
     @apply whitespace-nowrap cursor-pointer hover:text-mainBg2
 }
 
-.profilePic{
+.adminProfilePic{
     @apply bg-mainBg2 text-white h-8 w-8 flex justify-center items-center rounded-full text-sm cursor-pointer
+}
+
+.profileBox{
+    @apply absolute right-0 z-50 border border-mist bg-white p-2 shadow-boutique-sm
+}
+
+.profileBox li{
+    @apply whitespace-nowrap cursor-pointer px-3 py-2 text-sm text-ink/75 transition hover:bg-mist hover:text-laurel
+}
+
+.profilePic{
+    @apply flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-laurel text-sm font-semibold text-pearl shadow-boutique-sm transition hover:bg-ink
 }

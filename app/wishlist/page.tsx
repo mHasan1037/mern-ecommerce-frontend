@@ -56,27 +56,28 @@ const WishList = () => {
   if (error)
     return <h1 className="text-center text-red-600">Error: {error}</h1>;
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <h2 className="text-2xl font-semibold mb-6 text-center">My Wishlist</h2>
+    <main className="storefront-page">
+      <div className="storefront-shell py-8 md:py-12">
+      <h2 className="mb-8 text-center font-display text-4xl font-semibold text-ink">My Wishlist</h2>
       {wishlist && wishlist.length > 0 ? (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
             {wishlist.map((list) => (
               <div
                 key={list._id}
-                className="flex flex-col sm:flex-row items-center gap-4 p-4 border rounded-md shadow-sm bg-white relative"
+                className="storefront-card relative flex flex-col items-center gap-5 p-5 sm:flex-row"
               >
-                <div className="relative w-[100px] h-[100px]">
+                <div className="relative h-28 w-28 shrink-0 bg-pearl p-3">
                   <Image
                     src={list.images[0]?.url}
                     alt={list.name}
                     fill
-                    className="rounded object-cover border"
+                    className="border border-mist object-contain"
                   />
                 </div>
-                <div className="flex-1 space-y-1 w-full">
+                <div className="w-full flex-1 space-y-2">
                   <p
-                    className="text-lg font-semibold hover:text-green-500 hover:underline cursor-pointer"
+                    className="cursor-pointer font-display text-xl font-semibold leading-tight text-ink transition hover:text-laurel"
                     title={list.name}
                     onClick={() => router.push(`products/${list._id}`)}
                   >
@@ -84,10 +85,10 @@ const WishList = () => {
                       ? list.name.slice(0, 40) + "..."
                       : list.name}
                   </p>
-                  <p className="text-green-700 font-medium">${list.price}</p>
+                  <p className="font-semibold text-laurel">${list.price}</p>
                   <p
                     className={`text-sm ${
-                      list.stock > 0 ? "text-green-500" : "text-red-500"
+                      list.stock > 0 ? "text-laurel" : "text-red-600"
                     }`}
                   >
                     {list.stock > 0 ? "In stock" : "Out of stock"}
@@ -110,8 +111,8 @@ const WishList = () => {
                       min={1}
                       className={`w-16 px-2 py-1 rounded text-sm outline-none ${
                         cart && cart.some((c) => c.product._id === list._id)
-                          ? "cursor-not-allowed border-none"
-                          : "border"
+                          ? "cursor-not-allowed border border-transparent bg-mist text-ink/50"
+                          : "storefront-focus border border-mist bg-white"
                       }`}
                     />
                     <AddToCart
@@ -123,7 +124,7 @@ const WishList = () => {
                 </div>
                 <button
                   onClick={() => handleRemoveWishlist(list._id)}
-                  className="absolute top-2 right-2 p-1 text-red-500 hover:text-red-700"
+                  className="storefront-focus absolute right-3 top-3 p-1 text-ink/45 transition hover:text-red-700"
                 >
                   <RxCross2 size={20} />
                 </button>
@@ -132,7 +133,7 @@ const WishList = () => {
           </div>
           <div className="mt-8 text-center">
             <button
-              className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-md transition"
+              className="storefront-focus border border-red-700 px-6 py-2 font-semibold text-red-700 transition hover:bg-red-700 hover:text-white"
               onClick={removeAllWishlist}
             >
               Clear Wishlist
@@ -140,9 +141,10 @@ const WishList = () => {
           </div>
         </>
       ) : (
-        <p className="text-center text-gray-500">Your wishlist is empty.</p>
+        <p className="border border-mist bg-white/80 p-10 text-center text-ink/60 shadow-boutique-sm">Your wishlist is empty.</p>
       )}
-    </div>
+      </div>
+    </main>
   );
 };
 

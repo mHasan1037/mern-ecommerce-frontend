@@ -42,20 +42,20 @@ const CartItem: React.FC<CartItemProps> = ({ cart, stock, onDelete }) => {
   return (
     <div
       key={cart._id || `${product._id}-${cart.quantity}`}
-      className="flex flex-col sm:flex-row items-center gap-4 p-4 border rounded-md shadow-sm bg-white relative"
+      className="storefront-card relative flex flex-col items-center gap-5 p-5 sm:flex-row"
     >
-      <div className="relative w-[100px] h-[100px]">
+      <div className="relative h-28 w-28 shrink-0 bg-pearl p-3">
         <Image
           src={product.images[0]?.url || "/images/placeholder.png"}
           alt={product.name}
           fill
-          className="object-cover rounded border"
+          className="border border-mist object-contain"
         />
       </div>
 
-      <div className="flex-1 space-y-1 w-full">
+      <div className="w-full flex-1 space-y-2">
         <p
-          className="text-lg font-semibold hover:text-green-500 hover:underline cursor-pointer"
+          className="cursor-pointer font-display text-xl font-semibold leading-tight text-ink transition hover:text-laurel"
           title={product.name}
           onClick={() => router.push(`/products/${product._id}`)}
         >
@@ -63,11 +63,11 @@ const CartItem: React.FC<CartItemProps> = ({ cart, stock, onDelete }) => {
             ? product.name.slice(0, 40) + "..."
             : product.name}
         </p>
-        <p className="text-green-700 font-medium">${product.price}</p>
+        <p className="font-semibold text-laurel">${product.price}</p>
         <div className="flex items-center gap-2">
           <label
             htmlFor={`qty-${product._id}`}
-            className="text-sm text-gray-600"
+            className="text-sm text-ink/60"
           >
             Quantity:
           </label>
@@ -80,14 +80,14 @@ const CartItem: React.FC<CartItemProps> = ({ cart, stock, onDelete }) => {
               const newQuantity = Number(e.target.value);
               if(newQuantity >= 1) setLocalQuantity(newQuantity);
             }}
-            className="w-16 border rounded text-center text-sm focus:outline-none focus:ring-1 focus:ring-green-500"
+            className="storefront-focus w-16 border border-mist bg-white py-1 text-center text-sm"
           />
         </div>
       </div>
 
       <button
         onClick={() => onDelete(product._id)}
-        className="absolute top-2 right-2 p-1 text-red-500 hover:text-red-700"
+        className="storefront-focus absolute right-3 top-3 p-1 text-ink/45 transition hover:text-red-700"
       >
         <RxCross2 size={20} />
       </button>

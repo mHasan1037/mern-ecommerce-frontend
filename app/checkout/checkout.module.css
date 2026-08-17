@@ -2,39 +2,39 @@
 @tailwind utilities;
 
 .container {
-    @apply max-w-5xl mx-auto px-4 py-8 space-y-8;
+    @apply min-h-screen bg-pearl text-ink font-body mx-auto w-full max-w-6xl px-4 py-8 space-y-8 sm:px-6 lg:px-8 md:py-12;
 }
 
 .heading {
-    @apply text-2xl font-semibold text-center;
+    @apply text-center font-display text-4xl font-semibold text-ink md:text-5xl;
 }
 
 .tableWrapper {
-    @apply overflow-x-auto;
+    @apply overflow-x-auto border border-mist bg-white/85 shadow-boutique-sm;
 }
 
 .table {
-    @apply min-w-full border border-gray-300 rounded;
+    @apply min-w-full;
 }
 
 .tableCell {
-    @apply p-2 border text-sm;
+    @apply border-b border-mist p-3 text-sm text-ink/75;
 }
 
 .totalAmount {
-    @apply text-right text-lg font-medium;
+    @apply border-y border-mist py-4 text-right text-lg font-semibold text-ink;
 }
 
 .totalPrice {
-    @apply text-green-600;
+    @apply text-laurel;
 }
 
 .formSection {
-    @apply bg-white border rounded p-6 shadow-sm;
+    @apply border border-mist bg-white/85 p-6 shadow-boutique-sm;
 }
 
 .formTitle {
-    @apply text-lg font-semibold mb-4;
+    @apply mb-4 font-display text-2xl font-semibold text-ink;
 }
 
 .formGrid {
@@ -42,27 +42,27 @@
 }
 
 .input {
-    @apply border px-3 py-2 rounded w-full focus:outline-none;
+    @apply w-full border border-mist bg-white px-3 py-3 text-ink placeholder:text-ink/40 focus:border-brass focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2 focus-visible:ring-offset-pearl;
 }
 
 .submitButton {
-    @apply bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md text-base transition;
+    @apply bg-laurel px-8 py-3 text-base font-semibold text-pearl shadow-boutique-sm transition hover:-translate-y-0.5 hover:bg-ink hover:shadow-boutique focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2 focus-visible:ring-offset-pearl;
 }
 
 .paymentSection {
-    @apply mt-8 bg-white border rounded p-6 shadow-sm;
+    @apply mt-8 border border-mist bg-white/85 p-6 shadow-boutique-sm;
 }
 
 .paymentOptions {
-    @apply flex gap-4 mt-2;
+    @apply mt-2 flex flex-col gap-3 sm:flex-row;
 }
 
 .paymentOption {
-    @apply flex items-center gap-2 px-3 py-2 border border-gray-300 rounded bg-gray-50 cursor-pointer transition;
+    @apply flex cursor-pointer items-center gap-2 border border-mist bg-pearl px-4 py-3 text-sm font-semibold text-ink/75 transition;
 }
 
 .paymentOption:hover {
-    @apply bg-gray-100;
+    @apply border-brass bg-mist text-ink;
 }
 
 .paymentOption input {

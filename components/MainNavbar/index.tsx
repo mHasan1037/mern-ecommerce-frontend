@@ -54,7 +54,10 @@ function MainNavbar() {
             }}
           />
         </div>
-        <SmallScreenSearchbox />
+        <SmallScreenSearchbox 
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+        />
       </div>
       <div className="hidden md:block">
         <input

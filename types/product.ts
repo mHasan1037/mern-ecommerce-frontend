@@ -77,6 +77,7 @@ interface Category {
   export interface ProductState {
     productsInfo: ProductResponse | null;
     mostSoldProducts?: ProductType[];
+    featuredProducts?: ProductType[];
     loading: boolean;
     error: string | null;
     singleProduct: ProductType | null;

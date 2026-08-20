@@ -38,7 +38,6 @@ const ProductForm: React.FC<ProductFormProps> = ({
   const { categories, loading, error } = useAppSelector(
     (state) => state.categories,
   );
-  const router = useRouter();
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -109,7 +108,6 @@ const ProductForm: React.FC<ProductFormProps> = ({
       images: [],
       is_featured: false,
     });
-    router.push("/admin/product");
   };
   return (
     <form

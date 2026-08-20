@@ -5,19 +5,20 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   fetchMostSoldProducts,
   fetchProducts,
+  fetchFeaturedProducts,
 } from "@/redux/slices/productSlice";
 import LoadingScreen from "@/components/LoadingScreen";
 import HeroHomeSection from "../HeroHomePage";
 
 const HomeMainSection = () => {
   const dispatch = useAppDispatch();
-  const { productsInfo, mostSoldProducts, loading, error } = useAppSelector(
-    (state) => state.products
-  );
+  const { mostSoldProducts, featuredProducts, loading, error } =
+    useAppSelector((state) => state.products);
 
   useEffect(() => {
     dispatch(fetchProducts({ is_featured: true }));
     dispatch(fetchMostSoldProducts(10));
+    dispatch(fetchFeaturedProducts());
   }, [dispatch]);
 
   if (loading) return <LoadingScreen />;
@@ -25,15 +26,22 @@ const HomeMainSection = () => {
 
   return (
     <div className="w-full flex flex-col gap-14 md:gap-18">
-      <HeroHomeSection 
+      <HeroHomeSection
         headerText="Curated essentials"
         TitleText="Elevated finds for a quieter kind of luxury."
         descriptionText="Discover polished pieces selected for everyday utility, lasting texture, and a refined point of view."
       />
-      {productsInfo && (
+      {featuredProducts && (
         <section>
           <h2 className="headline">Featured Products</h2>
-          <ProductSlideSection allProductSlideSections={productsInfo} />
+          <ProductSlideSection
+            allProductSlideSections={{
+              total: featuredProducts.length,
+              page: 1,
+              pages: 1,
+              products: featuredProducts,
+            }}
+          />
         </section>
       )}
       {mostSoldProducts && (

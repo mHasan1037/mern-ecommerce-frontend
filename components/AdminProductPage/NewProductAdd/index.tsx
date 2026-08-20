@@ -4,6 +4,7 @@ import axiosInstance from "@/utils/axiosInstance";
 import ProductForm from "../ProductForm";
 import { ProductFormDataType } from "@/types/product";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const NewProductAdd = () => {
   const router = useRouter();
@@ -15,9 +16,11 @@ const NewProductAdd = () => {
         stock: Number(data.stock),
       };
       await axiosInstance.post(`/api/upload-product`, payload);
+      toast.success("Product is uploaded.")
       router.push("/admin/product");
     } catch (error) {
       console.error("Failed to submit product:", error);
+      throw error; 
     }
   };
 

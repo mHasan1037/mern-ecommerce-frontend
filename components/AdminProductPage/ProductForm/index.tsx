@@ -98,16 +98,18 @@ const ProductForm: React.FC<ProductFormProps> = ({
       ...formData,
       category: formData.category || categories[0]?._id || "",
     };
-    await onSubmit(uploadingProduct);
-    setFormData({
-      name: "",
-      description: "",
-      price: "",
-      category: "",
-      stock: "",
-      images: [],
-      is_featured: false,
-    });
+    try {
+      await onSubmit(uploadingProduct);
+      setFormData({
+        name: "",
+        description: "",
+        price: "",
+        category: "",
+        stock: "",
+        images: [],
+        is_featured: false,
+      });
+    } catch (err) {}
   };
   return (
     <form

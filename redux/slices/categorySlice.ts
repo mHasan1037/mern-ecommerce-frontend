@@ -23,6 +23,16 @@ interface CategoryState {
   selectedCategory: string | null;
 }
 
+interface DeleteCategoryArgs {
+  categoryId: string;
+  reassignTo?: string;
+}
+
+interface DeleteCategoryRejectValue {
+  message: string;
+  productCount?: number;
+}
+
 const initialState: CategoryState = {
   categories: [],
   loading: false,
@@ -37,6 +47,25 @@ export const fetchCategories = createAsyncThunk(
     return response.data.categories as Category[];
   },
 );
+
+export const deleteCategory = createAsyncThunk<
+  string,
+  DeleteCategoryArgs,
+  { rejectValue: DeleteCategoryRejectValue  }
+>("categories/deleteCategory", async ({ categoryId, reassignTo }, thunkApi) => {
+  try {
+    await axiosInstance.delete(`api/categories/${categoryId}`, {
+      withCredentials: true,
+      data: reassignTo ? { reassignTo } : undefined,
+    });
+    return categoryId;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue({
+      message: err.response?.data?.message || "Failed to delete category",
+      productCount: err.response?.data?.productCount,
+    });
+  }
+});
 
 const categorySlice = createSlice({
   name: "categories",
@@ -63,7 +92,13 @@ const categorySlice = createSlice({
       .addCase(fetchCategories.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Failed to fetch categories";
-      });
+      })
+      .addCase(deleteCategory.fulfilled, (state, action) => {
+        state.categories = state.categories.filter(
+          (item) => item._id !== action.payload,
+        );
+      })
+      .addCase(deleteCategory.rejected, (state, action) => { });
   },
 });
 

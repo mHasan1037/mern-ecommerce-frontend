@@ -38,7 +38,7 @@ const ProductBox: React.FC<ProductBoxProps> = ({ product }) => {
       className="group relative flex min-h-[430px] flex-col gap-4 border border-mist bg-white/90 p-4 shadow-boutique-sm transition duration-300 ease-out hover:-translate-y-1 hover:border-brass/60 hover:shadow-boutique"
     >
       <div
-        className="h-56 w-full cursor-pointer bg-pearl p-5 transition duration-300 group-hover:bg-mist/60"
+        className="h-56 w-full cursor-pointer p-5 transition duration-300"
         onClick={() => router.push(`/products/${product._id}`)}
       >
         <Image

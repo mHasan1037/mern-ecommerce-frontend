@@ -20,13 +20,19 @@ const AllCategoryList: React.FC<AllCategoryListProps> = ({onEdit, onDelete, cate
             className="bg-white border rounded-md shadow-sm p-4 flex gap-2"
           >
             <div className="w-[35%] flex flex-col gap-2">
-              <Image
-                alt={category.name}
-                src={category?.image?.url}
-                width={100}
-                height={100}
-                className="rounded-md object-cover border"
-              />
+              {category?.image ? (
+                <Image
+                  alt={category.name}
+                  src={category?.image?.url}
+                  width={100}
+                  height={100}
+                  className="rounded-md object-cover border"
+                />
+              ) : (
+                <div className="w-[100px] h-[100px] mt-2 flex items-center justify-center border rounded-md text-xs text-gray-400 bg-gray-50">
+                  No image
+                </div>
+              )}
               <h1 className="font-semibold text-md">{category.name}</h1>
             </div>
             <div>

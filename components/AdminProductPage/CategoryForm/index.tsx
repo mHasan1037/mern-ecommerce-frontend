@@ -5,6 +5,7 @@ import axiosInstance from "@/utils/axiosInstance";
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 interface CategoryProps {
   title: string;
@@ -101,8 +102,14 @@ const CategoryForm: React.FC<CategoryProps> = ({
         image: null,
       });
       setShowCategoryForm(false);
-    } catch (error) {
-      console.error("Form submit failed:", error);
+    } catch (error: any) {
+        const message = error?.response?.data?.message;
+
+        if (message === "Category already exists") {
+          toast.error(message);
+        } else {
+          toast.error("Something went wrong, Try again");
+        }
     }
   };
 

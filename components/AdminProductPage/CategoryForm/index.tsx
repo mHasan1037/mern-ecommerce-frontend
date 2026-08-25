@@ -59,13 +59,29 @@ const CategoryForm: React.FC<CategoryProps> = ({
   };
 
   const handleImageUpload = async (result: any) => {
-    setFormData((prev) => ({
-      ...prev,
-      image: {
-        url: result.info.secure_url,
-        public_id: result.info.public_id,
-      },
-    }));
+    const newImage = {
+      url: result.info.secure_url,
+      public_id: result.info.public_id,
+    }
+
+    let oldPublicId: string | undefined;
+    const originalPublicId = initialData?.image?.public_id;
+
+    setFormData((prev) => {
+      oldPublicId = prev.image?.public_id;
+      return {
+        ...prev,
+        image: newImage
+      }
+    });
+
+    if (oldPublicId && oldPublicId !== newImage.public_id && oldPublicId !== originalPublicId) {
+      try {
+        await axiosInstance.delete(`/api/products/delete-image/${oldPublicId}`);
+      } catch (err) {
+        console.error("Failed to delete replaced image from Cloudinary", err);
+      }
+    }
   };
 
   const handleImageDelete = async (publicId: string) => {
@@ -192,13 +208,13 @@ const CategoryForm: React.FC<CategoryProps> = ({
               height={100}
               className="rounded-md object-cover border"
             />
-            {/* <button
+            <button
               type="button"
               onClick={() => handleImageDelete(formData.image!.public_id)}
               className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-1 text-xs"
             >
               ❌
-            </button> */}
+            </button>
           </div>
         )}
         <ConfirmButton buttonText={title} type="submit" />

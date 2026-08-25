@@ -58,24 +58,12 @@ const CategoryForm: React.FC<CategoryProps> = ({
   };
 
   const handleImageUpload = async (result: any) => {
-    if(isEdit && formData.image?.public_id){
-      try{
-         await axiosInstance.delete(
-            `/api/products/delete-image/${formData.image.public_id}`
-         )
-      } catch (err){
-        console.error("Failed to delete old image:", err);
-      }
-    }
-
-    const newImage = {
-      url: result.info.secure_url,
-      public_id: result.info.public_id,
-    };
-
     setFormData((prev) => ({
       ...prev,
-      image: newImage,
+      image: {
+        url: result.info.secure_url,
+        public_id: result.info.public_id,
+      },
     }));
   };
 
@@ -93,11 +81,17 @@ const CategoryForm: React.FC<CategoryProps> = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const payload = {
+      ...formData,
+      parentCategory: formData.parentCategory?._id || null,
+    }
+
     try {
       if (isEdit && initialData?._id) {
-        await axiosInstance.put(`/api/categories/${initialData._id}`, formData);
+        await axiosInstance.put(`/api/categories/${initialData._id}`, payload);
       } else {
-        await axiosInstance.post(`/api/categories`, formData);
+        await axiosInstance.post(`/api/categories`, payload);
       }
 
       setFormData({

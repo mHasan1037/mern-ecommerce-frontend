@@ -53,6 +53,22 @@ export const saveCategory = createAsyncThunk<
   }
 });
 
+export const reorderCategories = createAsyncThunk(
+  "categories/reorder",
+  async (orderedIds: string[], { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.patch("/api/categories/reorder", {
+        orderedIds,
+      });
+      return res.data;
+    } catch (err: any) {
+      return rejectWithValue(
+        err.response?.data?.message || "Failed to reorder categories",
+      );
+    }
+  },
+); 
+
 const categorySlice = createSlice({
   name: "categories",
   initialState,
@@ -97,6 +113,12 @@ const categorySlice = createSlice({
       })
       .addCase(saveCategory.rejected, (state, action) => {
         state.error = action.payload || "Failed to save category";
+      })
+      .addCase(reorderCategories.fulfilled, (state, action) => {
+        state.categories = action.payload;
+      })
+      .addCase(reorderCategories.rejected, (state, action) => {
+        state.error = action.payload as string;
       });
   },
 });

@@ -6,7 +6,8 @@ import ConfirmButton from "@/components/buttons/ConfirmButton";
 import LoadingContainer from "@/components/LoadingScreen/LoadingContainer";
 import RadioSelectModal from "@/components/RadioSelectModal";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { Category as CategoryType, deleteCategory, fetchCategories } from "@/redux/slices/categorySlice";
+import { deleteCategory, fetchCategories } from "@/redux/slices/categorySlice";
+import { Category as CategoryType } from "@/types/category";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -50,7 +51,7 @@ const Category = () => {
     const result = await dispatch(deleteCategory({ categoryId: id }));
 
     if(deleteCategory.fulfilled.match(result)){
-      console.log('Deleted category:', category?.name);
+      toast.success(`"${category?.name}" deleted successfully`);
       return;
     };
 
@@ -61,7 +62,7 @@ const Category = () => {
         productCount: result.payload.productCount,
       })
     }else{
-      console.error(result.payload?.message)
+      toast.error(result.payload?.message || "Failed to delete category");
     }
   }
 

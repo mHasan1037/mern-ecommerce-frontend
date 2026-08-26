@@ -1,5 +1,5 @@
 "use client";
-import { Category, fetchCategories } from "@/redux/slices/categorySlice";
+import { Category } from "@/types/category";
 import Image from "next/image";
 
 interface AllCategoryListProps{

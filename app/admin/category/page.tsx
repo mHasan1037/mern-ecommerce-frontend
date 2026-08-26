@@ -3,10 +3,11 @@ import AllCategoryList from "@/components/AdminProductPage/AllCategoryList";
 import CategoryForm from "@/components/AdminProductPage/CategoryForm";
 import AdminSidebar from "@/components/adminSidebar";
 import ConfirmButton from "@/components/buttons/ConfirmButton";
+import CategoryReorderModal from "@/components/CategoryReorderModal";
 import LoadingContainer from "@/components/LoadingScreen/LoadingContainer";
 import RadioSelectModal from "@/components/RadioSelectModal";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { deleteCategory, fetchCategories } from "@/redux/slices/categorySlice";
+import { deleteCategory, fetchCategories, reorderCategories } from "@/redux/slices/categorySlice";
 import { Category as CategoryType } from "@/types/category";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -17,6 +18,7 @@ const Category = () => {
   const [showCategoryEditForm, setShowCategoryEditForm] = useState(false);
   const [editCategory, setEditCategory] = useState<CategoryType | null>(null);
   const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const [isReorderOpen, setReorderOpen] = useState(false);
   const [reassignTarget, setReassignTarget] = useState<{
     categoryId: string;
     categoryName: string;
@@ -77,13 +79,18 @@ const Category = () => {
     )
 
     if (deleteCategory.fulfilled.match(result)) {
-      console.log("Deleted category:", reassignTarget.categoryName);
+      toast.success(`deleted successfully and reassigned to ${reassignTarget.categoryName}`);
       setReassignTarget(null);
       setSelectedReassignId("");
     } else {
       console.error(result.payload?.message);
     }
   }
+
+  const handleSaveCategoryOrder = (orderedIds: string[]): void => {
+    dispatch(reorderCategories(orderedIds));
+    setReorderOpen(false);
+  };
 
   
   if (loading) return <LoadingContainer />;
@@ -95,11 +102,24 @@ const Category = () => {
       <div className="w-full">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-semibold">Product Categories</h1>
-          <ConfirmButton
-            buttonText="Add Category"
-            onclick={() => setShowCategoryForm(true)}
-          />
+          <div className="flex gap-5">
+            <ConfirmButton
+              buttonText="Reorder Categories"
+              onclick={() => setReorderOpen(true)}
+            />
+            <ConfirmButton
+              buttonText="Add Category"
+              onclick={() => setShowCategoryForm(true)}
+            />
+          </div>
         </div>
+        {isReorderOpen && (
+          <CategoryReorderModal
+            categories={categories}
+            onSave={handleSaveCategoryOrder}
+            onClose={() => setReorderOpen(false)}
+          />
+        )}
         {reassignTarget && (
           <RadioSelectModal
             title={`Reassign products from ${reassignTarget.categoryName}`}

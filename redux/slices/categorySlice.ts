@@ -1,44 +1,6 @@
+import { Category, CreateCategoryArgs, DeleteCategoryArgs, DeleteCategoryRejectValue, initialState } from "@/types/category";
 import axiosInstance from "@/utils/axiosInstance";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
-export interface Category {
-  _id: string;
-  name: string;
-  description: string;
-  image: {
-    url: string;
-    public_id?: string;
-  };
-  parentCategory: {
-    _id: string;
-    name: string;
-  } | null;
-  isDeleted?: boolean;
-}
-
-interface CategoryState {
-  categories: Category[];
-  loading: boolean;
-  error: string | null;
-  selectedCategory: string | null;
-}
-
-interface DeleteCategoryArgs {
-  categoryId: string;
-  reassignTo?: string;
-}
-
-interface DeleteCategoryRejectValue {
-  message: string;
-  productCount?: number;
-}
-
-const initialState: CategoryState = {
-  categories: [],
-  loading: false,
-  error: null,
-  selectedCategory: null,
-};
 
 export const fetchCategories = createAsyncThunk(
   "categories/fetch",
@@ -64,6 +26,30 @@ export const deleteCategory = createAsyncThunk<
       message: err.response?.data?.message || "Failed to delete category",
       productCount: err.response?.data?.productCount,
     });
+  }
+});
+
+export const saveCategory = createAsyncThunk<
+  Category,
+  CreateCategoryArgs,
+  { rejectValue: string }
+>("categories/saveCategory", async ({ formData, categoryId }, thunkApi) => {
+  try {
+    const payload = {
+      ...formData,
+      parentCategory: formData.parentCategory?._id ?? null,
+      image: formData.image ?? undefined,
+    };
+
+    const response = categoryId
+      ? await axiosInstance.put(`/api/categories/${categoryId}`, payload)
+      : await axiosInstance.post(`/api/categories`, payload);
+
+    return response.data.category as Category;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue(
+      err.response?.data?.message || "Failed to save category",
+    );
   }
 });
 
@@ -98,7 +84,20 @@ const categorySlice = createSlice({
           (item) => item._id !== action.payload,
         );
       })
-      .addCase(deleteCategory.rejected, (state, action) => { });
+      .addCase(deleteCategory.rejected, (state, action) => {})
+      .addCase(saveCategory.fulfilled, (state, action) => {
+        const index = state.categories.findIndex(
+          (c) => c._id === action.payload._id,
+        );
+        if (index !== -1) {
+          state.categories[index] = action.payload;
+        } else {
+          state.categories.push(action.payload);
+        }
+      })
+      .addCase(saveCategory.rejected, (state, action) => {
+        state.error = action.payload || "Failed to save category";
+      });
   },
 });
 

@@ -1,6 +1,7 @@
 import ConfirmButton from "@/components/buttons/ConfirmButton";
-import { Category } from "@/redux/slices/categorySlice";
-import { CloudinaryImage } from "@/types/product";
+import { useAppDispatch } from "@/redux/hooks";
+import { saveCategory } from "@/redux/slices/categorySlice";
+import { Category, CategoryFormData } from "@/types/category";
 import axiosInstance from "@/utils/axiosInstance";
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
@@ -12,16 +13,6 @@ interface CategoryProps {
   setShowCategoryForm: React.Dispatch<React.SetStateAction<boolean>>;
   isEdit?: boolean;
   initialData?: Category;
-}
-
-interface CategoryFormData {
-  name: string;
-  description: string;
-  parentCategory: {
-    _id: string;
-    name: string;
-  } | null;
-  image: CloudinaryImage | null;
 }
 
 const CategoryForm: React.FC<CategoryProps> = ({
@@ -46,6 +37,7 @@ const CategoryForm: React.FC<CategoryProps> = ({
     }
     : null,
   });
+  const dispatch = useAppDispatch();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -99,17 +91,15 @@ const CategoryForm: React.FC<CategoryProps> = ({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const payload = {
-      ...formData,
-      parentCategory: formData.parentCategory?._id || null,
-    }
-
     try {
-      if (isEdit && initialData?._id) {
-        await axiosInstance.put(`/api/categories/${initialData._id}`, payload);
-      } else {
-        await axiosInstance.post(`/api/categories`, payload);
-      }
+      await dispatch(
+        saveCategory({
+          formData,
+          categoryId: isEdit ? initialData?._id : undefined,
+        }),
+      ).unwrap();
+
+      toast.success(isEdit ? "Category updated successfully" : "Category created successfully");
 
       setFormData({
         name: "",
@@ -118,14 +108,12 @@ const CategoryForm: React.FC<CategoryProps> = ({
         image: null,
       });
       setShowCategoryForm(false);
-    } catch (error: any) {
-        const message = error?.response?.data?.message;
-
-        if (message === "Category already exists") {
-          toast.error(message);
-        } else {
-          toast.error("Something went wrong, Try again");
-        }
+    } catch (message: any) {
+      if (message === "Category already exists") {
+        toast.error(message);
+      } else {
+        toast.error("Something went wrong, Try again");
+      }
     }
   };
 

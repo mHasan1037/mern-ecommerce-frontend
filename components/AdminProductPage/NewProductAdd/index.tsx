@@ -20,6 +20,7 @@ const NewProductAdd = () => {
       router.push("/admin/product");
     } catch (error) {
       console.error("Failed to submit product:", error);
+      toast.error("You have reached your max featured product limit.")
       throw error; 
     }
   };

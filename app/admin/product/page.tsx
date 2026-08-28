@@ -53,12 +53,6 @@ const Product = () => {
       );
       if (!productToDelete) return;
 
-      for (const img of productToDelete.images) {
-        await axiosInstance.delete(
-          `/api/products/delete-image/${img?.public_id}`,
-        );
-      }
-
       await axiosInstance.delete(`/api/products/${id}`);
 
       dispatch(
@@ -68,8 +62,10 @@ const Product = () => {
           limit: LIMIT,
         }),
       );
+      toast.success(`Product deleted successfully`);
     } catch (error) {
       console.error("Error deleting product", error);
+      toast.error("Error deleting product")
     }
   };
 

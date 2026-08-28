@@ -94,7 +94,6 @@ const Category = () => {
 
   
   if (loading) return <LoadingContainer />;
-  if (error) return <p>Error: {error}</p>;
 
   return (
     <div className="adminMainSection">

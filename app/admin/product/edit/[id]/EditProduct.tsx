@@ -53,9 +53,11 @@ const EditProduct = ({ params }: EditProductProps) => {
       toast.success("Product is updated.")
       router.push("/admin/product");
     } catch (error: any) {
-      console.error("Error updating product", error?.response?.data);
-      toast.error("You have reached your max featured product limit.")
-      throw error; 
+      const message =
+      error?.response?.data?.message ??
+      "Failed to update product. Please try again.";
+      toast.error(message);
+      throw error;
     }
   };
 

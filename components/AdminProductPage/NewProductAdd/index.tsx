@@ -18,10 +18,13 @@ const NewProductAdd = () => {
       await axiosInstance.post(`/api/upload-product`, payload);
       toast.success("Product is uploaded.")
       router.push("/admin/product");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to submit product:", error);
-      toast.error("You have reached your max featured product limit.")
-      throw error; 
+      const message =
+      error?.response?.data?.message ??
+        "Failed to upload product. Please try again.";
+      toast.error(message);
+      throw error;
     }
   };
 

@@ -38,7 +38,6 @@ export const saveCategory = createAsyncThunk<
     const payload = {
       ...formData,
       parentCategory: formData.parentCategory?._id ?? null,
-      image: formData.image ?? undefined,
     };
 
     const response = categoryId

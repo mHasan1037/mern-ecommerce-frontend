@@ -33,6 +33,7 @@ const ChangePassword = () => {
       return;
     }
     dispatch(changePassword(formData))
+      .unwrap()
       .then(() => {
         setFormData({
           password: "",

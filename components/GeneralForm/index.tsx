@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import styles from "./GeneralForm.module.css";
 import { IoMdClose } from "react-icons/io";
 import ConfirmButton from "../buttons/ConfirmButton";
+import { toast } from "react-toastify";
 
 interface Field {
   name: string;
@@ -37,6 +38,16 @@ const GeneralForm: React.FC<GeneralFormProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const passwordField = fields.find((f) => f.type === 'password');
+    if(passwordField){
+      const passwordValue = (formData as any)[passwordField.name] || "";
+       if (passwordValue.length < 8) {
+        toast.error("Password must be at least 8 characters long");
+        return;
+      }
+
+    }
     onsubmit(formData);
   };
 

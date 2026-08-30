@@ -9,6 +9,7 @@ import { logout } from "@/redux/slices/authSlice";
 import { useRouter } from "next/navigation";
 import { RootState } from "@/redux/store";
 import { resetWishlist } from "@/redux/slices/wishListSlice";
+import Link from "next/link";
 
 const ProfileDropdown = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -49,10 +50,41 @@ const ProfileDropdown = () => {
       </p>
       {showDropdown && (
         <ul className={styles.profileBox}>
-          <li onClick={()=> {route.push('/account/profile'); setShowDropdown(false)}}>Profile</li>
-          <li onClick={()=> {route.push('/account/change-password'); setShowDropdown(false)}}>Change password</li>
-          <li onClick={()=> {route.push('/account/all_orders'); setShowDropdown(false)}}>My Orders</li>
-          <li onClick={handleLogout}>Log out</li>
+          <li>
+            <Link
+              href="/account/profile"
+              onClick={() => setShowDropdown(false)}
+            >
+              Profile
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/account/change-password"
+              onClick={() => setShowDropdown(false)}
+            >
+              Change password
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/account/all_orders"
+              onClick={() => setShowDropdown(false)}
+            >
+              My Orders
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                handleLogout();
+              }}
+            >
+              Log out
+            </Link>
+          </li>
         </ul>
       )}
     </div>

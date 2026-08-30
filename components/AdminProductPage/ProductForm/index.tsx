@@ -1,13 +1,13 @@
 "use client";
 import ConfirmButton from "@/components/buttons/ConfirmButton";
+import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchCategories } from "@/redux/slices/categorySlice";
 import { ProductFormDataType } from "@/types/product";
 import axiosInstance from "@/utils/axiosInstance";
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
 interface ProductFormProps {
@@ -38,6 +38,8 @@ const ProductForm: React.FC<ProductFormProps> = ({
   const { categories, loading, error } = useAppSelector(
     (state) => state.categories,
   );
+  const [isDirty, setIsDirty] = useState(false);
+  const newImageIdsRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -46,6 +48,16 @@ const ProductForm: React.FC<ProductFormProps> = ({
   useEffect(() => {
     if (initialData) setFormData(initialData);
   }, [initialData]);
+
+  const cleanupOrphanedImages = useCallback(async () => {
+    const ids = Array.from(newImageIdsRef.current);
+    newImageIdsRef.current.clear();
+    await Promise.allSettled(
+      ids.map((id) => axiosInstance.delete(`/api/products/delete-image/${id}`)),
+    );
+  }, []);
+
+  const { guardedAction } = useUnsavedChanges(isDirty, cleanupOrphanedImages);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -60,6 +72,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
     } else {
       setFormData({ ...formData, [name]: value });
     }
+    setIsDirty(true);
   };
 
   const handleImageUpload = (result: any) => {
@@ -67,20 +80,23 @@ const ProductForm: React.FC<ProductFormProps> = ({
       url: result.info.secure_url,
       public_id: result.info.public_id,
     };
-
+    newImageIdsRef.current.add(newImage.public_id);
     setFormData((prev) => ({
       ...prev,
       images: [...prev.images, newImage],
     }));
+    setIsDirty(true);
   };
 
   const handleImageDelete = async (publicId: string) => {
     try {
       await axiosInstance.delete(`/api/products/delete-image/${publicId}`);
+      newImageIdsRef.current.delete(publicId);
       setFormData((prev) => ({
         ...prev,
         images: prev.images.filter((img) => img.public_id !== publicId),
       }));
+      setIsDirty(true);
     } catch (error) {
       console.error("Failed to delete image", error);
     }
@@ -100,15 +116,9 @@ const ProductForm: React.FC<ProductFormProps> = ({
     };
     try {
       await onSubmit(uploadingProduct);
-      setFormData({
-        name: "",
-        description: "",
-        price: "",
-        category: "",
-        stock: "",
-        images: [],
-        is_featured: false,
-      });
+      newImageIdsRef.current.clear();
+      setIsDirty(false);
+      setFormData(defaultFormData);
     } catch (err) {}
   };
   return (

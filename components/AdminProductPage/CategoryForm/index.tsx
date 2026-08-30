@@ -1,11 +1,12 @@
 import ConfirmButton from "@/components/buttons/ConfirmButton";
+import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
 import { useAppDispatch } from "@/redux/hooks";
 import { saveCategory } from "@/redux/slices/categorySlice";
 import { Category, CategoryFormData } from "@/types/category";
 import axiosInstance from "@/utils/axiosInstance";
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { toast } from "react-toastify";
 
 interface CategoryProps {
@@ -38,6 +39,7 @@ const CategoryForm: React.FC<CategoryProps> = ({
     : null,
   });
   const dispatch = useAppDispatch();
+  const [isDirty, setIsDirty] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -48,6 +50,7 @@ const CategoryForm: React.FC<CategoryProps> = ({
       ...prev,
       [name]: value,
     }));
+    setIsDirty(true);
   };
 
   const handleImageUpload = async (result: any) => {
@@ -66,6 +69,7 @@ const CategoryForm: React.FC<CategoryProps> = ({
         image: newImage
       }
     });
+    setIsDirty(true);
 
     if (oldPublicId && oldPublicId !== newImage.public_id && oldPublicId !== originalPublicId) {
       try {
@@ -83,10 +87,26 @@ const CategoryForm: React.FC<CategoryProps> = ({
         ...prev,
         image: null,
       }));
+      setIsDirty(true);
     } catch (error) {
       console.error("Failed to delete image", error);
     }
   };
+
+  const cleanupOrphanedImage = useCallback(async () => {
+    const currentId = formData.image?.public_id;
+    const originalId = initialData?.image?.public_id;
+    if (currentId && currentId !== originalId) {
+      try {
+        await axiosInstance.delete(`/api/products/delete-image/${currentId}`);
+      } catch (err) {
+        console.error("Failed to clean up orphaned category image", err);
+      }
+    }
+  }, [formData.image, initialData]);
+
+  const {guardedAction} = useUnsavedChanges(isDirty, cleanupOrphanedImage);
+  const handleBack = () => guardedAction(() => setShowCategoryForm(false));
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -100,7 +120,7 @@ const CategoryForm: React.FC<CategoryProps> = ({
       ).unwrap();
 
       toast.success(isEdit ? "Category updated successfully" : "Category created successfully");
-
+      setIsDirty(false);
       setFormData({
         name: "",
         description: "",
@@ -120,7 +140,7 @@ const CategoryForm: React.FC<CategoryProps> = ({
   return (
     <div className="bg-white p-6 rounded-md shadow-md">
       <button
-        onClick={() => setShowCategoryForm(false)}
+        onClick={handleBack}
         className="mb-4 text-sm text-blue-600 hover:underline"
       >
         ← Back to categories
@@ -160,7 +180,6 @@ const CategoryForm: React.FC<CategoryProps> = ({
             onChange={handleChange}
             placeholder="Optional"
             className="w-full border px-4 py-2 rounded-md focus:outline-none"
-            //className="w-full border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
             readOnly={true}
           />
         </div>

@@ -33,6 +33,7 @@ const ChangePassword = () => {
       return;
     }
     dispatch(changePassword(formData))
+      .unwrap()
       .then(() => {
         setFormData({
           password: "",
@@ -42,6 +43,7 @@ const ChangePassword = () => {
         router.push('/');
       })
       .catch((err: any) => {
+        toast.error(err);
         console.log("Some error occure", err);
       });
   };

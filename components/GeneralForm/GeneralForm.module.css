@@ -2,17 +2,17 @@
 @tailwind utilities;
 
 .background{
-    @apply w-[100vw] h-[100vh] bg-[#000000] bg-opacity-50 flex justify-center items-center absolute top-0 z-50;
+    @apply fixed inset-0 z-50 flex h-[100vh] w-[100vw] items-center justify-center bg-ink/60 px-4 backdrop-blur-sm;
 }
 
 .mainContainer{
-    @apply w-[90vw] md:w-[60vw] lg:w-[35vw] h-auto bg-white rounded-sm py-3 px-4
+    @apply h-auto w-[90vw] border border-mist bg-pearl px-5 py-5 font-body shadow-boutique md:w-[60vw] lg:w-[35vw]
 }
 
 .fieldBox{
-    @apply flex flex-col py-1 gap-1
+    @apply flex flex-col gap-2 py-2 text-sm font-semibold text-ink/75
 }
 
 .inputStyle{
-    @apply outline-none border-2 border-border1 focus:border-border2 rounded-md px-2 py-1;
+    @apply border border-mist bg-white px-3 py-3 font-normal text-ink placeholder:text-ink/40 focus:border-brass focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2 focus-visible:ring-offset-pearl;
 }

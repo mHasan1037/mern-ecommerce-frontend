@@ -212,7 +212,7 @@ const Checkout = () => {
       <div className={style.tableWrapper}>
         <table className={style.table}>
           <thead>
-            <tr className="bg-gray-100 text-left text-sm">
+            <tr className="bg-mist/70 text-left text-xs uppercase tracking-[0.16em] text-ink/60">
               <th className={style.tableCell}>Image</th>
               <th className={style.tableCell}>Name</th>
               <th className={style.tableCell}>Qty</th>
@@ -222,14 +222,14 @@ const Checkout = () => {
           </thead>
           <tbody>
             {orderItems.map((item) => (
-              <tr key={item.productId} className="text-sm">
+              <tr key={item.productId} className="text-sm transition hover:bg-pearl">
                 <td className={`${style.tableCell} w-[60px]`}>
                   <Image
                     src={item.image}
                     alt={item.name}
                     width={50}
                     height={50}
-                    className="rounded object-cover"
+                    className="border border-mist object-contain"
                   />
                 </td>
                 <td className={style.tableCell}>{item.name}</td>

@@ -1,34 +1,6 @@
+import { Category, CreateCategoryArgs, DeleteCategoryArgs, DeleteCategoryRejectValue, initialState } from "@/types/category";
 import axiosInstance from "@/utils/axiosInstance";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
-export interface Category {
-  _id: string;
-  name: string;
-  description: string;
-  image: {
-    url: string;
-    public_id?: string;
-  };
-  parentCategory: {
-    _id: string;
-    name: string;
-  } | null;
-  isDeleted?: boolean;
-}
-
-interface CategoryState {
-  categories: Category[];
-  loading: boolean;
-  error: string | null;
-  selectedCategory: string | null;
-}
-
-const initialState: CategoryState = {
-  categories: [],
-  loading: false,
-  error: null,
-  selectedCategory: null,
-};
 
 export const fetchCategories = createAsyncThunk(
   "categories/fetch",
@@ -37,6 +9,64 @@ export const fetchCategories = createAsyncThunk(
     return response.data.categories as Category[];
   },
 );
+
+export const deleteCategory = createAsyncThunk<
+  string,
+  DeleteCategoryArgs,
+  { rejectValue: DeleteCategoryRejectValue  }
+>("categories/deleteCategory", async ({ categoryId, reassignTo }, thunkApi) => {
+  try {
+    await axiosInstance.delete(`api/categories/${categoryId}`, {
+      withCredentials: true,
+      data: reassignTo ? { reassignTo } : undefined,
+    });
+    return categoryId;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue({
+      message: err.response?.data?.message || "Failed to delete category",
+      productCount: err.response?.data?.productCount,
+    });
+  }
+});
+
+export const saveCategory = createAsyncThunk<
+  Category,
+  CreateCategoryArgs,
+  { rejectValue: string }
+>("categories/saveCategory", async ({ formData, categoryId }, thunkApi) => {
+  try {
+    const payload = {
+      ...formData,
+      parentCategory: formData.parentCategory?._id ?? null,
+    };
+
+    const response = categoryId
+      ? await axiosInstance.put(`/api/categories/${categoryId}`, payload)
+      : await axiosInstance.post(`/api/categories`, payload);
+
+    return response.data.category as Category;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue(
+      err.response?.data?.message || "Failed to save category",
+    );
+  }
+});
+
+export const reorderCategories = createAsyncThunk(
+  "categories/reorder",
+  async (orderedIds: string[], { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.patch("/api/categories/reorder", {
+        orderedIds,
+      });
+      return res.data;
+    } catch (err: any) {
+      return rejectWithValue(
+        err.response?.data?.message || "Failed to reorder categories",
+      );
+    }
+  },
+); 
 
 const categorySlice = createSlice({
   name: "categories",
@@ -63,6 +93,31 @@ const categorySlice = createSlice({
       .addCase(fetchCategories.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Failed to fetch categories";
+      })
+      .addCase(deleteCategory.fulfilled, (state, action) => {
+        state.categories = state.categories.filter(
+          (item) => item._id !== action.payload,
+        );
+      })
+      .addCase(deleteCategory.rejected, (state, action) => {})
+      .addCase(saveCategory.fulfilled, (state, action) => {
+        const index = state.categories.findIndex(
+          (c) => c._id === action.payload._id,
+        );
+        if (index !== -1) {
+          state.categories[index] = action.payload;
+        } else {
+          state.categories.push(action.payload);
+        }
+      })
+      .addCase(saveCategory.rejected, (state, action) => {
+        state.error = action.payload || "Failed to save category";
+      })
+      .addCase(reorderCategories.fulfilled, (state, action) => {
+        state.categories = action.payload;
+      })
+      .addCase(reorderCategories.rejected, (state, action) => {
+        state.error = action.payload as string;
       });
   },
 });

@@ -4,7 +4,15 @@ import styles from "./MobileSearchbox.module.css";
 import { IoSearchOutline } from "react-icons/io5";
 import useOutsideClick from "@/hooks/useOutsideClick";
 
-const SmallScreenSearchbox = () => {
+interface SmallScreenSearchboxProps {
+  searchValue: string;
+  setSearchValue: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const SmallScreenSearchbox = ({
+  searchValue,
+  setSearchValue,
+}: SmallScreenSearchboxProps) => {
   const [showSearchbox, setShowSearchbox] = useState(false);
   const ref = useOutsideClick<HTMLDivElement>(() => setShowSearchbox(false));
   return (
@@ -19,6 +27,13 @@ const SmallScreenSearchbox = () => {
           className={styles.mobileSearchBox}
           type="text"
           placeholder="Search for a product or brand"
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              setShowSearchbox(false);
+            }
+          }}
         />
       )}
     </div>

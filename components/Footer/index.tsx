@@ -13,19 +13,19 @@ const Footer = () => {
   }, []);
 
   return (
-    <div className="bg-mainBg1 flex justify-between p-3">
+    <div className={"flex justify-between border-t border-mist bg-ink px-4 py-6 font-body text-sm text-pearl/75 sm:px-8"}>
       <p className="flex gap-2">
         © {year}
         <a
           href="https://www.linkedin.com/in/mhasan95/"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-600 hover:underline"
+          className={"text-brass transition hover:text-pearl"}
         >
           Mahmudul Hasan
         </a>
       </p>
-      {user?.isAdmin && <Link href="/admin">Admin dashboard</Link>}
+      {user?.isAdmin && <Link className={"transition hover:text-brass"} href="/admin">Admin dashboard</Link>}
     </div>
   );
 };

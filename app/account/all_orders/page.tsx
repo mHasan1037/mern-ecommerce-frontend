@@ -49,7 +49,7 @@ const AllOrders = () => {
       <h1 className="text-2xl font-bold text-center mb-6">My Orders</h1>
 
       <div>
-        <div className="flex gap-4 justify-center mb-8">
+        <div className="grid grid-cols-2 sm:flex sm:justify-center gap-4 mb-8">
           {orderStatusType.map((status) => (
             <button
               key={status}

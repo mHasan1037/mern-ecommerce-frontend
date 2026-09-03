@@ -3,6 +3,23 @@ interface Category {
     slug: string;
     _id: string;
   }
+
+interface RadioSelectOption {
+  id: string;
+  label: string;
+}
+
+export interface RadioSelectModalProps {
+  title: string;
+  detail: string;
+  options: RadioSelectOption[];
+  selectedId: string;
+  onSelect: (id: string) => void;
+  onCancel: () => void;
+  onSubmit: () => void;
+  cancelLabel?: string;
+  submitLabel?: string;
+}
   
   interface Image {
     url: string;
@@ -77,6 +94,7 @@ interface Category {
   export interface ProductState {
     productsInfo: ProductResponse | null;
     mostSoldProducts?: ProductType[];
+    featuredProducts?: ProductType[];
     loading: boolean;
     error: string | null;
     singleProduct: ProductType | null;

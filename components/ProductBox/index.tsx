@@ -35,19 +35,22 @@ const ProductBox: React.FC<ProductBoxProps> = ({ product }) => {
   return (
     <div
       key={product._id}
-      className="relative bg-gray-50 border border-gray-200 rounded-lg shadow-sm p-4 hover:shadow-md transition duration-300 flex flex-col gap-4"
+      className="group relative flex min-h-[430px] flex-col gap-4 border border-mist bg-white/90 p-4 shadow-boutique-sm transition duration-300 ease-out hover:-translate-y-1 hover:border-brass/60 hover:shadow-boutique"
     >
-      <div className="w-full h-40">
+      <div
+        className="h-56 w-full cursor-pointer p-5 transition duration-300"
+        onClick={() => router.push(`/products/${product._id}`)}
+      >
         <Image
           src={product.images[0]?.url}
           alt={product.name}
           width={200}
           height={200}
-          className="w-full h-full object-contain"
+          className="h-full w-full object-contain transition duration-500 group-hover:scale-105"
         />
       </div>
       <p
-        className="cursor-pointer text-mainBg2 font-bold h-10"
+        className="h-12 cursor-pointer font-display text-lg font-semibold leading-tight text-ink transition hover:text-laurel"
         onClick={() => router.push(`/products/${product._id}`)}
         title={product.name}
       >
@@ -55,19 +58,19 @@ const ProductBox: React.FC<ProductBoxProps> = ({ product }) => {
           ? `${product.name.slice(0, 40)}...`
           : product.name}
       </p>
-      <div className="flex justify-between">
-        <p>Price: ${product.price}</p>
-        <p>
+      <div className="flex items-end justify-between gap-3 border-t border-mist pt-3 text-sm text-ink/65">
+        <p className="font-body text-lg font-semibold text-laurel">${product.price}</p>
+        <p className="text-right">
           {product.ratings?.average === 0
             ? "No ratings"
             : `Rating: ${product.ratings?.average}`}
         </p>
       </div>
-      <div className="absolute top-3 right-3 flex items-center gap-1">
+      <div className="absolute right-4 top-4 flex items-center gap-2 px-2 py-1">
         <FaCodeCompare title="Add to Compare" className={baseStyle} onClick={handleCompareClick} />
         <AddWishList id={product._id} />
       </div>
-      <div className="flex justify-between">
+      <div className="mt-auto flex flex-col gap-2 sm:flex-row sm:justify-between">
         <AddToCart productId={product._id} quantity={1} stock={product.stock} />
         <ConfirmButton
           buttonText={"Buy now"}

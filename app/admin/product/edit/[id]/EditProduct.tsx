@@ -7,7 +7,8 @@ import { clearProducts, fetchProductById } from "@/redux/slices/productSlice";
 import { ProductFormDataType } from "@/types/product";
 import axiosInstance from "@/utils/axiosInstance";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { toast } from "react-toastify";
 
 const defaultFormData: ProductFormDataType = {
   name: "",
@@ -26,9 +27,9 @@ type EditProductProps = {
 };
 
 const EditProduct = ({ params }: EditProductProps) => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const { singleProduct, singleLoading } = useAppSelector((state) => state.products);
-  const router = useRouter();
 
   useEffect(() => {
     if(params.id){
@@ -49,10 +50,14 @@ const EditProduct = ({ params }: EditProductProps) => {
       };
 
       await axiosInstance.put(`/api/products/${params.id}`, payload);
-
+      toast.success("Product is updated.")
       router.push("/admin/product");
-    } catch (error) {
-      console.error("Error updating product", error);
+    } catch (error: any) {
+      const message =
+      error?.response?.data?.message ??
+      "Failed to update product. Please try again.";
+      toast.error(message);
+      throw error;
     }
   };
 

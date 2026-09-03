@@ -1,7 +1,6 @@
 "use client";
 import LoadingScreen from "@/components/LoadingScreen";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { loadUser } from "@/redux/slices/authSlice";
+import { useAppSelector } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 

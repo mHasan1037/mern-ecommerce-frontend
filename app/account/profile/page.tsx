@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 const Profile = () => {
-  const dispatch = useAppDispatch();
   const { user, loading, isAuthenticated } = useAppSelector((state) => state.auth);
   const router = useRouter();
   
@@ -15,10 +14,6 @@ const Profile = () => {
       router.replace("/");
     }
   }, [loading, isAuthenticated, router]);
-
-  useEffect(() => {
-    dispatch(loadUser());
-  }, [dispatch]);
 
   if (loading) {
     return <LoadingScreen />;

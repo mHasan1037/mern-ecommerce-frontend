@@ -2,7 +2,7 @@
 
 A full-featured e-commerce storefront and admin panel built with **Next.js 16 (App Router)**, **React 19**, **TypeScript**, **Redux Toolkit**, and **Tailwind CSS**. It includes an **AI chat assistant** that answers product questions, checks order status, and compares products side by side.
 
-🎬 [Watch the Video Walkthrough](https://youtu.be/gIIgdMW259Q) | 🌐 [Live Demo](https://mern-ecommerce-frontend-jg1w.onrender.com/) | ⚙️ [Backend Repository](https://github.com/mHasan1037/mern-ecommerce-backend)
+🎬 [Watch the Video Walkthrough](https://www.youtube.com/watch?v=gIIgdMW259Q) | 🌐 [Live Demo](https://mern-ecommerce-frontend-seven-sigma.vercel.app/) | ⚙️ [Backend Repository](https://github.com/mHasan1037/mern-ecommerce-backend)
 
 > The live demo runs on free-tier hosting, so the first request after a period of inactivity can take up to a minute while the server wakes up.
 

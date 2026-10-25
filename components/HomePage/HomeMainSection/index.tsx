@@ -27,9 +27,9 @@ const HomeMainSection = () => {
   return (
     <div className="w-full flex flex-col gap-14 md:gap-18">
       <HeroHomeSection
-        headerText="Curated essentials"
-        TitleText="Elevated finds for a quieter kind of luxury."
-        descriptionText="Discover polished pieces selected for everyday utility, lasting texture, and a refined point of view."
+        headerText="SHOP SMARTER"
+        TitleText="Everything you need, all in one place."
+        descriptionText="From tech and home essentials to fashion and wellness, find quality products at prices that make sense."
       />
       {featuredProducts && (
         <section>

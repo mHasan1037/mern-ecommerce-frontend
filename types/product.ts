@@ -95,6 +95,7 @@ export interface RadioSelectModalProps {
     productsInfo: ProductResponse | null;
     mostSoldProducts?: ProductType[];
     featuredProducts?: ProductType[];
+    recommendedProducts?: ProductType[];
     loading: boolean;
     error: string | null;
     singleProduct: ProductType | null;

@@ -6,13 +6,15 @@ import {
   fetchMostSoldProducts,
   fetchProducts,
   fetchFeaturedProducts,
+  fetchRecommendedProducts
 } from "@/redux/slices/productSlice";
 import LoadingScreen from "@/components/LoadingScreen";
 import HeroHomeSection from "../HeroHomePage";
 
 const HomeMainSection = () => {
   const dispatch = useAppDispatch();
-  const { mostSoldProducts, featuredProducts, loading, error } =
+  const { user } = useAppSelector((state) => state.auth);
+  const { mostSoldProducts, featuredProducts, recommendedProducts, loading, error } =
     useAppSelector((state) => state.products);
 
   useEffect(() => {
@@ -20,6 +22,12 @@ const HomeMainSection = () => {
     dispatch(fetchMostSoldProducts(10));
     dispatch(fetchFeaturedProducts());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchRecommendedProducts(8));
+    }
+  }, [dispatch, user]);
 
   if (loading) return <LoadingScreen />;
   if (error) return <p>Error fetching products: {error}</p>;
@@ -31,6 +39,19 @@ const HomeMainSection = () => {
         TitleText="Everything you need, all in one place."
         descriptionText="From tech and home essentials to fashion and wellness, find quality products at prices that make sense."
       />
+      {user && recommendedProducts && (
+        <section>
+          <h2 className="headline">Recommended Products</h2>
+          <ProductSlideSection
+            allProductSlideSections={{
+              total: recommendedProducts.length,
+              page: 1,
+              pages: 1,
+              products: recommendedProducts,
+            }}
+          />
+        </section>
+      )}
       {featuredProducts && (
         <section>
           <h2 className="headline">Featured Products</h2>

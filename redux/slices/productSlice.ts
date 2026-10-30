@@ -6,6 +6,7 @@ const initialState: ProductState = {
   productsInfo: null,
   mostSoldProducts: [],
   featuredProducts: [],
+  recommendedProducts: [],
   loading: false,
   error: null,
   singleProduct: null,
@@ -74,6 +75,18 @@ export const fetchFeaturedProducts = createAsyncThunk(
   async (_, {rejectWithValue}) =>{
     try{
       const res = await axiosInstance.get(`/api/products/featured`);
+      return res.data.products;
+    }catch(err: any){
+      return rejectWithValue(err.response?.data?.message || "Something went wrong")
+    }
+  }
+)
+
+export const fetchRecommendedProducts = createAsyncThunk(
+  "products/fetchRecommendedProducts",
+  async (limit: number = 8, {rejectWithValue}) =>{
+    try{
+      const res = await axiosInstance.get(`/api/products/recommended?limit=${limit}`);
       return res.data.products;
     }catch(err: any){
       return rejectWithValue(err.response?.data?.message || "Something went wrong")
@@ -150,6 +163,19 @@ const productSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
+      .addCase(fetchRecommendedProducts.pending, (state) =>{
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchRecommendedProducts.fulfilled, (state, action) =>{
+        state.loading = false;
+        state.recommendedProducts = action.payload;
+      })
+      .addCase(fetchRecommendedProducts.rejected, (state, action) =>{
+        state.loading = false;
+        state.recommendedProducts = [];
+        state.error = action.payload as string;
+      });
   },
 });
 
